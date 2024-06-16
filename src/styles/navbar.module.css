@@ -2,19 +2,35 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+
   background-color: red;
   height: 5vh;
   max-height: 4rem;
 }
-.navbarItem {
-  margin: 0 10px;
+.navbarLink {
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0.5rem;
+  transition: background-color 0.3s;
+  font-size: 1.3rem;
 }
-.navbarItem:first-child,
-.navbarItem:nth-child(2),
-.navbarItem:nth-child(3) {
-  margin-right: 20px;
+.navbarLink:hover {
+  background-color: rgb(27, 27, 27);
+  color: rgb(255, 0, 0);
 }
-
-.navbarItem:last-child {
+.navbarLink:first-child {
+  margin-left: 15%;
+}
+.navbarLink:last-child {
   margin-left: auto;
+  margin-right: 3rem;
+}
+.checkout {
+  display: flex;
+  align-items: center;
+}
+.checkoutAmount {
+  color: white;
 }

@@ -1,21 +1,23 @@
 import React from "react";
 import styles from "../../styles/navbar.module.css";
 import Link from "next/link";
+import { TiShoppingCart } from "react-icons/ti";
 
 function Navbar() {
   return (
     <nav className={styles.navbar}>
-      <Link href="/" className={styles.navbarItem}>
-        home
+      <Link href="/" className={styles.navbarLink}>
+        Home
       </Link>
-      <Link href="/" className={styles.navbarItem}>
-        about
+      <Link href="/Shop" className={styles.navbarLink}>
+        Shop
       </Link>
-      <Link href="/" className={styles.navbarItem}>
-        contact
-      </Link>
-      <Link href="/checkout" className={styles.navbarItem}>
-        checkout
+
+      <Link href="/Checkout" className={styles.navbarLink}>
+        <div className={styles.checkout}>
+          <TiShoppingCart size={"2em"} color={"white"} />
+          <p className={styles.checkoutAmount}>5</p>
+        </div>
       </Link>
     </nav>
   );
