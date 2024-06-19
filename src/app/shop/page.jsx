@@ -1,13 +1,9 @@
 import React from "react";
-import Filter from "../components/Filter";
 import mainStyles from "../page.module.css";
+import fakedata from "../testdata";
 
 function Shop() {
-  return (
-    <div className={mainStyles.main}>
-      <Filter />
-    </div>
-  );
+  return <div className={mainStyles.main}></div>;
 }
 
 export default Shop;

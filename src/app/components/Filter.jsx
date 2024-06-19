@@ -4,24 +4,24 @@ import Link from "next/link";
 
 function Filter() {
   return (
-    <nav class={styles.navbar}>
-      <ul class={styles.navLinks}>
-        <Link href="/shop/engine" class={styles.navLink}>
+    <nav className={styles.navbar}>
+      <ul className={styles.navLinks}>
+        <Link href="/Shop/Engine" className={styles.navLink}>
           Engine
         </Link>
-        <Link href="/shop/fuel" class={styles.navLink}>
+        <Link href="/Shop/Fuel" className={styles.navLink}>
           Fuel
         </Link>
-        <Link href="/shop/chassis" class={styles.navLink}>
+        <Link href="/Shop/Chassis" className={styles.navLink}>
           Chassis
         </Link>
-        <Link href="/shop/enginemanagement" class={styles.navLink}>
+        <Link href="/Shop/Enginemanagement" className={styles.navLink}>
           Engine management
         </Link>
-        <Link href="/shop/drivetrain" class={styles.navLink}>
+        <Link href="/Shop/Drivetrain" className={styles.navLink}>
           Drivetrain
         </Link>
-      </ul>
+      </ul> 
     </nav>
   );
 }
