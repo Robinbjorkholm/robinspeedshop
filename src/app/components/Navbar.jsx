@@ -7,12 +7,12 @@ function Navbar() {
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.navbarLink}>
-        Home
-      </Link>
-      <Link href="/Shop" className={styles.navbarLink}>
         Shop
       </Link>
 
+      <Link href="/Login" className={styles.navbarLink}>
+        log in
+      </Link>
       <Link href="/Checkout" className={styles.navbarLink}>
         <div className={styles.checkout}>
           <TiShoppingCart size={"2em"} color={"white"} />

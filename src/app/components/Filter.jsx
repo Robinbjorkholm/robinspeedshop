@@ -4,21 +4,21 @@ import Link from "next/link";
 
 function Filter() {
   return (
-    <nav className={styles.navbar}>
+    <nav className={styles.navbarFilter}>
       <ul className={styles.navLinks}>
-        <Link href="/Shop/Engine" className={styles.navLink}>
+        <Link href="/Engine" className={styles.navLink}>
           Engine
         </Link>
-        <Link href="/Shop/Fuel" className={styles.navLink}>
+        <Link href="/Fuel" className={styles.navLink}>
           Fuel
         </Link>
-        <Link href="/Shop/Chassis" className={styles.navLink}>
+        <Link href="/Chassis" className={styles.navLink}>
           Chassis
         </Link>
-        <Link href="/Shop/Enginemanagement" className={styles.navLink}>
+        <Link href="/Enginemanagement" className={styles.navLink}>
           Engine management
         </Link>
-        <Link href="/Shop/Drivetrain" className={styles.navLink}>
+        <Link href="/Drivetrain" className={styles.navLink}>
           Drivetrain
         </Link>
       </ul> 

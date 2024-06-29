@@ -4,7 +4,6 @@ import ProductCards from "@/app/components/ProductCards";
 function Fuel() {
   return (
     <div>
-      Fuel
       <ProductCards />
     </div>
   );

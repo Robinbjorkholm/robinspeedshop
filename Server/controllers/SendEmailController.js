@@ -33,4 +33,4 @@ sendEmail = async (req, res) => {
   });
 };
 
-module.exports = { sendVerificationEmail, sendEmail };
+module.exports = { sendEmail };

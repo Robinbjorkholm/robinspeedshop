@@ -1,7 +1,7 @@
-.navbar {
+.navbarFilter {
   background-color: #333;
   width: 50vw;
-  margin-top: -6rem;
+  margin: 0 auto;
 }
 
 .navLinks {

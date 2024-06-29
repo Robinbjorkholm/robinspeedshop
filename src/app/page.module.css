@@ -80,6 +80,21 @@
   position: relative;
   padding: 4rem 0;
 }
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.rowSpace{
+  margin-top: 1rem;
+  margin-bottom:1rem;
+}
 
 .center::before {
   background: var(--secondary-glow);
