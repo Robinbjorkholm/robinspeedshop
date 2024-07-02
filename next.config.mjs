@@ -4,9 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const nextConfig = {
-  cssModules: {
-    localIdentName: "[local]--[hash:base64:5]",
-  },
+  experimental: {},
 };
 
 export default nextConfig;

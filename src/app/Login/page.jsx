@@ -9,7 +9,9 @@ import * as Yup from "yup";
 
 const schema = Yup.object().shape({
   email: Yup.string().email().required(),
+  createEmail: Yup.string().email().required(),
   password: Yup.string().required(),
+  createPassword: Yup.string().required(),
   address: Yup.string(),
   postalCode: Yup.number().required(),
   city: Yup.string().required(),
@@ -18,12 +20,14 @@ const schema = Yup.object().shape({
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [createEmail, setCreateEmail] = useState("");
+  const [createPassword, setCreatePassword] = useState("");
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [forgotPassword, setForgotPassword] = useState(false);
+  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
   const {
@@ -45,9 +49,17 @@ const Login = () => {
       )
     );
   }
-  
+
   function submitRegisterUser(event) {
     event.preventDefault();
+    console.log(
+      createEmail,
+      createPassword,
+      address,
+      postalCode,
+      city,
+      country
+    );
     handleSubmit(
       RegisterApi(email, password, address, postalCode, city, country).then(
         (response) => {
@@ -64,17 +76,16 @@ const Login = () => {
         <form onSubmit={submitLoginUser}>
           <label className={styles.label}>Email:</label>
           <input
+            {...register("email")}
             type="email"
             onChange={(event) => setEmail(event.target.value)}
             className={styles.input}
-            {...register("email")}
           />
           <label className={styles.label}>Password:</label>
           <input
             type="password"
             onChange={(event) => setPassword(event.target.value)}
             className={styles.input}
-            {...register("password")}
           />
           <button type="submit" className={styles.button}>
             Login
@@ -83,17 +94,17 @@ const Login = () => {
             <p className="login-form-error-message">{loginError}</p>
           )}
           <button
-            onClick={() => setForgotPassword(true)}
+            onClick={() => setForgotPasswordInput(true)}
             style={{ padding: "10px" }}
           >
             Forgot password?
           </button>
-          {forgotPassword && (
+          {forgotPasswordInput && (
             <p className={mainStyles.rowSpace}>
               Enter your email and we will resend your password
             </p>
           )}
-          {forgotPassword && (
+          {forgotPasswordInput && (
             <div>
               <label className={styles.label}>Email:</label>
               <input
@@ -114,10 +125,10 @@ const Login = () => {
               Email:<span style={{ color: "red" }}>*</span>
             </label>
             <input
-              {...register("email", { required: "email" })}
+              {...register("createEmail", { required: "email" })}
               type="email"
               className={styles.input}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => setCreateEmail(event.target.value)}
             />
           </div>
           <div className={mainStyles.flexColumn}>
@@ -125,9 +136,9 @@ const Login = () => {
               Password:<span style={{ color: "red" }}>*</span>
             </label>
             <input
-              {...register("password", { required: "password" })}
+              {...register("createPassword", { required: "password" })}
               type="password"
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => setCreatePassword(event.target.value)}
               className={styles.input}
             />
           </div>

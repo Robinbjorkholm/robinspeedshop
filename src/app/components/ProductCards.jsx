@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/productcards.module.css";
+import styles from "../../styles/productCards.module.css";
 import Link from "next/link";
 import testdata from "../testdata";
 import Card from "../components/Card";
@@ -9,7 +9,7 @@ function ProductCards() {
     <div className={styles.gridContainer}>
       {testdata.map((item) => {
         return (
-          <Link className={styles.gridItem} href="/Fuel/Product1">
+          <Link className={styles.gridItem} href="/Fuel/Product1" key={item.id}>
             <Card
               key={item.id}
               title={item.title}

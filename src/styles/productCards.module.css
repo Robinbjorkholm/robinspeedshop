@@ -1,7 +1,10 @@
 .gridContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns */
-  gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 90%;
+  gap: 1rem;
+  margin: 0 auto;
+  margin-top: 4%;
 }
 
 .gridItem {

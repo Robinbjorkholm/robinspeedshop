@@ -3,7 +3,7 @@
   justify-content: space-around;
   align-items: center;
 
-  background-color: red;
+  background-color: rgb(255, 0, 0);
   height: 5vh;
   max-height: 4rem;
 }
