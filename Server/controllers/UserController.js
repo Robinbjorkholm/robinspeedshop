@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).send("User already exists");
+      return res.status(400).send("Email is already registered.");
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -29,19 +29,41 @@ const registerUser = async (req, res) => {
     await user.save();
 
     const verificationToken = await user.generateVerificationToken();
-
-    const emailData = {
-      to: user.email,
-      subject: "robinspeedshop - Verify your email address",
-      body: `Please verify your email address by clicking this link: ${process.env.BASE_URL_FRONTEND}/verify-email/${user._id}/${verificationToken}`,
-    };
-    await SendEmailController.sendEmail(req, res, emailData);
+    if (verificationToken) {
+      const emailData = {
+        from: "robinspeedshop",
+        to: "bjorkholmrobin@gmail.com",
+        subject: "robinspeedshop - Verify your email address",
+        body: `Please verify your email address by clicking this link: 
+              ${process.env.BASE_URL_FRONTEND}/verify-email/${user._id}/${verificationToken}`,
+      };
+      await SendEmailController.sendEmail(emailData);
+    }
 
     res.send("User created successfully. Please verify your email address.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error creating user");
+    res.status(500).send("A problem occured when sending email");
   }
 };
 
-module.exports = { registerUser };
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const user = await User.findOne({ email });
+  if (!user)
+    return res.status(400).send("User with given email does not exist.");
+  if (user.isVerified === false)
+    return res.status(400).send("Email is not verified.");
+
+  const validPassword = await bcrypt.compare(hashedPassword, user.password);
+  if (!validPassword)
+    return res.status(400).send("Incorrect Email or Password");
+
+  const Token = user.generateJWT();
+  res.send(Token);
+};
+
+module.exports = { registerUser, loginUser };

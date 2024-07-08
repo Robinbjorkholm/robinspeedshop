@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styles from "../../styles/Login.module.css";
 import mainStyles from "../page.module.css";
-import RegisterApi from "../api/Register";
+import RegisterApi from "../api/RegisterApi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -52,20 +52,17 @@ const Login = () => {
 
   function submitRegisterUser(event) {
     event.preventDefault();
-    console.log(
-      createEmail,
-      createPassword,
-      address,
-      postalCode,
-      city,
-      country
-    );
     handleSubmit(
-      RegisterApi(email, password, address, postalCode, city, country).then(
-        (response) => {
-          setRegisterError(response);
-        }
-      )
+      RegisterApi(
+        createEmail,
+        createPassword,
+        address,
+        postalCode,
+        city,
+        country
+      ).then((response) => {
+        setRegisterError(response);
+      })
     );
   }
 
@@ -122,7 +119,8 @@ const Login = () => {
         <form onSubmit={submitRegisterUser} className={styles.registrationForm}>
           <div className={mainStyles.flexColumn}>
             <label className={styles.label}>
-              Email:<span style={{ color: "red" }}>*</span>
+              Email:
+              <span style={{ color: "red" }}>* </span>
             </label>
             <input
               {...register("createEmail", { required: "email" })}
@@ -185,12 +183,12 @@ const Login = () => {
             />
           </div>
 
-          {registerError && (
-            <p className="login-form-error-message">{registerError}</p>
-          )}
           <button type="submit" className={styles.button}>
             Register
           </button>
+          {registerError && (
+            <span style={{ color: "red" }}>{registerError} </span>
+          )}
         </form>
       </div>{" "}
     </div>

@@ -1,36 +1,31 @@
 const nodemailer = require("nodemailer");
-const User = require("../models/User");
+require("dotenv").config();
 
-sendEmail = async (req, res) => {
-  const { to, subject, body } = req.body;
+const sendEmail = async ({ from, to, subject, body }) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      service: "gmail",
+      port: process.env.EMAIL_PORT,
+      secure: process.env.SECURE,
+      auth: {
+        user: "robinspeedshop@gmail.com",
+        pass: process.env.EMAIL_PASSWORD,
+      },
+      tls: { rejectUnauthorized: false },
+    });
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    service: "gmail",
-    port: process.env.EMAIL_PORT,
-    secure: process.env.SECURE,
-    auth: {
-      user: "robinspeedshop@gmail.com",
-      pass: process.env.EMAIL_PASSWORD,
-    },
-    tls: { rejectUnauthorized: false },
-  });
+    const info = await transporter.sendMail({
+      from: from,
+      to: to,
+      subject: subject,
+      html: body,
+    });
 
-  const mailOptions = {
-    from: "robinspeedshop",
-    to,
-    subject,
-    text: body,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.send("Error while sending email");
-    } else {
-      console.log("Email sent:", info.response);
-      res.send("Email sent successfully");
-    }
-  });
+    console.log(`Email sent: ${info.response}`);
+  } catch (err) {
+    console.error(`Error sending email: ${err}`);
+  }
 };
 
 module.exports = { sendEmail };

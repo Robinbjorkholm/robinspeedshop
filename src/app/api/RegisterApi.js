@@ -7,9 +7,9 @@ const headers = {
   },
 };
 
-export default function Register(
-  password,
+export default function RegisterApi(
   email,
+  password,
   address,
   postalCode,
   city,
@@ -19,8 +19,8 @@ export default function Register(
     .post(
       `http://localhost:3001/user/registerUser`,
       {
-        password: password,
         email: email,
+        password: password,
         address: address,
         postalCode: postalCode,
         city: city,
