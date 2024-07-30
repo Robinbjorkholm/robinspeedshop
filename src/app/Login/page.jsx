@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Login.module.css";
 import mainStyles from "../page.module.css";
 import RegisterApi from "../api/RegisterApi";
+import LoginApi from "../api/LoginApi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -17,7 +18,6 @@ const schema = Yup.object().shape({
   city: Yup.string().required(),
   country: Yup.string().required(),
 });
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [createEmail, setCreateEmail] = useState("");
@@ -42,11 +42,9 @@ const Login = () => {
   function submitLoginUser(event) {
     event.preventDefault();
     handleSubmit(
-      RegisterApi(email, password, address, postalCode, city, country).then(
-        (response) => {
-          setLoginError(response);
-        }
-      )
+      LoginApi(email, password).then((response) => {
+        setLoginError(response);
+      })
     );
   }
 
@@ -62,6 +60,9 @@ const Login = () => {
         country
       ).then((response) => {
         setRegisterError(response);
+        if (!registerError) {
+          window.location.href = "/verification-email-sent/";
+        }
       })
     );
   }

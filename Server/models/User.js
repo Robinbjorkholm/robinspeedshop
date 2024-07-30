@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const VerificationToken = require("./VerificationToken");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
   admin: {
@@ -56,7 +57,6 @@ userSchema.methods.generateJWT = function () {
 
 userSchema.methods.generateVerificationToken = async function () {
   const verificationToken = new VerificationToken({
-    // Use the imported model
     userId: this._id,
     token: crypto.randomBytes(32).toString("hex"),
     expiresAt: Date.now() + 3600000,
@@ -65,4 +65,11 @@ userSchema.methods.generateVerificationToken = async function () {
   return verificationToken.token;
 };
 
+userSchema.methods.verifyToken = async function (token) {
+  const verificationToken = await VerificationToken.findOne({
+    token,
+    userId: this._id,
+  });
+  return verificationToken;
+};
 module.exports = mongoose.model("User", userSchema);

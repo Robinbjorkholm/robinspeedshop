@@ -7,15 +7,13 @@ const headers = {
   },
 };
 
-export default function VerifyEmailApi(
- id,token
-) {
+export default function VerifyEmailApi(id, token) {
   return axios
     .post(
-      `http://localhost:3001/user/VerifyEmail`,
+      `http://localhost:3001/user/verifyEmail`,
       {
-       id:id,
-       token:token
+        id: id,
+        token: token,
       },
       { headers: headers }
     )
@@ -23,6 +21,7 @@ export default function VerifyEmailApi(
       console.log(response);
     })
     .catch(function (error) {
+      console.log(error);
       const { response } = error;
       return response.data;
     });

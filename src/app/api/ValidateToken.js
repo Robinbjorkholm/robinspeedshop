@@ -7,24 +7,21 @@ const headers = {
   },
 };
 
-export default function LoginApi(
-  email,
-  password,
-
-) {
+export default function VerifyEmailApi(id, token) {
   return axios
     .post(
-      `http://localhost:3001/user/loginUser`,
+      `http://localhost:3001/user/validateToken`,
       {
-        email: email,
-        password: password,
+        id: id,
+        token: token,
       },
       { headers: headers }
     )
     .then((response) => {
-      console.log(response);
+      return response.data.success;
     })
     .catch(function (error) {
+      console.log(error);
       const { response } = error;
       return response.data;
     });

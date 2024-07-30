@@ -30,12 +30,14 @@ const registerUser = async (req, res) => {
 
     const verificationToken = await user.generateVerificationToken();
     if (verificationToken) {
+      console.log(user._id);
       const emailData = {
         from: "robinspeedshop",
         to: "bjorkholmrobin@gmail.com",
         subject: "robinspeedshop - Verify your email address",
-        body: `Please verify your email address by clicking this link: 
-              ${process.env.BASE_URL_FRONTEND}/verify-email/${user._id}/${verificationToken}`,
+        html: `
+          <p>Please verify your email address by clicking this <a href="${process.env.BASE_URL_FRONTEND}/verify-email/${user._id}/${verificationToken}">link</a></p>
+        `,
       };
       await SendEmailController.sendEmail(emailData);
     }
@@ -63,7 +65,38 @@ const loginUser = async (req, res) => {
     return res.status(400).send("Incorrect Email or Password");
 
   const Token = user.generateJWT();
-  res.send(Token);
+  res.set("Authorization", `Bearer ${Token}`);
 };
 
-module.exports = { registerUser, loginUser };
+const verifyEmail = async (req, res) => {
+  const { id, token } = req.body;
+  const user = await User.findById(id);
+
+  if (!user) return res.status(400).send("user does not exist");
+
+  if (!user.verifyToken(token)) return res.status(400).send("invalid token");
+
+  try {
+    await user.updateOne({ isVerified: true });
+    res.send("Email verified you can now login");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error verifying email");
+  }
+};
+
+const validateToken = async (req, res) => {
+  const { id, token } = req.body;
+  const user = await User.findById(id);
+  if (!user) return res.status(400).send("user does not exist");
+  if (!(await user.verifyToken(token))) {
+    return res.status(400).send("invalid token");
+  }
+  try {
+    res.json({ success: true, message: "access granted" });
+  } catch (error) {
+    res.status(500).send("error with server");
+  }
+};
+
+module.exports = { registerUser, loginUser, verifyEmail, validateToken };
