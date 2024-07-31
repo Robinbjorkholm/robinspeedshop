@@ -9,7 +9,7 @@ function Card({ title, price, description }) {
       <div className={styles.cardContent}>
         <h2 className={styles.cardTitle}>{title}</h2>
         <p className={styles.cardDescription}>{description}</p>
-        <p className={styles.cardPrice}>{price}</p>
+        <p className={styles.cardPrice}> Price € {price}</p>
         <button className={styles.cardButton}>Add to Cart</button>
       </div>
     </div>

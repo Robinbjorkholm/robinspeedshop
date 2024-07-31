@@ -9,7 +9,11 @@ function ProductCards() {
     <div className={styles.gridContainer}>
       {testdata.map((item) => {
         return (
-          <Link className={styles.gridItem} href="/Fuel/Product1" key={item.id}>
+          <Link
+            className={styles.gridItem}
+            href={`/fuel/${item.id}`}
+            key={item.id}
+          >
             <Card
               key={item.id}
               title={item.title}
