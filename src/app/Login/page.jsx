@@ -55,20 +55,23 @@ const Login = () => {
   async function submitRegisterUser(event) {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          createEmail,
-          createPassword,
-          address,
-          postalCode,
-          city,
-          country,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            createEmail,
+            createPassword,
+            address,
+            postalCode,
+            city,
+            country,
+          }),
+        }
+      );
       const data = await response.json();
       if (data.message === "Email already exist") {
         setRegisterError("Email already exists");
