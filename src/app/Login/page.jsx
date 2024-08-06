@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import styles from "../../styles/Login.module.css";
 import mainStyles from "../page.module.css";
-import RegisterApi from "../api/RegisterApi";
 import LoginApi from "../api/LoginApi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,12 +10,15 @@ import * as Yup from "yup";
 const schema = Yup.object().shape({
   email: Yup.string().email().required(),
   password: Yup.string().required(),
-  createEmail: Yup.string().email().required("Email is a required field"),
+  createEmail: Yup.string()
+    .email("Email must be a valid email")
+    .required("Email is a required field"),
   createPassword: Yup.string().required("Password has to be between 9 & 20"),
   address: Yup.string(),
-  postalCode: Yup.number()
-    .positive("")
-    .required("Postal code is a required field"),
+  postalCode: Yup.number("Postal code must be a number")
+    .positive("Postal code must be a valid number1")
+    .typeError("Postal code is a required field"),
+
   city: Yup.string().required("City is a required field"),
   country: Yup.string().required("Country is a required field"),
 });
@@ -41,7 +43,7 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  function submitLoginUser(event) {
+  /*function submitLoginUser(event) {
     event.preventDefault();
     handleSubmit(
       LoginApi(email, password).then((response) => {
@@ -49,28 +51,41 @@ const Login = () => {
       })
     );
   }
-
-  function submitRegisterUser(event) {
+*/
+  async function submitRegisterUser(event) {
     event.preventDefault();
-    handleSubmit(
-      RegisterApi(
-        createEmail,
-        createPassword,
-        address,
-        postalCode,
-        city,
-        country
-      ).then((response) => {
-        setRegisterError(response);
-      })
-    );
+    try {
+      const response = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          createEmail,
+          createPassword,
+          address,
+          postalCode,
+          city,
+          country,
+        }),
+      });
+      const data = await response.json();
+      if (data.message === "Email already exist") {
+        setRegisterError("Email already exists");
+      } else {
+        // User created successfully
+        console.log(data.message);
+      }
+    } catch (error) {
+      setRegisterError(error.message);
+    }
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.loginForm}>
         <h2>Login</h2>
-        <form onSubmit={submitLoginUser}>
+        <form>
           <label className={styles.label}>Email:</label>
           <input
             {...register("email")}
@@ -215,7 +230,7 @@ const Login = () => {
               type="submit"
               title="Enter required fields (*)"
               className={styles.button}
-              disabled={!isDirty || !isValid}
+              disabled={!isDirty}
             >
               Register
             </button>

@@ -2,26 +2,26 @@ import bcrypt from "bcrypt";
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
-import { SignJWT } from "jose";
 
-export async function POST(request) {
+export async function POST(req, res) {
   await connectDB();
-  const { email, password, address, country, city, postalCode } =
-    await request.json();
+  const { createEmail, createPassword, address, country, city, postalCode } =
+    await req.json();
 
   try {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: createEmail });
     if (user) return NextResponse.json({ Message: "Email already exist" });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(createPassword, salt);
 
     const newUser = new User({
-      email: email,
-      password: bcrypt.hash(10, password),
+      email: createEmail,
+      password: hashedPassword,
       address: address,
       country: country,
       city: city,
       postalCode: postalCode,
-      isVerified: false,
+      isVerified: true,
       admin: false,
     });
     await newUser.save();
@@ -31,6 +31,6 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: "error " }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
