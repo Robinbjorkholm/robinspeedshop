@@ -10,25 +10,27 @@ import * as Yup from "yup";
 
 const schema = Yup.object().shape({
   email: Yup.string().email().required(),
-  createEmail: Yup.string().email().required(),
   password: Yup.string().required(),
-  createPassword: Yup.string().required(),
+  createEmail: Yup.string().email().required("Email is a required field"),
+  createPassword: Yup.string().required("Password has to be between 9 & 20"),
   address: Yup.string(),
-  postalCode: Yup.number().required(),
-  city: Yup.string().required(),
-  country: Yup.string().required(),
+  postalCode: Yup.number()
+    .positive("")
+    .required("Postal code is a required field"),
+  city: Yup.string().required("City is a required field"),
+  country: Yup.string().required("Country is a required field"),
 });
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [createEmail, setCreateEmail] = useState("");
   const [createPassword, setCreatePassword] = useState("");
-  const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
-  const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
   const {
     register,
@@ -60,9 +62,6 @@ const Login = () => {
         country
       ).then((response) => {
         setRegisterError(response);
-        if (!registerError) {
-          window.location.href = "/verification-email-sent/";
-        }
       })
     );
   }
@@ -118,30 +117,41 @@ const Login = () => {
       </div>
       <div>
         <form onSubmit={submitRegisterUser} className={styles.registrationForm}>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>
               Email:
-              <span style={{ color: "red" }}>* </span>
+              <span style={{ color: "red", marginTop: -15 }}>* </span>
             </label>
             <input
-              {...register("createEmail", { required: "email" })}
+              {...register("createEmail", { required: "createEmail" })}
               type="email"
               className={styles.input}
               onChange={(event) => setCreateEmail(event.target.value)}
             />
+            {errors.createEmail && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.createEmail.message}
+              </p>
+            )}
+            {}
           </div>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>
-              Password:<span style={{ color: "red" }}>*</span>
+              Password:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
             <input
-              {...register("createPassword", { required: "password" })}
+              {...register("createPassword", { required: "createPassword" })}
               type="password"
               onChange={(event) => setCreatePassword(event.target.value)}
               className={styles.input}
             />
+            {errors.createPassword && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.createPassword.message}
+              </p>
+            )}
           </div>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>Address:</label>
             <input
               {...register("address")}
@@ -150,9 +160,10 @@ const Login = () => {
               className={styles.input}
             />
           </div>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>
-              Postal Code:<span style={{ color: "red" }}>*</span>
+              Postal Code:
+              <span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
             <input
               {...register("postalCode", { required: "postalCode" })}
@@ -160,10 +171,15 @@ const Login = () => {
               onChange={(event) => setPostalCode(event.target.value)}
               className={styles.input}
             />
+            {errors.postalCode && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.postalCode.message}
+              </p>
+            )}
           </div>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>
-              City:<span style={{ color: "red" }}>*</span>
+              City:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
             <input
               {...register("city", { required: "city" })}
@@ -171,10 +187,15 @@ const Login = () => {
               onChange={(event) => setCity(event.target.value)}
               className={styles.input}
             />{" "}
+            {errors.city && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.city.message}
+              </p>
+            )}
           </div>
-          <div className={mainStyles.flexColumn}>
+          <div>
             <label className={styles.label}>
-              Country:<span style={{ color: "red" }}>*</span>
+              Country:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
             <input
               {...register("country", { required: "country" })}
@@ -182,14 +203,26 @@ const Login = () => {
               onChange={(event) => setCountry(event.target.value)}
               className={styles.input}
             />
+            {errors.country && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.country.message}
+              </p>
+            )}
           </div>
-
-          <button type="submit" className={styles.button}>
-            Register
-          </button>
-          {registerError && (
-            <span style={{ color: "red" }}>{registerError} </span>
-          )}
+          <div>
+            {" "}
+            <button
+              type="submit"
+              title="Enter required fields (*)"
+              className={styles.button}
+              disabled={!isDirty || !isValid}
+            >
+              Register
+            </button>
+            {registerError && (
+              <span className={styles.registerErrorMain}>{registerError} </span>
+            )}
+          </div>
         </form>
       </div>{" "}
     </div>

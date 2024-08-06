@@ -8,6 +8,7 @@ function Card({ title, price, description }) {
       <img src="/turbo.jpg" alt="Product Image" className={styles.cardImage} />
       <div className={styles.cardContent}>
         <h2 className={styles.cardTitle}>{title}</h2>
+
         <p className={styles.cardDescription}>{description}</p>
         <p className={styles.cardPrice}> Price € {price}</p>
         <button className={styles.cardButton}>Add to Cart</button>

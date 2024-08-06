@@ -31,7 +31,17 @@
   border: 1px solid #ddd;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+.registrationForm div:last-child {
+  grid-column: 2/3;
+  grid-row: 3/3;
+  display: flex;
+  height: 5rem;
+  flex-direction: column;
+}
+.registrationForm div {
+  flex-direction: column;
+  height: 5rem;
+}
 .label {
   margin-bottom: 10px;
   font-size: 16px;
@@ -52,7 +62,10 @@
   border-color: #aaa;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+.registerErrorMain {
+  color: red;
+  margin: 0 auto;
+}
 .button {
   width: 25%;
   min-width: 10rem;
@@ -65,13 +78,10 @@
   grid-column: 2;
   grid-row: auto;
 }
-
+.button:disabled:hover {
+  background-color: rgba(0, 0, 0, 0.644);
+  cursor: auto;
+}
 .button:hover {
   background-color: black;
-}
-
-.registerUserErrorMessage {
-  color: red;
-  margin: 0;
-  height: fit-content;
 }
