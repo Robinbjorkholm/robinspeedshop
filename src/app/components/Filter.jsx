@@ -6,22 +6,22 @@ function Filter() {
   return (
     <nav className={styles.navbarFilter}>
       <ul className={styles.navLinks}>
-        <Link href="/engine" className={styles.navLink}>
+        <Link href="/shop/engine" className={styles.navLink}>
           Engine
         </Link>
-        <Link href="/fuel" className={styles.navLink}>
+        <Link href="/shop/fuel" className={styles.navLink}>
           Fuel
         </Link>
-        <Link href="/chassis" className={styles.navLink}>
+        <Link href="/shop/chassis" className={styles.navLink}>
           Chassis
         </Link>
-        <Link href="/engine-management" className={styles.navLink}>
+        <Link href="/shop/engine-management" className={styles.navLink}>
           Engine management
         </Link>
-        <Link href="/drivetrain" className={styles.navLink}>
+        <Link href="/shop/drivetrain" className={styles.navLink}>
           Drivetrain
         </Link>
-      </ul> 
+      </ul>
     </nav>
   );
 }

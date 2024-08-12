@@ -4,9 +4,9 @@ import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 
-export async function POST(req,res) {
+export async function POST(req, res) {
   await connectDB();
-  const { email, password } = await request.json();
+  const { email, password } = await req.json();
 
   try {
     if (!email || !password)
@@ -15,10 +15,10 @@ export async function POST(req,res) {
       });
     const user = await User.findOne({ email: email });
     if (!user)
-      return NextResponse.json({ message: "incorrect username or password" });
+      return NextResponse.json({ message: "Incorrect username or password" });
     const validPassword = await bcrypt.compare(user.password, password);
     if (!validPassword)
-      return NextResponse.json({ message: "incorrect username or password" });
+      return NextResponse.json({ message: "Incorrect username or password" });
     const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
     const token = await new SignJWT({ userId: user._id })
       .setProtectedHeader({
@@ -26,8 +26,8 @@ export async function POST(req,res) {
       })
       .sign(jwtSecret);
 
-    response.cookies.set({
-      name: "x-authToken",
+    res.cookies.set({
+      name: "authToken",
       value: token,
       path: "/",
       httpOnly: true,

@@ -8,8 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 const schema = Yup.object().shape({
-  email: Yup.string().email().required(),
-  password: Yup.string().required(),
   createEmail: Yup.string()
     .email("Email must be a valid email")
     .required("Email is a required field"),
@@ -43,17 +41,32 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  /*function submitLoginUser(event) {
+  async function submitLoginUser(event) {
     event.preventDefault();
-    handleSubmit(
-      LoginApi(email, password).then((response) => {
-        setLoginError(response);
-      })
-    );
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (data.message === "Incorrect username or password") {
+        setLoginError("Incorrect username or password");
+      }
+    } catch (error) {
+      setLoginError(error.message);
+    }
   }
-*/
-  async function submitRegisterUser(event) {
-    event.preventDefault();
+
+  const submitResetPassword = async (value) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
@@ -63,12 +76,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            createEmail,
-            createPassword,
-            address,
-            postalCode,
-            city,
-            country,
+           email:email
           }),
         }
       );
@@ -76,7 +84,6 @@ const Login = () => {
       if (data.message === "Email already exist") {
         setRegisterError("Email already exists");
       } else {
-        // User created successfully
         console.log(data.message);
       }
     } catch (error) {
@@ -84,57 +91,106 @@ const Login = () => {
     }
   }
 
+  const submitRegisterUser = async (value) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            createEmail: value.createEmail,
+            createPassword: value.createPassword,
+            address: value.address,
+            postalCode: value.postalCode,
+            city: value.city,
+            country: value.country,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (data.message === "Email already exist") {
+        setRegisterError("Email already exists");
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      setRegisterError(error.message);
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.loginForm}>
-        <h2>Login</h2>
-        <form>
+      <div className={styles.loginContainer}>
+        <h2 style={{ marginBottom: "10px" }}>Login</h2>
+        <form onSubmit={submitLoginUser} className={styles.loginForm}>
           <label className={styles.label}>Email:</label>
           <input
             {...register("email")}
             type="email"
             onChange={(event) => setEmail(event.target.value)}
-            className={styles.input}
+            className={styles.loginInput}
           />
           <label className={styles.label}>Password:</label>
           <input
             type="password"
             onChange={(event) => setPassword(event.target.value)}
-            className={styles.input}
+            className={styles.loginInput}
           />
-          <button type="submit" className={styles.button}>
-            Login
-          </button>
-          {loginError && (
-            <p className="login-form-error-message">{loginError}</p>
-          )}
-          <button
-            onClick={() => setForgotPasswordInput(true)}
-            style={{ padding: "10px" }}
+          <div
+            style={{
+              display: "Flex",
+              flexDirection: "Column",
+              alignItems: "flex-start",
+            }}
           >
-            Forgot password?
-          </button>
+            <button type="submit" className={styles.buttonLogin}>
+              Login
+            </button>
+            {loginError && (
+              <p style={{ color: "red", marginTop: "10px" }}>{loginError}</p>
+            )}
+
+            <button
+              onClick={() => setForgotPasswordInput(true)}
+              style={{ padding: "10px" }}
+            >
+              Forgot password?
+            </button>
+          </div>
           {forgotPasswordInput && (
             <p className={mainStyles.rowSpace}>
-              Enter your email and we will resend your password
+              Please provide your email address and we will send an email for
+              resetting your password
             </p>
           )}
           {forgotPasswordInput && (
-            <div>
-              <label className={styles.label}>Email:</label>
+            <form
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "10px",
+              }}
+              onSubmit={submitResetPassword}
+            >
               <input
                 {...register("email")}
                 type="email"
-                className={styles.input}
+                className={styles.loginInput}
                 onChange={(event) => setEmail(event.target.value)}
               />{" "}
-              <button className={styles.button}>Send</button>
-            </div>
+              <button className={styles.buttonLogin}>Send</button>
+            </form>
           )}
         </form>
       </div>
       <div>
-        <form onSubmit={submitRegisterUser} className={styles.registrationForm}>
+        <form
+          onSubmit={handleSubmit(submitRegisterUser)}
+          className={styles.registrationForm}
+        >
           <div>
             <label className={styles.label}>
               Email:
@@ -143,7 +199,7 @@ const Login = () => {
             <input
               {...register("createEmail", { required: "createEmail" })}
               type="email"
-              className={styles.input}
+              className={styles.registerInput}
               onChange={(event) => setCreateEmail(event.target.value)}
             />
             {errors.createEmail && (
@@ -161,7 +217,7 @@ const Login = () => {
               {...register("createPassword", { required: "createPassword" })}
               type="password"
               onChange={(event) => setCreatePassword(event.target.value)}
-              className={styles.input}
+              className={styles.registerInput}
             />
             {errors.createPassword && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -175,7 +231,7 @@ const Login = () => {
               {...register("address")}
               type="text"
               onChange={(event) => setAddress(event.target.value)}
-              className={styles.input}
+              className={styles.registerInput}
             />
           </div>
           <div>
@@ -187,7 +243,7 @@ const Login = () => {
               {...register("postalCode", { required: "postalCode" })}
               type="number"
               onChange={(event) => setPostalCode(event.target.value)}
-              className={styles.input}
+              className={styles.registerInput}
             />
             {errors.postalCode && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -203,7 +259,7 @@ const Login = () => {
               {...register("city", { required: "city" })}
               type="text"
               onChange={(event) => setCity(event.target.value)}
-              className={styles.input}
+              className={styles.registerInput}
             />{" "}
             {errors.city && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -219,7 +275,7 @@ const Login = () => {
               {...register("country", { required: "country" })}
               type="text"
               onChange={(event) => setCountry(event.target.value)}
-              className={styles.input}
+              className={styles.registerInput}
             />
             {errors.country && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -232,7 +288,7 @@ const Login = () => {
             <button
               type="submit"
               title="Enter required fields (*)"
-              className={styles.button}
+              className={styles.buttonRegister}
               disabled={!isDirty}
             >
               Register

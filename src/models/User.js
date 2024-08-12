@@ -1,4 +1,6 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose from "mongoose";
+import VerificationToken from "./VerificationToken";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema(
   {
@@ -39,11 +41,33 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    verificationToken: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "VerificationToken",
+    },
+    verificationTokenString: { type: String },
   },
   {
     timestamps: true,
   }
 );
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+userSchema.statics.generateVerificationToken = async function (userId) {
+  const verificationToken = new VerificationToken({
+    userId,
+    token: crypto.randomBytes(32).toString("hex"),
+    expiresAt: Date.now() + 3600000,
+  });
+  await verificationToken.save();
+  return verificationToken.token;
+};
+
+userSchema.methods.verifyToken = async function (token) {
+  const validVerificationToken = await VerificationToken.findOne({
+    token,
+    userId: this._id,
+  });
+  return validVerificationToken;
+};
+const User = mongoose.model("User", userSchema);
 
 export default User;

@@ -1,0 +1,28 @@
+.gridLayout {
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.gridItem {
+  background-color: #f1f1f1;
+  height: 20rem;
+  width: 20rem;
+  box-sizing: border-box;
+  text-align: center;
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}

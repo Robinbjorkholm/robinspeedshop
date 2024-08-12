@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "../../styles/productCards.module.css";
+import styles from "../../../styles/productCards.module.css";
 import Link from "next/link";
-import testdata from "../testdata";
-import Card from "../components/Card";
+import testdata from "../../testdata";
+import Card from "../../components/Card";
 
 function Fuel() {
   return (

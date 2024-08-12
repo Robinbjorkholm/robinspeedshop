@@ -1,7 +1,7 @@
 import React from "react";
 
 function Chassis() {
-  return <div>Chassis</div>;
+  return <div></div>;
 }
 
 export default Chassis;

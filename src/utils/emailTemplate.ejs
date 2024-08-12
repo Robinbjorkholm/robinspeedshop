@@ -1,0 +1,27 @@
+<style>
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 0, 0);
+    height: 5vh;
+    max-height: 4rem;
+  }
+  .verifyButton {
+    background-color: green;
+    width: 20px;
+    height: 20px;
+  }
+</style>
+
+<head>
+  <body>
+    <div class="navbar">
+      <p>Please verify your email address by clicking the link below</p>
+      <a
+        class="verifyButton"
+        href="<%= baseUrl %>/verify-email/<%= userId %>/<%= verificationToken %>"
+        >Verify Email Address</a
+      >
+    </div>
+  </body>
+</head>
