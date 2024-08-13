@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../../../models/User";
+import VerificationToken from "../../../models/VerificationToken";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { sendEmail } from "../../../utils/nodemailer";
@@ -15,7 +16,6 @@ export async function POST(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
 
-    const verificationToken = await User.generateVerificationToken();
     const newUser = new User({
       email: createEmail,
       password: hashedPassword,
@@ -25,21 +25,22 @@ export async function POST(req, res) {
       postalCode: postalCode,
       isVerified: false,
       admin: false,
-      verificationTokenString: verificationToken,
     });
+    const verificationToken = await User.generateVerificationToken();
+    const tokenString = verificationToken.token;
+    newUser.verificationTokenString = tokenString;
     await newUser.save();
+
+    verificationToken.userId = newUser._id;
+    await verificationToken.save();
+
     if (verificationToken) {
-      /*const templateData = {
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL_FRONTEND,
-        userId: newUser._id,
-        verificationToken: verificationToken,
-        };*/
       try {
         const data = {
           from: "robinspeedshop",
           to: newUser.email,
           subject: "robinspeedshop - Verify your email address",
-          html: `<p>Please verify your email address by clicking this  <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${newUser._id}/${verificationToken}">link</a></p>`,
+          html: `<p>Please verify your email address by clicking this  <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${newUser._id}/${verificationToken.token}">link</a></p>`,
         };
         await sendEmail(data);
       } catch (error) {

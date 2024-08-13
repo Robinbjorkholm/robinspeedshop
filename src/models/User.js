@@ -58,7 +58,7 @@ userSchema.statics.generateVerificationToken = async function (userId) {
     expiresAt: Date.now() + 3600000,
   });
   await verificationToken.save();
-  return verificationToken.token;
+  return verificationToken;
 };
 
 userSchema.methods.verifyToken = async function (token) {
@@ -68,6 +68,6 @@ userSchema.methods.verifyToken = async function (token) {
   });
   return validVerificationToken;
 };
-const User = mongoose.model("User", userSchema);
+const User = mongoose.Model.User || mongoose.model("User", userSchema);
 
 export default User;

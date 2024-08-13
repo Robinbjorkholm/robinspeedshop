@@ -6,7 +6,7 @@ const verificationTokenSchema = new mongoose.Schema({
   expiresAt: Date,
 });
 
-const VerificationToken = mongoose.model(
+const VerificationToken = mongoose.model.VerificationToken || mongoose.model(
   "VerificationToken",
   verificationTokenSchema
 );
