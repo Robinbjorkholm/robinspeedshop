@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";

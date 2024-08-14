@@ -1,0 +1,43 @@
+.form {
+  width: 35%;
+  height: 50%;
+  background-color: red;
+  border-radius: 9px;
+  margin: 0 auto;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.enterCode {
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.enterCode input {
+  width: 4rem;
+  aspect-ratio: 1/1;
+  border-radius: 9px;
+  border: none;
+  box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.enterCode input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+  transform: scale(1.1);
+  box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.5);
+}

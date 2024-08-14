@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import styles from "../../styles/Login.module.css";
 import mainStyles from "../page.module.css";
-import LoginApi from "../api/LoginApi";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -76,7 +75,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-           email:email
+            email: email,
           }),
         }
       );
@@ -89,7 +88,7 @@ const Login = () => {
     } catch (error) {
       setRegisterError(error.message);
     }
-  }
+  };
 
   const submitRegisterUser = async (value) => {
     try {
