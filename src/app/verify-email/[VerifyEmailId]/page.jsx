@@ -1,22 +1,33 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "../../../styles/verifyEmail.module.css";
 import { NextResponse } from "next/server";
 
 function VerifyEmail({ params }) {
-  const { VerifyEmailId } = params;   
+  const { VerifyEmailId } = params;
   const [code, setCode] = useState(new Array(6).fill(""));
+  const [completedCode, setCompletedCode] = useState("");
   const inputRefs = useRef([]);
 
   const handleInputChange = (index, value) => {
-    const newcode = [...code];
-    newcode[index] = value;
-    setCode(newcode);
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
 
     if (value !== "" && index < 5) {
       inputRefs.current[index + 1].focus();
     }
+    if (newCode.every((number) => number !== "")) {
+      setCompletedCode(newCode.join(""));
+    }
   };
+
+  useEffect(() => {
+    if (completedCode.length === 6) {
+      submitVerifyEmail();
+    }
+  }, [completedCode]);
+
   async function submitVerifyEmail() {
     try {
       const response = await fetch(
@@ -50,7 +61,7 @@ function VerifyEmail({ params }) {
           {code.map((code, index) => (
             <input
               key={index}
-              type="tel"
+              type="number"
               id={`code-${index}`}
               value={code}
               onChange={(e) => handleInputChange(index, e.target.value)}
@@ -58,6 +69,7 @@ function VerifyEmail({ params }) {
               pattern="[0-9]*"
               required
               ref={(ref) => (inputRefs.current[index] = ref)}
+              className={styles.inputRemoveArrows}
             />
           ))}
         </div>{" "}

@@ -31,6 +31,8 @@
   text-align: center;
   font-weight: bold;
   color: #333;
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
 }
 
 .enterCode input:focus {
@@ -40,4 +42,13 @@
   color: inherit;
   transform: scale(1.1);
   box-shadow: 5px 5px 15px rgb(0, 0, 0, 0.5);
+}
+.inputRemoveArrows {
+  -moz-appearance: textfield;
+}
+
+.inputRemoveArrows::-webkit-inner-spin-button,
+.inputRemoveArrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
