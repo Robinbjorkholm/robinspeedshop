@@ -1,8 +1,6 @@
 .form {
   width: 35%;
   height: 50%;
-  background-color: red;
-  border-radius: 9px;
   margin: 0 auto;
   margin-top: 10%;
   display: flex;
@@ -11,7 +9,13 @@
   justify-content: center;
   padding: 1rem;
 }
-
+.form h2 {
+  color: #333;
+  padding-bottom: 0.5rem;
+}
+.form h3 {
+  color: #585858;
+}
 .enterCode {
   padding: 1rem;
   width: 100%;
@@ -25,7 +29,7 @@
   aspect-ratio: 1/1;
   border-radius: 9px;
   border: none;
-  box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.5);
+  box-shadow: 2px 2px 7px rgb(0, 0, 0, 0.5);
   transition: all 0.2s;
   font-size: 2rem;
   text-align: center;
