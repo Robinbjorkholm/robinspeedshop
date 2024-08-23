@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import styles from "../../../styles/verifyEmail.module.css";
 import loginStyles from "../../../styles/Login.module.css";
 import { NextResponse } from "next/server";
@@ -12,7 +13,7 @@ function VerifyEmail({ params, userEmail }) {
   const [displayResponseDataError, setDisplayResponseDataError] = useState("");
   const [displayResponseDataSuccess, setDisplayResponseDataSuccess] =
     useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef([]);
 
   /////////// HANDLE INPUTS AND AUTOMATICALLY CHANGE TO NEXT INPUT FIELD /////////////
@@ -29,7 +30,6 @@ function VerifyEmail({ params, userEmail }) {
   };
   useEffect(() => {
     inputRefs.current[0].focus();
-
     if (completedCode.length === 6) {
       submitVerifyEmail();
       setCode(new Array(6).fill(""));
@@ -39,6 +39,7 @@ function VerifyEmail({ params, userEmail }) {
 
   /////// SUBMIT VERIFICATION CODE //////////////////
   async function submitVerifyEmail() {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/verify-email`,
@@ -54,7 +55,7 @@ function VerifyEmail({ params, userEmail }) {
         }
       );
       const responseData = await response.json();
-
+      setIsLoading(false);
       if (responseData.error) {
         setDisplayResponseDataError(responseData.error);
         setCode(new Array(6).fill(""));
@@ -68,7 +69,7 @@ function VerifyEmail({ params, userEmail }) {
   //////// RESEND EMAIL //////////
   async function resendEmail() {
     setDisableButton(true);
-
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/resend-verification-code`,
@@ -83,6 +84,7 @@ function VerifyEmail({ params, userEmail }) {
         }
       );
       const responseData = await response.json();
+      setIsLoading(false);
       setDisplayResponseDataError(null);
       setDisplayResponseDataSuccess(responseData.message);
     } catch (error) {
@@ -112,6 +114,7 @@ function VerifyEmail({ params, userEmail }) {
             />
           ))}
         </div>{" "}
+        {isLoading && <LoadingSpinner />}
         <p
           style={{
             width: "65%",

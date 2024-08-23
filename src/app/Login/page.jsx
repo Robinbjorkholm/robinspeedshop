@@ -4,6 +4,7 @@ import styles from "../../styles/Login.module.css";
 import mainStyles from "../page.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import LoadingSpinner from "../components/LoadingSpinner";
 import * as Yup from "yup";
 
 const schema = Yup.object().shape({
@@ -31,6 +32,8 @@ const Login = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [registerError, setRegisterError] = useState("");
+  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const {
     register,
     handleSubmit,
@@ -43,6 +46,7 @@ const Login = () => {
   async function submitLoginUser(event) {
     event.preventDefault();
     try {
+      setIsLoadingLogin(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/login`,
         {
@@ -57,6 +61,7 @@ const Login = () => {
         }
       );
       const data = await response.json();
+      setIsLoadingLogin(false);
       if (data.message === "Incorrect username or password") {
         setLoginError("Incorrect username or password");
       }
@@ -75,7 +80,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: email,
+            email: value.email,
           }),
         }
       );
@@ -92,6 +97,7 @@ const Login = () => {
 
   const submitRegisterUser = async (value) => {
     try {
+      setIsLoadingRegister(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
         {
@@ -110,6 +116,7 @@ const Login = () => {
         }
       );
       const data = await response.json();
+      setIsLoadingRegister(false);
       if (data.message === "Email already exist") {
         setRegisterError("Email already exists");
       } else {
@@ -122,8 +129,9 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.loginContainer}>
-        <h2 style={{ marginBottom: "10px" }}>Login</h2>
+      <div  className={`${styles.loginRegisterContainer} ${isLoadingLogin ? styles.pulse : ""}`}
+    >
+        <h2 style={{ margin: "10px" }}>Login</h2>
         <form onSubmit={submitLoginUser} className={styles.loginForm}>
           <label className={styles.label}>Email:</label>
           <input
@@ -155,7 +163,7 @@ const Login = () => {
             <button
               onClick={() => setForgotPasswordInput(true)}
               style={{ padding: "10px" }}
-            >
+              >
               Forgot password?
             </button>
           </div>
@@ -167,29 +175,31 @@ const Login = () => {
           )}
           {forgotPasswordInput && (
             <form
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "10px",
-              }}
-              onSubmit={submitResetPassword}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "10px",
+            }}
+            onSubmit={submitResetPassword}
             >
               <input
                 {...register("email")}
                 type="email"
                 className={styles.loginInput}
                 onChange={(event) => setEmail(event.target.value)}
-              />{" "}
+                />{" "}
               <button className={styles.buttonLogin}>Send</button>
             </form>
           )}
         </form>
+        {isLoadingLogin && <LoadingSpinner />}
       </div>
-      <div>
+      <div className={`${styles.loginRegisterContainer} ${isLoadingRegister ? styles.pulse : ""}`}>
+      <h2 style={{ margin: "10px" }}>Register</h2>
         <form
           onSubmit={handleSubmit(submitRegisterUser)}
           className={styles.registrationForm}
-        >
+          >
           <div>
             <label className={styles.label}>
               Email:
@@ -282,19 +292,20 @@ const Login = () => {
               </p>
             )}
           </div>
-          <div>
+          <div style={{ alignItems: "center" }}>
             {" "}
             <button
               type="submit"
               title="Enter required fields (*)"
               className={styles.buttonRegister}
               disabled={!isDirty}
-            >
+              >
               Register
             </button>
             {registerError && (
               <span className={styles.registerErrorMain}>{registerError} </span>
             )}
+            {isLoadingRegister && <LoadingSpinner />}
           </div>
         </form>
       </div>{" "}
