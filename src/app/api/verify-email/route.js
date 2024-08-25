@@ -7,13 +7,11 @@ export async function POST(req, res) {
   const { VerifyEmailId, VerificationCode } = await req.json();
   const VerificationNumberString = VerificationCode.join("");
   const VerificationNumber = parseInt(VerificationNumberString);
-
   try {
     const user = await User.findOne({ _id: VerifyEmailId });
     if (!user) {
       return NextResponse.json({ error: "Email is not registered" });
     }
-
     if (user.verificationCode !== VerificationNumber) {
       return NextResponse.json({
         error:
@@ -25,8 +23,8 @@ export async function POST(req, res) {
         message: "You have already verified your account",
       });
     }
-    user.isVerified = true;
 
+    user.isVerified = true;
     await user.save();
     return NextResponse.json({
       message: "Account verified you can now login",
