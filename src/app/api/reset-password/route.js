@@ -1,30 +1,23 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   await connectDB();
-  const { email } = await req.json();
-
+  const { id, password } = await req.json();
   try {
-    const user = await User.findOne({ email: email });
-    if (!user) return NextResponse.json({ Message: "Email is not registered" });
-
-    const newUser = new User({
-      email: createEmail,
-      password: hashedPassword,
-      address: address,
-      country: country,
-      city: city,
-      postalCode: postalCode,
-      isVerified: true,
-      admin: false,
-    });
-    await newUser.save();
+    const user = await User.findOne({ _id: id });
+    if (!user)
+      return NextResponse.json({
+        error: "User doesnt exist ",
+      });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword;
+    await user.save();
     return NextResponse.json({
-      message:
-        "Account created, please check your email for verifying your account",
+      message: "Password updated, you can now use your new password to login",
     });
   } catch (error) {
     console.error(error);

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import styles from "../../styles/Login.module.css";
+import styles from "../../styles/login.module.css";
 import mainStyles from "../page.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,11 +11,16 @@ const schema = Yup.object().shape({
   createEmail: Yup.string()
     .email("Email must be a valid email")
     .required("Email is a required field"),
-  createPassword: Yup.string().required("Password has to be between 9 & 20"),
+  createPassword: Yup.string()
+    .required("Password has to be between 9 & 20")
+    .min(9, "password must be between 9 & 20 characters")
+    .max(20, "password must be between 9 & 20 characters"),
   address: Yup.string(),
   postalCode: Yup.number("Postal code must be a number")
     .positive("Postal code must be a valid number1")
-    .typeError("Postal code is a required field"),
+    .typeError("Postal code is a required field")
+    .min(5, "postal code must be a valid postal code ")
+    .max(5, "postal code must be a valid postal code "),
 
   city: Yup.string().required("City is a required field"),
   country: Yup.string().required("Country is a required field"),
@@ -70,7 +75,7 @@ const Login = () => {
     }
   }
 
-  const submitResetPassword = async (value) => {
+  const submitResetPassword = async (email) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
@@ -80,16 +85,10 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: value.email,
+            email: email,
           }),
         }
       );
-      const data = await response.json();
-      if (data.message === "Email already exist") {
-        setRegisterError("Email already exists");
-      } else {
-        console.log(data.message);
-      }
     } catch (error) {
       setRegisterError(error.message);
     }
@@ -115,12 +114,11 @@ const Login = () => {
           }),
         }
       );
-      const data = await response.json();
+      const responseData = await response.json();
       setIsLoadingRegister(false);
-      if (data.message === "Email already exist") {
-        setRegisterError("Email already exists");
-      } else {
-        console.log(data.message);
+      if (responseData.error) {
+        setRegisterError(responseData.error);
+      } else if (responseData.message) {
       }
     } catch (error) {
       setRegisterError(error.message);
@@ -129,8 +127,11 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div  className={`${styles.loginRegisterContainer} ${isLoadingLogin ? styles.pulse : ""}`}
-    >
+      <div
+        className={`${styles.loginRegisterContainer} ${
+          isLoadingLogin ? styles.pulse : ""
+        }`}
+      >
         <h2 style={{ margin: "10px" }}>Login</h2>
         <form onSubmit={submitLoginUser} className={styles.loginForm}>
           <label className={styles.label}>Email:</label>
@@ -142,6 +143,7 @@ const Login = () => {
           />
           <label className={styles.label}>Password:</label>
           <input
+            autoComplete="current-password"
             type="password"
             onChange={(event) => setPassword(event.target.value)}
             className={styles.loginInput}
@@ -163,7 +165,7 @@ const Login = () => {
             <button
               onClick={() => setForgotPasswordInput(true)}
               style={{ padding: "10px" }}
-              >
+            >
               Forgot password?
             </button>
           </div>
@@ -175,31 +177,35 @@ const Login = () => {
           )}
           {forgotPasswordInput && (
             <form
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "10px",
-            }}
-            onSubmit={submitResetPassword}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "10px",
+              }}
+              onSubmit={() => submitResetPassword(email)}
             >
               <input
                 {...register("email")}
                 type="email"
                 className={styles.loginInput}
                 onChange={(event) => setEmail(event.target.value)}
-                />{" "}
+              />{" "}
               <button className={styles.buttonLogin}>Send</button>
             </form>
           )}
         </form>
         {isLoadingLogin && <LoadingSpinner />}
       </div>
-      <div className={`${styles.loginRegisterContainer} ${isLoadingRegister ? styles.pulse : ""}`}>
-      <h2 style={{ margin: "10px" }}>Register</h2>
+      <div
+        className={`${styles.loginRegisterContainer} ${
+          isLoadingRegister ? styles.pulse : ""
+        }`}
+      >
+        <h2 style={{ margin: "10px" }}>Register</h2>
         <form
           onSubmit={handleSubmit(submitRegisterUser)}
           className={styles.registrationForm}
-          >
+        >
           <div>
             <label className={styles.label}>
               Email:
@@ -216,7 +222,6 @@ const Login = () => {
                 {errors.createEmail.message}
               </p>
             )}
-            {}
           </div>
           <div>
             <label className={styles.label}>
@@ -227,6 +232,7 @@ const Login = () => {
               type="password"
               onChange={(event) => setCreatePassword(event.target.value)}
               className={styles.registerInput}
+              autoComplete="new-password"
             />
             {errors.createPassword && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -298,9 +304,15 @@ const Login = () => {
               type="submit"
               title="Enter required fields (*)"
               className={styles.buttonRegister}
-              disabled={!isDirty}
-              >
+              disabled={!isValid}
+            >
               Register
+            </button>
+            <button
+              onClick={submitResetPassword(createEmail)}
+              style={{ padding: "10px" }}
+            >
+              Forgot password?
             </button>
             {registerError && (
               <span className={styles.registerErrorMain}>{registerError} </span>

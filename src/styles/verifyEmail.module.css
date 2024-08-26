@@ -10,13 +10,7 @@
   justify-content: center;
   padding: 1rem;
 }
-.div h2 {
-  color: #333;
-  padding-bottom: 0.5rem;
-}
-.div h3 {
-  color: #585858;
-}
+
 .enterCode {
   padding: 1rem;
   width: 100%;

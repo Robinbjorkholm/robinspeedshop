@@ -102,7 +102,6 @@ button {
   background-color: rgba(0, 0, 0, 0);
   border-radius: 6px;
   transition: all 0.3s;
-  
 }
 button:hover {
   cursor: pointer;
@@ -117,8 +116,15 @@ Link {
 Link:hover {
   cursor: pointer;
 }
-
-
+h2 {
+  color: #333;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+h3 {
+  color: #585858;
+  padding-bottom: 0.25rem;
+}
 
 @media (prefers-color-scheme: dark) {
   html {

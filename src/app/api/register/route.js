@@ -11,7 +11,7 @@ export async function POST(req, res) {
 
   try {
     const user = await User.findOne({ email: createEmail });
-    if (user) return NextResponse.json({ Message: "Email already exist" });
+    if (user) return NextResponse.json({ error: "User with given email already exists,if you have forgot your password you can click the link above to reset your password" });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
     const generatedVerificationCode =

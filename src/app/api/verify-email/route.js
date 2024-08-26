@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   await connectDB();
+  
   const { VerifyEmailId, VerificationCode } = await req.json();
   const VerificationNumberString = VerificationCode.join("");
   const VerificationNumber = parseInt(VerificationNumberString);

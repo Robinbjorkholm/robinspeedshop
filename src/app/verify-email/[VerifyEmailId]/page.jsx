@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import styles from "../../../styles/verifyEmail.module.css";
-import loginStyles from "../../../styles/Login.module.css";
+import loginStyles from "../../../styles/login.module.css";
 import { IconContext } from "react-icons";
 import { MdMarkEmailRead } from "react-icons/md";
 import { NextResponse } from "next/server";
@@ -170,7 +170,7 @@ function VerifyEmail({ params, userEmail }) {
           <h3>you can now use your account</h3>
           <h3>
             you will automatically get routed back to the home page in {timer}
-            (seconds)
+            &nbsp;(seconds)
           </h3>
         </div>
       )}
