@@ -1,17 +1,22 @@
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { sendEmail } from "../../../utils/nodemailer";
-
 import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   await connectDB();
-  const { VerifyEmailId } = await req.json();
+  const { VerificationEmailSentId } = await req.json();
+  const isValidObjectId = (VerificationEmailSentId) => {
+    return /^[0-9a-fA-F]{24}$/.test(VerificationEmailSentId);
+  };
+  if (!isValidObjectId(VerificationEmailSentId)) {
+    return NextResponse.json({ error: "User doesnt exist." });
+  }
 
   try {
-    const user = await User.findOne({ _id: VerifyEmailId });
+    const user = await User.findOne({ _id: VerificationEmailSentId });
     if (!user) {
-      return NextResponse.json({ Message: "Email is not registered" });
+      return NextResponse.json({ error: "Email is not registered." });
     }
     try {
       const data = {

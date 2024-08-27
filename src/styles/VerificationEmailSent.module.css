@@ -1,10 +1,15 @@
-.test {
-  width: 50%;
-  height: 20rem;
-  background-color: rgb(240, 240, 240);
-  margin: 15% auto;
-  border-radius: 9px;
+.container {
   display: flex;
+  text-align: center;
   flex-direction: column;
-  align-items: center;
+  width: 35%;
+  margin: 0 auto;
+  margin-top: 3rem;
+}
+
+.container p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color:#333
 }

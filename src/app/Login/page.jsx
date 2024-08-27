@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import styles from "../../styles/login.module.css";
 import mainStyles from "../page.module.css";
 import { useForm } from "react-hook-form";
@@ -16,29 +18,26 @@ const schema = Yup.object().shape({
     .min(9, "password must be between 9 & 20 characters")
     .max(20, "password must be between 9 & 20 characters"),
   address: Yup.string(),
-  postalCode: Yup.number("Postal code must be a number")
-    .positive("Postal code must be a valid number1")
-    .typeError("Postal code is a required field")
-    .min(5, "postal code must be a valid postal code ")
-    .max(5, "postal code must be a valid postal code "),
-
-  city: Yup.string().required("City is a required field"),
-  country: Yup.string().required("Country is a required field"),
-});
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
-  const [loginError, setLoginError] = useState("");
-  const [createEmail, setCreateEmail] = useState("");
-  const [createPassword, setCreatePassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [registerError, setRegisterError] = useState("");
-  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
-  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+  postalCode: Yup.string()
+    .test(
+      "len",
+      "Postal code must be a valid postal code",
+      (val) => val.length === 5
+    )
+    .matches(/^\d+$/, "Postal code must be a number"),
+    city: Yup.string().required("City is a required field"),
+    country: Yup.string().required("Country is a required field"),
+  });
+  
+  const Login = () => {
+    const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
+    const [loginError, setLoginError] = useState("");
+    const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+    const [resetPasswordError, setResetPasswordError] = useState("");
+    const [registerError, setRegisterError] = useState("");
+    const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+    const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -60,8 +59,8 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
-            password,
+            email: value.email,
+            password: value.password,
           }),
         }
       );
@@ -75,22 +74,28 @@ const Login = () => {
     }
   }
 
-  const submitResetPassword = async (email) => {
+  const submitResetPassword = async (resetPasswordEmail) => {
+    setIsLoadingLogin(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/send-reset-password-email`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: email,
+            email: resetPasswordEmail,
           }),
         }
       );
+      const responseData = await response.json();
+      setIsLoadingLogin(false);
+      if (responseData) {
+        setResetPasswordError(responseData.Message);
+      }
     } catch (error) {
-      setRegisterError(error.message);
+      console.log(error);
     }
   };
 
@@ -118,7 +123,8 @@ const Login = () => {
       setIsLoadingRegister(false);
       if (responseData.error) {
         setRegisterError(responseData.error);
-      } else if (responseData.message) {
+      } else if (responseData.url) {
+        router.push(responseData.url);
       }
     } catch (error) {
       setRegisterError(error.message);
@@ -138,14 +144,13 @@ const Login = () => {
           <input
             {...register("email")}
             type="email"
-            onChange={(event) => setEmail(event.target.value)}
             className={styles.loginInput}
           />
           <label className={styles.label}>Password:</label>
           <input
+            {...register("password")}
             autoComplete="current-password"
             type="password"
-            onChange={(event) => setPassword(event.target.value)}
             className={styles.loginInput}
           />
           <div
@@ -158,17 +163,24 @@ const Login = () => {
             <button type="submit" className={styles.buttonLogin}>
               Login
             </button>
-            {loginError && (
-              <p style={{ color: "red", marginTop: "10px" }}>{loginError}</p>
-            )}
-
             <button
               onClick={() => setForgotPasswordInput(true)}
               style={{ padding: "10px" }}
             >
               Forgot password?
             </button>
+            {loginError && (
+              <p style={{ color: "red", marginTop: "10px" }}>{loginError}</p>
+            )}
           </div>
+        </form>
+        <form
+          className={styles.loginForm}
+          onSubmit={(event) => {
+            event.preventDefault();
+            submitResetPassword(resetPasswordEmail);
+          }}
+        >
           {forgotPasswordInput && (
             <p className={mainStyles.rowSpace}>
               Please provide your email address and we will send an email for
@@ -176,22 +188,34 @@ const Login = () => {
             </p>
           )}
           {forgotPasswordInput && (
-            <form
+            <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 marginBottom: "10px",
               }}
-              onSubmit={() => submitResetPassword(email)}
             >
               <input
-                {...register("email")}
                 type="email"
                 className={styles.loginInput}
-                onChange={(event) => setEmail(event.target.value)}
-              />{" "}
-              <button className={styles.buttonLogin}>Send</button>
-            </form>
+                {...register("resetPasswordEmail")}
+                onChange={(event) => {
+                  setResetPasswordEmail(event.target.value);
+                }}
+              />
+
+              {resetPasswordError && (
+                <p
+                  style={{ color: "red", marginTop: -15, paddingLeft: "10px" }}
+                >
+                  {resetPasswordError}
+                </p>
+              )}
+
+              <button className={styles.buttonLogin} type="submit">
+                Send
+              </button>
+            </div>
           )}
         </form>
         {isLoadingLogin && <LoadingSpinner />}
@@ -215,7 +239,6 @@ const Login = () => {
               {...register("createEmail", { required: "createEmail" })}
               type="email"
               className={styles.registerInput}
-              onChange={(event) => setCreateEmail(event.target.value)}
             />
             {errors.createEmail && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -230,7 +253,6 @@ const Login = () => {
             <input
               {...register("createPassword", { required: "createPassword" })}
               type="password"
-              onChange={(event) => setCreatePassword(event.target.value)}
               className={styles.registerInput}
               autoComplete="new-password"
             />
@@ -245,19 +267,17 @@ const Login = () => {
             <input
               {...register("address")}
               type="text"
-              onChange={(event) => setAddress(event.target.value)}
               className={styles.registerInput}
             />
           </div>
           <div>
             <label className={styles.label}>
-              Postal Code:
+              Postal code:
               <span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
             <input
               {...register("postalCode", { required: "postalCode" })}
               type="number"
-              onChange={(event) => setPostalCode(event.target.value)}
               className={styles.registerInput}
             />
             {errors.postalCode && (
@@ -273,7 +293,6 @@ const Login = () => {
             <input
               {...register("city", { required: "city" })}
               type="text"
-              onChange={(event) => setCity(event.target.value)}
               className={styles.registerInput}
             />{" "}
             {errors.city && (
@@ -289,7 +308,6 @@ const Login = () => {
             <input
               {...register("country", { required: "country" })}
               type="text"
-              onChange={(event) => setCountry(event.target.value)}
               className={styles.registerInput}
             />
             {errors.country && (
@@ -298,8 +316,11 @@ const Login = () => {
               </p>
             )}
           </div>
-          <div style={{ alignItems: "center" }}>
+          <div style={{ alignItems: "center", height: "auto" }}>
             {" "}
+            {registerError && (
+              <span className={styles.registerErrorMain}>{registerError} </span>
+            )}
             <button
               type="submit"
               title="Enter required fields (*)"
@@ -308,15 +329,6 @@ const Login = () => {
             >
               Register
             </button>
-            <button
-              onClick={submitResetPassword(createEmail)}
-              style={{ padding: "10px" }}
-            >
-              Forgot password?
-            </button>
-            {registerError && (
-              <span className={styles.registerErrorMain}>{registerError} </span>
-            )}
             {isLoadingRegister && <LoadingSpinner />}
           </div>
         </form>

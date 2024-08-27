@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
+const { URL } = require("url");
 import { NextResponse } from "next/server";
 import { sendEmail } from "../../../utils/nodemailer";
+import { cookies } from "next/headers";
 
 export async function POST(req, res) {
   await connectDB();
@@ -11,7 +13,11 @@ export async function POST(req, res) {
 
   try {
     const user = await User.findOne({ email: createEmail });
-    if (user) return NextResponse.json({ error: "User with given email already exists,if you have forgot your password you can click the link above to reset your password" });
+    if (user)
+      return NextResponse.json({
+        error:
+          "User with given email already exists,if you have forgot your password you can click the link above to reset your password",
+      });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
     const generatedVerificationCode =
@@ -41,10 +47,17 @@ export async function POST(req, res) {
     } catch (error) {
       console.error(error);
     }
-
+    const expire = 10 * 60
+    cookies().set("registersession", process.env.I_NEED_TO_PUT_SOMETHING_HERE, {
+      httpOnly: true,
+      secure: true,
+      expires: expire,
+      sameSite: "lax",
+      path: "/",
+    });
+  
     return NextResponse.json({
-      message:
-        "Account created, please check your email for verifying your account",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${user._id}`,
     });
   } catch (error) {
     console.error(error);

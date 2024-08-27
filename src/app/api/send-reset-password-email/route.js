@@ -1,12 +1,15 @@
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import { sendEmail } from "../../../utils/nodemailer";
 
 export async function POST(req, res) {
   await connectDB();
   const { email } = await req.json();
 
   try {
+    if (!email) return NextResponse.json({ Message: "Please enter a valid email" });
+    
     const user = await User.findOne({ email: email });
     if (!user) return NextResponse.json({ Message: "Email is not registered" });
     try {
