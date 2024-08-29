@@ -58,15 +58,15 @@ export async function POST(req, res) {
       );
 
       return NextResponse.json({
-        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${user._id}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${newUser._id}`,
       });
     } catch (error) {
       console.error(error);
-      logger.error("Error sending email - register",error);
+      logger.error("Error sending email - register", error);
     }
   } catch (error) {
     console.error(error);
-    logger.error("Error register",error);
+    logger.error("Error register", error);
     return NextResponse.json(
       { message: "Error communicating with server" },
       { status: 500 }
