@@ -36,6 +36,7 @@ export async function POST(req, res) {
     return response;
   } catch (error) {
     console.error(error);
+    logger.error("Error login ", error)
     return NextResponse.json({ message: "error " }, { status: 500 });
   }
 }

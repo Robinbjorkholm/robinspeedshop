@@ -1,12 +1,12 @@
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import logger from "../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
 
   const { VerifyEmailId, VerificationCode } = await req.json();
-
   const VerificationNumberString = VerificationCode.join("");
   const VerificationNumber = parseInt(VerificationNumberString);
   const isValidObjectId = (VerifyEmailId) => {
@@ -38,6 +38,7 @@ export async function POST(req, res) {
       message: "Account verified you can now login",
     });
   } catch (error) {
+    logger.error("Error verify-email", error);
     console.error(error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }

@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import logger from "../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
@@ -28,6 +29,7 @@ export async function POST(req, res) {
     });
   } catch (error) {
     console.error(error);
+    logger.error("Error resetting password", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

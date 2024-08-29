@@ -24,9 +24,11 @@ export async function POST(req, res) {
       await sendEmail(data);
     } catch (error) {
       console.error(error);
+      logger.error("error sending email - send-reset-password-email",error)
     }
   } catch (error) {
     console.error(error);
+    logger.error("error send-reset-password-email",error)
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

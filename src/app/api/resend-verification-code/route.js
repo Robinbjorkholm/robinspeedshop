@@ -2,6 +2,7 @@ import User from "../../../models/User";
 import connectDB from "../../../lib/mongodb";
 import { sendEmail } from "../../../utils/nodemailer";
 import { NextResponse } from "next/server";
+import logger from "../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
@@ -33,9 +34,11 @@ export async function POST(req, res) {
       });
     } catch (error) {
       console.error(error);
+      logger.error("Error sending email - resend-verification-code", error);
     }
   } catch (error) {
     console.error(error);
+    logger.error("Error resend-verification-code", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
