@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "../../../styles/verificationEmailSent.module.css";
 import loginStyles from "../../../styles/login.module.css";
 import { MdMarkEmailRead } from "react-icons/md";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 
 function VerificationEmailSentClient({ VerificationEmailSentId }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +37,10 @@ function VerificationEmailSentClient({ VerificationEmailSentId }) {
   }
   return (
     <div className={styles.container}>
-      <MdMarkEmailRead size={120} style={{ margin: "0 auto", color: "#333" }} />
+      <MdMarkEmailRead
+        size={120}
+        style={{ margin: "0 auto", color: "rgb(0, 222, 0)" }}
+      />
       <h2 style={{ marginBottom: "20px" }}>Verification email sent</h2>
       <p>
         We've sent a verification link to your email address. Please check your
@@ -49,11 +53,12 @@ function VerificationEmailSentClient({ VerificationEmailSentId }) {
       <button
         onClick={() => submitResendVerificationCode()}
         className={loginStyles.buttonRegister}
-        >
+      >
         Resend{" "}
       </button>
-        {responseSuccess && <p style={{ color: "black" }}>{responseSuccess}</p>}
-        {responseError && <p style={{ color: "red" }}>{responseError}</p>}
+      {responseSuccess && <p style={{ color: "black" }}>{responseSuccess}</p>}
+      {responseError && <p style={{ color: "red" }}>{responseError}</p>}
+      {isLoading && <LoadingSpinner />}
     </div>
   );
 }

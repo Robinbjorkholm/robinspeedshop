@@ -25,19 +25,23 @@ const schema = Yup.object().shape({
       (val) => val.length === 5
     )
     .matches(/^\d+$/, "Postal code must be a number"),
-    city: Yup.string().required("City is a required field"),
-    country: Yup.string().required("Country is a required field"),
-  });
-  
-  const Login = () => {
-    const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
-    const [loginError, setLoginError] = useState("");
-    const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-    const [resetPasswordError, setResetPasswordError] = useState("");
-    const [registerError, setRegisterError] = useState("");
-    const [isLoadingLogin, setIsLoadingLogin] = useState(false);
-    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
-    const router = useRouter();
+  city: Yup.string().required("City is a required field"),
+  country: Yup.string().required("Country is a required field"),
+});
+
+const Login = () => {
+  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
+  const [resetPasswordError, setResetPasswordError] = useState("");
+  const [resetPasswordResponseEmail,setResetPasswordResponseEmail] = useState("")
+  const [registerError, setRegisterError] = useState("");
+  const [resetPasswordResponse, setResetPasswordResponse] = useState("");
+  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -47,8 +51,7 @@ const schema = Yup.object().shape({
     resolver: yupResolver(schema),
   });
 
-  async function submitLoginUser(event) {
-    event.preventDefault();
+  async function submitLoginUser() {
     try {
       setIsLoadingLogin(true);
       const response = await fetch(
@@ -59,8 +62,8 @@ const schema = Yup.object().shape({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: value.email,
-            password: value.password,
+            email: email,
+            password: password,
           }),
         }
       );
@@ -91,8 +94,11 @@ const schema = Yup.object().shape({
       );
       const responseData = await response.json();
       setIsLoadingLogin(false);
-      if (responseData) {
-        setResetPasswordError(responseData.Message);
+      if (responseData.error) {
+        setResetPasswordError(responseData.error);
+      } else if (responseData.message && responseData.email) {
+        setResetPasswordResponse(responseData.message);
+        setResetPasswordResponseEmail(responseData.email);
       }
     } catch (error) {
       console.log(error);
@@ -139,16 +145,22 @@ const schema = Yup.object().shape({
         }`}
       >
         <h2 style={{ margin: "10px" }}>Login</h2>
-        <form onSubmit={submitLoginUser} className={styles.loginForm}>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            submitLoginUser();
+          }}
+          className={styles.loginForm}
+        >
           <label className={styles.label}>Email:</label>
           <input
-            {...register("email")}
+            onChange={(event) => setEmail(event.target.value)}
             type="email"
             className={styles.loginInput}
           />
           <label className={styles.label}>Password:</label>
           <input
-            {...register("password")}
+            onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
             type="password"
             className={styles.loginInput}
@@ -160,6 +172,9 @@ const schema = Yup.object().shape({
               alignItems: "flex-start",
             }}
           >
+            {loginError && (
+              <p style={{ color: "red", marginBottom: "10px" }}>{loginError}</p>
+            )}
             <button type="submit" className={styles.buttonLogin}>
               Login
             </button>
@@ -169,9 +184,6 @@ const schema = Yup.object().shape({
             >
               Forgot password?
             </button>
-            {loginError && (
-              <p style={{ color: "red", marginTop: "10px" }}>{loginError}</p>
-            )}
           </div>
         </form>
         <form
@@ -182,10 +194,13 @@ const schema = Yup.object().shape({
           }}
         >
           {forgotPasswordInput && (
-            <p className={mainStyles.rowSpace}>
-              Please provide your email address and we will send an email for
-              resetting your password
-            </p>
+             
+          
+                <p className={mainStyles.rowSpace}>
+                  Please provide your email address and we will send an email
+                  for resetting your password
+                </p>
+              
           )}
           {forgotPasswordInput && (
             <div
@@ -206,12 +221,20 @@ const schema = Yup.object().shape({
 
               {resetPasswordError && (
                 <p
-                  style={{ color: "red", marginTop: -15, paddingLeft: "10px" }}
+                  style={{
+                    color: "red",
+                    marginBottom: "5px",
+                    paddingLeft: "10px",
+                  }}
                 >
                   {resetPasswordError}
                 </p>
               )}
-
+ {resetPasswordResponse && 
+                <p style={{ marginBottom: "10px", paddingLeft: "10px" }}>
+                  {resetPasswordResponse}<u style={{ marginBottom: "10px", paddingLeft: "10px", fontWeight: "bold" }}>&nbsp;{resetPasswordResponseEmail} </u>
+                </p>}
+           
               <button className={styles.buttonLogin} type="submit">
                 Send
               </button>

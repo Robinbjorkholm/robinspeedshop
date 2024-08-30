@@ -16,7 +16,7 @@ export async function POST(req, res) {
     if (user)
       return NextResponse.json({
         error:
-          "User with given email already exists,if you have forgot your password you can click the link above to reset your password",
+          "Email already in use, if you have forgot your password you can click the link above to reset your password.",
       });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
@@ -33,8 +33,15 @@ export async function POST(req, res) {
       admin: false,
       verificationCode: generatedVerificationCode,
     });
-    await newUser.save();
 
+    const expireDate = new Date(Date.now() + 10 * 60 * 1000);
+    cookies().set("registersession", process.env.I_NEED_TO_PUT_SOMETHING_HERE, {
+      httpOnly: true,
+      secure: true,
+      expires: expireDate,
+      sameSite: "lax",
+      path: "/",
+    });
     try {
       const data = {
         from: "robinspeedshop",
@@ -44,18 +51,7 @@ export async function POST(req, res) {
         <p>Please enter the 6-digit code provided in this email <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${newUser._id}">here</a></p>`,
       };
       await sendEmail(data);
-      const expire = 10 * 60;
-      cookies().set(
-        "registersession",
-        process.env.I_NEED_TO_PUT_SOMETHING_HERE,
-        {
-          httpOnly: true,
-          secure: true,
-          expires: expire,
-          sameSite: "lax",
-          path: "/",
-        }
-      );
+      await newUser.save();
 
       return NextResponse.json({
         url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${newUser._id}`,
@@ -63,6 +59,9 @@ export async function POST(req, res) {
     } catch (error) {
       console.error(error);
       logger.error("Error sending email - register", error);
+      return NextResponse.json({
+        error: "An error occured when creating account",
+      });
     }
   } catch (error) {
     console.error(error);

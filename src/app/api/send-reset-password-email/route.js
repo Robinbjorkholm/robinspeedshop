@@ -8,10 +8,11 @@ export async function POST(req, res) {
   const { email } = await req.json();
 
   try {
-    if (!email) return NextResponse.json({ Message: "Please enter a valid email" });
-    
+    if (!email)
+      return NextResponse.json({ error: "Please enter a valid email" });
+
     const user = await User.findOne({ email: email });
-    if (!user) return NextResponse.json({ Message: "Email is not registered" });
+    if (!user) return NextResponse.json({ error: "Email is not registered" });
     try {
       const data = {
         from: "robinspeedshop",
@@ -22,13 +23,19 @@ export async function POST(req, res) {
         <p>If this was a mistake you can simply ignore this email.</p>`,
       };
       await sendEmail(data);
+      return NextResponse.json({
+        message:
+          "An Email containing a link for resetting your password has been sent to",
+        email: user.email,
+      });
     } catch (error) {
       console.error(error);
-      logger.error("error sending email - send-reset-password-email",error)
+      logger.error("error sending email - send-reset-password-email", error);
+      return NextResponse.json({ message: error.message }, { status: 500 });
     }
   } catch (error) {
     console.error(error);
-    logger.error("error send-reset-password-email",error)
+    logger.error("error send-reset-password-email", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
