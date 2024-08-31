@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
-import User from "../../../models/User";
-import connectDB from "../../../lib/mongodb";
+import User from "../../../../models/User";
+import connectDB from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
-import { sendEmail } from "../../../utils/nodemailer";
+import { sendEmail } from "../../../../utils/nodemailer";
 import { cookies } from "next/headers";
-import logger from "../../../winston";
+import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
@@ -72,3 +72,8 @@ export async function POST(req, res) {
     );
   }
 }
+
+
+
+
+

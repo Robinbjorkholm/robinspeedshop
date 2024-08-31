@@ -50,15 +50,21 @@ function VerificationEmailSentClient({ VerificationEmailSentId }) {
         If you don't see the email in your inbox, please check your spam folder
         or try resending the verification email.
       </p>
-      <button
+      {!isLoading? <button
         onClick={() => submitResendVerificationCode()}
         className={loginStyles.buttonRegister}
       >
         Resend{" "}
-      </button>
+      </button>:<button
+       disabled={true}
+        className={loginStyles.buttonRegister}
+      >
+        Sending...{" "}
+      </button> }
+
       {responseSuccess && <p style={{ color: "black" }}>{responseSuccess}</p>}
       {responseError && <p style={{ color: "red" }}>{responseError}</p>}
-      {isLoading && <LoadingSpinner />}
+     
     </div>
   );
 }

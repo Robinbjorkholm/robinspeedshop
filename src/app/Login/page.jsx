@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 
 import styles from "../../styles/login.module.css";
 import mainStyles from "../page.module.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import LoadingSpinner from "../components/LoadingSpinner";
 import * as Yup from "yup";
 
 const schema = Yup.object().shape({
@@ -34,12 +35,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [showPasswordLogin, setShowPasswordLogin] = useState(false);
+  const [showPasswordRegister, setShowPasswordRegister] = useState(false);
   const [resetPasswordEmail, setResetPasswordEmail] = useState("");
   const [resetPasswordError, setResetPasswordError] = useState("");
-  const [resetPasswordResponseEmail,setResetPasswordResponseEmail] = useState("")
+  const [resetPasswordResponseEmail, setResetPasswordResponseEmail] =
+    useState("");
   const [registerError, setRegisterError] = useState("");
   const [resetPasswordResponse, setResetPasswordResponse] = useState("");
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const [isLoadingResetPassword, setisLoadingResetPassword] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const router = useRouter();
   const {
@@ -51,26 +56,20 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  async function submitLoginUser() {
+  async function submitLoginUser(email, password) {
     try {
       setIsLoadingLogin(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
-      const data = await response.json();
+
+      const result = await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false,
+      });
       setIsLoadingLogin(false);
-      if (data.message === "Incorrect username or password") {
-        setLoginError("Incorrect username or password");
+      if (result.error) {
+        setLoginError(result.error);
+      } else {
+        router.push("/");
       }
     } catch (error) {
       setLoginError(error.message);
@@ -78,7 +77,7 @@ const Login = () => {
   }
 
   const submitResetPassword = async (resetPasswordEmail) => {
-    setIsLoadingLogin(true);
+    setisLoadingResetPassword(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/send-reset-password-email`,
@@ -93,7 +92,7 @@ const Login = () => {
         }
       );
       const responseData = await response.json();
-      setIsLoadingLogin(false);
+      setisLoadingResetPassword(false);
       if (responseData.error) {
         setResetPasswordError(responseData.error);
       } else if (responseData.message && responseData.email) {
@@ -109,7 +108,7 @@ const Login = () => {
     try {
       setIsLoadingRegister(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/register`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/auth/register`,
         {
           method: "POST",
           headers: {
@@ -148,23 +147,38 @@ const Login = () => {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            submitLoginUser();
+            submitLoginUser(email, password);
           }}
           className={styles.loginForm}
         >
           <label className={styles.label}>Email:</label>
-          <input
-            onChange={(event) => setEmail(event.target.value)}
-            type="email"
-            className={styles.loginInput}
-          />
+          <div style={{ position: "relative", width: "65%" }}>
+            <input
+              onChange={(event) => setEmail(event.target.value)}
+              type="email"
+              className={styles.loginInput}
+            />
+          </div>
           <label className={styles.label}>Password:</label>
-          <input
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="current-password"
-            type="password"
-            className={styles.loginInput}
-          />
+          <div style={{ position: "relative", width: "65%" }}>
+            <input
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              type={!showPasswordLogin ? "password" : "text"}
+              className={styles.loginInput}
+            />
+            {showPasswordLogin ? (
+              <FaRegEyeSlash
+                className={styles.showPasswordLogin}
+                onClick={() => setShowPasswordLogin(!showPasswordLogin)}
+              />
+            ) : (
+              <FaEye
+                className={styles.showPasswordLogin}
+                onClick={() => setShowPasswordLogin(!showPasswordLogin)}
+              />
+            )}
+          </div>
           <div
             style={{
               display: "Flex",
@@ -175,9 +189,19 @@ const Login = () => {
             {loginError && (
               <p style={{ color: "red", marginBottom: "10px" }}>{loginError}</p>
             )}
-            <button type="submit" className={styles.buttonLogin}>
-              Login
-            </button>
+            {!isLoadingLogin ? (
+              <button className={styles.buttonLogin} type="submit">
+                Login
+              </button>
+            ) : (
+              <button
+                className={styles.buttonLogin}
+                type="submit"
+                disabled={true}
+              >
+                Logging in..
+              </button>
+            )}
             <button
               onClick={() => setForgotPasswordInput(true)}
               style={{ padding: "10px" }}
@@ -194,13 +218,10 @@ const Login = () => {
           }}
         >
           {forgotPasswordInput && (
-             
-          
-                <p className={mainStyles.rowSpace}>
-                  Please provide your email address and we will send an email
-                  for resetting your password
-                </p>
-              
+            <p className={mainStyles.rowSpace}>
+              Please provide your email address and we will send an email for
+              resetting your password
+            </p>
           )}
           {forgotPasswordInput && (
             <div
@@ -230,18 +251,37 @@ const Login = () => {
                   {resetPasswordError}
                 </p>
               )}
- {resetPasswordResponse && 
+              {resetPasswordResponse && (
                 <p style={{ marginBottom: "10px", paddingLeft: "10px" }}>
-                  {resetPasswordResponse}<u style={{ marginBottom: "10px", paddingLeft: "10px", fontWeight: "bold" }}>&nbsp;{resetPasswordResponseEmail} </u>
-                </p>}
-           
-              <button className={styles.buttonLogin} type="submit">
-                Send
-              </button>
+                  {resetPasswordResponse}
+                  <u
+                    style={{
+                      marginBottom: "10px",
+                      paddingLeft: "10px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    &nbsp;{resetPasswordResponseEmail}{" "}
+                  </u>
+                </p>
+              )}
+
+              {!isLoadingResetPassword ? (
+                <button className={styles.buttonLogin} type="submit">
+                  Send
+                </button>
+              ) : (
+                <button
+                  className={styles.buttonLogin}
+                  type="submit"
+                  disabled={true}
+                >
+                  Sending...
+                </button>
+              )}
             </div>
           )}
         </form>
-        {isLoadingLogin && <LoadingSpinner />}
       </div>
       <div
         className={`${styles.loginRegisterContainer} ${
@@ -273,14 +313,27 @@ const Login = () => {
             <label className={styles.label}>
               Password:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
-            <input
-              {...register("createPassword", { required: "createPassword" })}
-              type="password"
-              className={styles.registerInput}
-              autoComplete="new-password"
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                {...register("createPassword", { required: "createPassword" })}
+                type={!showPasswordRegister ? "password" : "text"}
+                className={styles.registerInput}
+                autoComplete="new-password"
+              />
+              {showPasswordRegister ? (
+                <FaRegEyeSlash
+                  className={styles.showPasswordRegister}
+                  onClick={() => setShowPasswordRegister(!showPasswordRegister)}
+                />
+              ) : (
+                <FaEye
+                  className={styles.showPasswordRegister}
+                  onClick={() => setShowPasswordRegister(!showPasswordRegister)}
+                />
+              )}
+            </div>
             {errors.createPassword && (
-              <p style={{ color: "red", marginTop: -15 }}>
+              <p style={{ color: "red", marginTop: -40 }}>
                 {errors.createPassword.message}
               </p>
             )}
@@ -344,15 +397,25 @@ const Login = () => {
             {registerError && (
               <span className={styles.registerErrorMain}>{registerError} </span>
             )}
-            <button
-              type="submit"
-              title="Enter required fields (*)"
-              className={styles.buttonRegister}
-              disabled={!isValid}
-            >
-              Register
-            </button>
-            {isLoadingRegister && <LoadingSpinner />}
+            {!isLoadingRegister ? (
+              <button
+                type="submit"
+                title="Enter required fields (*)"
+                className={styles.buttonRegister}
+                disabled={!isValid}
+              >
+                Register
+              </button>
+            ) : (
+              <button
+                type="submit"
+                title="Enter required fields (*)"
+                className={styles.buttonRegister}
+                disabled={true}
+              >
+                Creating account...
+              </button>
+            )}
           </div>
         </form>
       </div>{" "}

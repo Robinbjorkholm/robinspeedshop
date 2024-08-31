@@ -1,18 +1,36 @@
+"use client";
 import React from "react";
 import styles from "../../styles/navbar.module.css";
 import Link from "next/link";
 import { TiShoppingCart } from "react-icons/ti";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { MdLogin, MdLogout } from "react-icons/md";
 
 function Navbar() {
+  const { data: session } = useSession();
+
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.navbarLink}>
         Shop
       </Link>
+      {session?.user?.admin && (
+        <Link href="/admin" className={styles.navbarLink}>
+          ADMIN
+        </Link>
+      )}
 
-      <Link href="/login" className={styles.navbarLink}>
-        log in
-      </Link>
+      {session ? (
+        <button className={styles.navbarLink} onClick={signOut}>
+          <MdLogout size={32} />
+          Logout
+        </button>
+      ) : (
+        <Link href="/login" className={styles.navbarLink}>
+          <MdLogin size={32} /> Log in
+        </Link>
+      )}
       <Link href="/checkout" className={styles.navbarLink}>
         <div className={styles.checkout}>
           <TiShoppingCart size={"2em"} color={"white"} />
