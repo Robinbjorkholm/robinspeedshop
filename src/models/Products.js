@@ -17,8 +17,8 @@ const productSchema = new mongoose.Schema({
   },
   numberInStock: {
     type: Number,
-    required: true,
-    default: 0,
+    required: false,
+    default: null,
   },
   category: {
     type: String,
@@ -26,9 +26,11 @@ const productSchema = new mongoose.Schema({
     trim: true,
   },
   image: {
-    type: String,
+    type: [String],
     required: false,
   },
 });
+const Product =
+  mongoose.models.Product || mongoose.model("Product", productSchema);
 
-module.exports = mongoose.model("Product", productSchema);
+export default Product;

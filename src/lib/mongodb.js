@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
-
 export default async function connectDB() {
   try {
-    const { connection } = await mongoose.connect(process.env.MONGODB);
+    await mongoose.connect(process.env.MONGODB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    const connection = mongoose.connection;
     if (connection.readyState === 1) {
       return Promise.resolve(true);
     }

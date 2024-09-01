@@ -1,8 +1,14 @@
+"use client";
 import React from "react";
 import styles from "../../styles/filter.module.css";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function Filter() {
+  const pathname = usePathname();
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  if (isAdminRoute === true) return null;
   return (
     <nav className={styles.navbarFilter}>
       <ul className={styles.navLinks}>
