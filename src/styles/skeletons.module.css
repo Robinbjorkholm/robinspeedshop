@@ -1,3 +1,21 @@
+.productsNewsSkeletonItemMain {
+  width: 60vw;
+  height: 40vh;
+  margin-bottom: 10vh;
+  display: flex;
+  flex-direction: column;
+  animation: pulse 2.5s infinite;
+}
+.productsNewsSkeletonItemMain h1 {
+  align-self: flex-start;
+  color: #333;
+}
+.productsNewsSkeletonItem {
+  width: 60vw;
+  background-color: #f1f1f1;
+  height: 90%;
+}
+
 .gridLayout {
   width: 90%;
   display: grid;

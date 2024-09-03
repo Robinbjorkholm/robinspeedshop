@@ -1,0 +1,28 @@
+.productsNewsMain {
+  width: 60vw;
+  height: 40vh;
+  margin-bottom: 10vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.productsNewsMain h1 {
+  align-self: flex-start;
+  color: #333;
+}
+
+.productsNewsItems {
+  width: 60vw;
+  height: 90%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.productsNewsItems div {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+.newsImage {
+  object-fit: cover;
+}

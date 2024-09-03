@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const nextConfig = {
-  output: "server",
+  output: "standalone", // or "export"
   experimental: {},
   images: {
     domains: ["res.cloudinary.com"],

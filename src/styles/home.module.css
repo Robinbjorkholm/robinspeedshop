@@ -1,0 +1,19 @@
+.productsNewsContainer {
+  display: flex;
+  width: 60vw;
+  height: 25vh;
+  display: flex;
+  align-items: end;
+}
+.productsNewsContainer h1 {
+  align-self: flex-start;
+  color: #333;
+}
+
+.productsNewsItems {
+  background-color: green;
+  height: 85%;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
