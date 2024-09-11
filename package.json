@@ -14,6 +14,7 @@
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^2.4.3",
     "cookies-next": "^4.2.1",
+    "countries-list": "^3.1.1",
     "ejs": "^3.1.10",
     "fs": "^0.0.1-security",
     "mongodb": "^6.8.0",

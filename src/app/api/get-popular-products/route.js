@@ -6,14 +6,14 @@ import connectDB from "../../../lib/mongodb";
 export async function GET() {
   await connectDB();
   try {
-    const latestProducts = await Products.find()
-      .sort({ createdAt: -1 })
+    const mostPopularProducts = await Products.find()
+      .sort({ amountOfPurchases: -1 })
       .limit(5);
 
-    return NextResponse.json(latestProducts);
+    return NextResponse.json(mostPopularProducts);
   } catch (error) {
     console.error(error);
-    logger.error("error getting latest products", error);
+    logger.error("error getting most popular products", error);
 
     return NextResponse.json(
       { message: "Error fetching products" },

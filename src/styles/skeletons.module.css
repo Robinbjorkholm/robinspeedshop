@@ -1,9 +1,9 @@
 .productsNewsSkeletonItemMain {
   width: 60vw;
   height: 40vh;
-  margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
+  margin-bottom: 10vh;
   animation: pulse 2.5s infinite;
 }
 .productsNewsSkeletonItemMain h1 {

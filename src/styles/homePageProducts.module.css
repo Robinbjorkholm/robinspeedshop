@@ -1,0 +1,78 @@
+.productsMain {
+  width: 60vw;
+  height: 40vh;
+  margin-bottom: 10vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.productsMain h1 {
+  align-self: flex-start;
+  color: #333;
+}
+
+.productsItemsContainer {
+  width: 60vw;
+  height: 90%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.productsItems {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.productsItems:hover {
+  opacity: 1;
+  transition: all 0.2s;
+}
+.textContainer {
+  display: flex;
+  background-color: rgba(51, 51, 51, 0.8);
+  width: 90%;
+  position: absolute;
+  height: fit-content;
+  min-height: 3rem;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translatex(-50%);
+}
+.textContainerDiscounted {
+  display: flex;
+  background-color: rgba(51, 51, 51, 0.8);
+  width: 90%;
+  position: absolute;
+  height: 3rem;
+  top: 30%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translatex(-50%);
+}
+.titleImageText {
+  margin: 0 auto;
+  color: #d8d8d8;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.discountAmount {
+  background-color: rgba(197, 2, 2, 0.8);
+  width: fit-content;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+.testing {
+  height: 0.1rem;
+  width: 100%;
+  background-color: red;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translatex(-50%);
+
+  position: absolute;
+}

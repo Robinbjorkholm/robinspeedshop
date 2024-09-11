@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import countries from "countries-list";
 
 const userSchema = new mongoose.Schema(
   {
@@ -18,14 +19,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      minlength: [9, "Password must be at least 9 characters long"],
+      maxlength: [20, "Password must be no more than 20 characters long"],
     },
     address: {
       type: String,
       required: false,
     },
     postalCode: {
-      type: Number,
+      type: String,
       required: true,
+      length: 5,
+      match: [/^\d{5}$/, "Postal code must be exactly 5 digits long"],
     },
     city: {
       type: String,

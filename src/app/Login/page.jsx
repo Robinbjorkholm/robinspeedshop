@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
-import styles from "../../styles/login.module.css";
-import mainStyles from "../page.module.css";
-import { useForm } from "react-hook-form";
+import countries from "countries-list";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import mainStyles from "../page.module.css";
+import styles from "../../styles/login.module.css";
+import { useForm } from "react-hook-form";
 
 const schema = Yup.object().shape({
   createEmail: Yup.string()
@@ -380,11 +381,13 @@ const Login = () => {
             <label className={styles.label}>
               Country:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
-            <input
-              {...register("country", { required: "country" })}
-              type="text"
-              className={styles.registerInput}
-            />
+         
+              <input
+                {...register("country", { required: "country" })}
+                type="text"
+                className={styles.registerInput}
+              />
+     
             {errors.country && (
               <p style={{ color: "red", marginTop: -15 }}>
                 {errors.country.message}

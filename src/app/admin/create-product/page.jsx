@@ -7,13 +7,16 @@ import { CldUploadWidget } from "next-cloudinary";
 
 function createProduct() {
   const [title, setTitle] = useState("");
+  const [titleNews, setTitleNews] = useState("");
   const [description, setDescription] = useState("");
+  const [disclaimers, setDisclaimers] = useState("");
   const [price, setPrice] = useState(0);
+  const [error, setError] = useState("");
   const [numberInStock, setNumberInStock] = useState(0);
+  const [isStockProduct, setIsStockProduct] = useState(true);
   const [category, setCategory] = useState("");
   const [image, setImage] = useState([]);
   const router = useRouter();
-  console.log(image);
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -26,7 +29,10 @@ function createProduct() {
           },
           body: JSON.stringify({
             title: title,
+            titleNews: titleNews,
             description: description,
+            stockProduct: isStockProduct,
+            disclaimers: disclaimers,
             price: price,
             numberInStock: numberInStock,
             category: category,
@@ -37,6 +43,9 @@ function createProduct() {
       const responseData = await response.json();
       if (responseData.message) {
         router.push(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/admin`);
+      }
+      if (responseData.error) {
+        setError(error);
       }
     } catch (error) {
       console.log(error);
@@ -55,13 +64,32 @@ function createProduct() {
           onChange={(event) => setTitle(event.target.value)}
           className={styles.inputField}
         />
-      </label>
+      </label>{" "}
+      <label className={styles.label} htmlFor="titleNews">
+        Title news:
+        <input
+          type="text"
+          id="titleNews"
+          value={titleNews}
+          onChange={(event) => setTitleNews(event.target.value)}
+          className={styles.inputField}
+        />
+      </label>{" "}
       <label className={styles.label} htmlFor="description">
         Description:
         <textarea
           id="description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
+          className={styles.textareaField}
+        />
+      </label>{" "}
+      <label className={styles.label} htmlFor="disclaimers">
+        Disclaimers:
+        <textarea
+          id="disclaimers"
+          value={disclaimers}
+          onChange={(event) => setDisclaimers(event.target.value)}
           className={styles.textareaField}
         />
       </label>
@@ -86,6 +114,20 @@ function createProduct() {
           onChange={(event) => setNumberInStock(event.target.value)}
           className={styles.inputField}
         />
+      </label>
+      <label className={styles.label} htmlFor="isStockProduct">
+        Stock product:
+        <select
+          id="isStockProduct"
+          placeholder="0"
+          value={isStockProduct}
+          onChange={(event) => setIsStockProduct(event.target.value)}
+          className={styles.inputField}
+        >
+          <option value="true">yes</option>
+
+          <option value="false">no</option>
+        </select>
       </label>
       <label className={styles.label} htmlFor="category">
         Category:
@@ -124,7 +166,6 @@ function createProduct() {
           );
         }}
       </CldUploadWidget>
-
       <div className={styles.previewImages}>
         {image &&
           image.map((image, index) => (
@@ -154,6 +195,7 @@ function createProduct() {
           Cancel
         </button>
       </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 }

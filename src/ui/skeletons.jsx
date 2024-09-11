@@ -17,19 +17,27 @@ export function ProductsSkeleton() {
 
 export function ProductsNewsSkeleton() {
   return (
-    <div>
-      <div className={styles.productsNewsSkeletonItemMain}>
-        <h1>News</h1>
-        <div className={styles.productsNewsSkeletonItem}></div>
-      </div>
-      <div className={styles.productsNewsSkeletonItemMain}>
-        <h1>Popular</h1>
-        <div className={styles.productsNewsSkeletonItem}></div>
-      </div>
-      <div className={styles.productsNewsSkeletonItemMain}>
-        <h1>Sale</h1>
-        <div className={styles.productsNewsSkeletonItem}></div>
-      </div>
+    <div className={styles.productsNewsSkeletonItemMain}>
+      <h1>News</h1>
+      <div className={styles.productsNewsSkeletonItem}></div>
+    </div>
+  );
+}
+
+export function ProductsPopularSkeleton() {
+  return (
+    <div className={styles.productsNewsSkeletonItemMain}>
+      <h1>Popular</h1>
+      <div className={styles.productsNewsSkeletonItem}></div>
+    </div>
+  );
+}
+
+export function ProductsSaleSkeleton() {
+  return (
+    <div className={styles.productsNewsSkeletonItemMain}>
+      <h1>Sale</h1>
+      <div className={styles.productsNewsSkeletonItem}></div>
     </div>
   );
 }
