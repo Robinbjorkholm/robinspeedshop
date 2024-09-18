@@ -1,8 +1,8 @@
-import User from "../../../models/User";
-import connectDB from "../../../lib/mongodb";
-import { sendEmail } from "../../../utils/nodemailer";
+import User from "../../../../models/User";
+import connectDB from "../../../../lib/mongodb";
+import { sendEmail } from "../../../../utils/nodemailer";
 import { NextResponse } from "next/server";
-import logger from "../../../winston";
+import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();

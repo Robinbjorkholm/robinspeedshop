@@ -19,8 +19,12 @@ function Navbar() {
         <Link href="/admin" className={styles.navbarLink}>
           ADMIN
         </Link>
+      )}{" "}
+      {session?.user?.admin && (
+        <Link href="/admin/create-product" className={styles.navbarLink}>
+          ADD PRODUCT
+        </Link>
       )}
-
       {session ? (
         <button className={styles.navbarLink} onClick={signOut}>
           <MdLogout size={32} />

@@ -80,7 +80,7 @@ const Login = () => {
     setisLoadingResetPassword(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/send-reset-password-email`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/send-reset-password-email`,
         {
           method: "POST",
           headers: {
@@ -108,7 +108,7 @@ const Login = () => {
     try {
       setIsLoadingRegister(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/auth/register`,
         {
           method: "POST",
           headers: {

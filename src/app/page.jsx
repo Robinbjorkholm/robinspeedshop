@@ -1,4 +1,4 @@
-import styles from "./page.module.css";
+import styles from "../styles/page.module.css";
 import ProductsNews from "./components/ProductsNews";
 import ProductsOnSale from "./components/ProductsOnSale";
 import ProductsPopular from "./components/productsPopular";
@@ -16,7 +16,7 @@ export default async function Home() {
   async function fetchProducts(endpoint) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/${endpoint}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/products/${endpoint}`,
         {
           method: "GET",
           headers: {
@@ -24,7 +24,9 @@ export default async function Home() {
           },
         }
       );
-      return await response.json();
+      const data = await response.json();
+
+      return data && data.length > 0 ? data : null;
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +52,11 @@ export default async function Home() {
   return (
     <main className={styles.main}>
       <div>
-        {productsNews ? <ProductsNews products={productsNews} /> : <ProductsNewsSkeleton />}
+        {productsNews ? (
+          <ProductsNews products={productsNews} />
+        ) : (
+          <ProductsNewsSkeleton />
+        )}
         {productsOnSale ? (
           <ProductsOnSale products={productsOnSale} />
         ) : (

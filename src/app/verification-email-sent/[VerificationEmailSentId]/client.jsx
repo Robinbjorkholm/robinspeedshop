@@ -13,7 +13,7 @@ function VerificationEmailSentClient({ VerificationEmailSentId }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/resend-verification-code`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/resend-verification-code`,
         {
           method: "POST",
           headers: {

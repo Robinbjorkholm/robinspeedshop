@@ -105,6 +105,7 @@ button {
 }
 button:hover {
   cursor: pointer;
+  opacity: 1;
 }
 ul {
   list-style: none;
@@ -115,6 +116,9 @@ Link {
 }
 Link:hover {
   cursor: pointer;
+}
+h1 {
+  color: #333;
 }
 h2 {
   color: #333;

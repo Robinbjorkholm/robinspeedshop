@@ -1,7 +1,7 @@
-import connectDB from "../../../lib/mongodb";
-import Products from "../../../models/Products";
+import connectDB from "../../../../lib/mongodb";
+import Products from "../../../../models/Products";
 import { NextResponse } from "next/server";
-import logger from "../../../winston";
+import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
@@ -15,7 +15,11 @@ export async function POST(req, res) {
     category,
     image,
     stockProduct,
+    kitIncludes,
   } = await req.json();
+  if (numberInStock > 0) {
+    stockProduct = true;
+  }
   try {
     const newProduct = await Products.create({
       title: title,
@@ -27,6 +31,7 @@ export async function POST(req, res) {
       category: category,
       image: image,
       stockProduct: stockProduct,
+      kitIncludes: kitIncludes,
     });
     await newProduct.save();
     return NextResponse.json({

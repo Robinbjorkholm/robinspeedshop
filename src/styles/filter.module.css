@@ -1,7 +1,10 @@
 .navbarFilter {
   background-color: #333;
   width: 50vw;
-  margin: 0 auto;
+  position: fixed;
+  top: 2.9rem;
+  left: 25%;
+  z-index: 1;
 }
 
 .navLinks {

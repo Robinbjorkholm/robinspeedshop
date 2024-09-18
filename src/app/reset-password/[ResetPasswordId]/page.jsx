@@ -35,7 +35,7 @@ function ResetPassword({ params }) {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/reset-password`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/reset-password`,
         {
           method: "POST",
           headers: {

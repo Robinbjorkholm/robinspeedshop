@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState} from "react";
 import styles from "../../../styles/createProduct.module.css";
 import { useRouter } from "next/navigation";
 import NextImage from "next/image";
@@ -16,12 +16,14 @@ function createProduct() {
   const [isStockProduct, setIsStockProduct] = useState(true);
   const [category, setCategory] = useState("");
   const [image, setImage] = useState([]);
+  const [kitIncludes, setKitIncludes] = useState([]);
+  const [kitIncludesItem, setkKitIncludesItem] = useState("");
   const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/create-product`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/products/create-product`,
         {
           method: "POST",
           headers: {
@@ -31,12 +33,13 @@ function createProduct() {
             title: title,
             titleNews: titleNews,
             description: description,
-            stockProduct: isStockProduct,
             disclaimers: disclaimers,
+            stockProduct: isStockProduct,
             price: price,
             numberInStock: numberInStock,
             category: category,
             image: image,
+            kitIncludes: kitIncludes,
           }),
         }
       );
@@ -50,6 +53,17 @@ function createProduct() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleAddKitIncludesItem = (event) => {
+    event.preventDefault();
+    if (kitIncludesItem.trim() !== "") {
+      setKitIncludes([...kitIncludes, kitIncludesItem.trim()]);
+      setkKitIncludesItem("");
+    }
+  };
+  const handleRemoveKitIncludesItem = (index) => {
+    setKitIncludes(kitIncludes.filter((_, i) => i !== index));
   };
 
   return (
@@ -92,6 +106,46 @@ function createProduct() {
           onChange={(event) => setDisclaimers(event.target.value)}
           className={styles.textareaField}
         />
+      </label>
+      <label htmlFor="kitIncludesItem">Kit includes</label>
+      <div>
+        <input
+          id="kitIncludesItem"
+          value={kitIncludesItem}
+          onChange={(e) => setkKitIncludesItem(e.target.value)}
+          placeholder="what does this kit include?"
+        />
+        <button
+          className={styles.greyButton}
+          style={{ marginLeft: "1rem" }}
+          onClick={handleAddKitIncludesItem}
+        >
+          Add
+        </button>
+      </div>
+      <label className={styles.label} htmlFor="kitIncludes">
+        {kitIncludes.length > 0 ? (
+          <ul className={styles.kitIncludesList}>
+            {kitIncludes.map((item, index) => (
+              <li key={index} style={{ marginBottom: "1rem" }}>
+                {item}
+                <button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveKitIncludesItem(index)}
+                  className={styles.greyButton}
+                  style={{ marginLeft: "1rem" }}
+                >
+                  X
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ marginTop: "1rem" }}>
+            This kit does not include anything yet
+          </p>
+        )}
       </label>
       <label className={styles.label} htmlFor="price">
         Price:
@@ -159,7 +213,7 @@ function createProduct() {
             <button
               type="button"
               onClick={() => open()}
-              className={styles.cancelButton}
+              className={styles.greyButton}
             >
               Upload an Image
             </button>
@@ -191,7 +245,7 @@ function createProduct() {
         <button type="submit" className={styles.submitButton}>
           Create product
         </button>
-        <button className={styles.cancelButton} type="button">
+        <button className={styles.greyButton} type="button">
           Cancel
         </button>
       </div>

@@ -1,18 +1,24 @@
-.productsNewsSkeletonItemMain {
-  width: 60vw;
+.productsSkeletonItemMain {
   height: 40vh;
   display: flex;
   flex-direction: column;
   margin-bottom: 10vh;
-  animation: pulse 2.5s infinite;
+  animation: pulse 1.5s infinite;
 }
-.productsNewsSkeletonItemMain h1 {
+.productsDetailSkeleton {
+  width: 50vw;
+  background-color: #e2e2e2;
+  margin-top: 5rem;
+  height: 35vw;
+  animation: pulse 1.5s infinite;
+}
+.productsSkeletonItemMain h1 {
   align-self: flex-start;
   color: #333;
 }
-.productsNewsSkeletonItem {
-  width: 60vw;
-  background-color: #f1f1f1;
+.productsSkeletonItem {
+  width: 63vw;
+  background-color: #e2e2e2;
   height: 90%;
 }
 
@@ -25,12 +31,12 @@
 }
 
 .gridItem {
-  background-color: #f1f1f1;
+  background-color: #e2e2e2;
   height: 20rem;
   width: 20rem;
   box-sizing: border-box;
   text-align: center;
-  animation: pulse 2.5s infinite;
+  animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {

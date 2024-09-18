@@ -45,6 +45,18 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.kitIncludesList {
+  display: flex;
+  flex-direction: column;
+}
+.kitIncludesList li {
+  display: flex;
+
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid black;
+}
+
 .previewImages {
   height: 10rem;
   width: 100%;
@@ -65,7 +77,7 @@
   transform: translate(-50%, -50%);
   text-align: center;
 }
-.cancelButton {
+.greyButton {
   background-color: #bebebe;
   opacity: 0.7;
   color: black;
