@@ -2,16 +2,18 @@ import styles from "../styles/skeletons.module.css";
 
 export function ProductsSkeleton() {
   return (
-    <div className={styles.gridLayout}>
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-      <div className={styles.gridItem} />
-    </div>
+ 
+      <div className={styles.gridLayout}>
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+        <div className={styles.gridItem} />
+      </div>
+   
   );
 }
 

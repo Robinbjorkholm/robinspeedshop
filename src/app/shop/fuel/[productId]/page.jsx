@@ -1,12 +1,13 @@
+"use client";
 import React from "react";
-import Card from "../../components/Card";
+import ProductDetails from "../../../components/ProductDetails";
 
-function ProductDetails({ id, title, description, price }) {
+function FuelProductDetails() {
   return (
-    <div>
-      <Card key={id} title={title} description={description} price={price} />
-    </div>
+    <>
+      <ProductDetails />
+    </>
   );
 }
 
-export default ProductDetails;
+export default FuelProductDetails;

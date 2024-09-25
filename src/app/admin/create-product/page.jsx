@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import styles from "../../../styles/createProduct.module.css";
 import { useRouter } from "next/navigation";
 import NextImage from "next/image";
@@ -12,13 +12,14 @@ function createProduct() {
   const [disclaimers, setDisclaimers] = useState("");
   const [price, setPrice] = useState(0);
   const [error, setError] = useState("");
-  const [numberInStock, setNumberInStock] = useState(0);
-  const [isStockProduct, setIsStockProduct] = useState(true);
+  const [numberInStock, setNumberInStock] = useState(null);
+  const [isStockProduct, setIsStockProduct] = useState(false);
   const [category, setCategory] = useState("");
   const [image, setImage] = useState([]);
   const [kitIncludes, setKitIncludes] = useState([]);
   const [kitIncludesItem, setkKitIncludesItem] = useState("");
   const router = useRouter();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -158,17 +159,7 @@ function createProduct() {
           className={styles.inputField}
         />
       </label>
-      <label className={styles.label} htmlFor="numberInStock">
-        Number in stock:
-        <input
-          type="number"
-          id="numberInStock"
-          placeholder="0"
-          value={numberInStock}
-          onChange={(event) => setNumberInStock(event.target.value)}
-          className={styles.inputField}
-        />
-      </label>
+     
       <label className={styles.label} htmlFor="isStockProduct">
         Stock product:
         <select
@@ -183,6 +174,18 @@ function createProduct() {
           <option value="false">no</option>
         </select>
       </label>
+      {isStockProduct &&   <label className={styles.label} htmlFor="numberInStock">
+        Number in stock:
+        <input
+          type="number"
+          id="numberInStock"
+          placeholder="0"
+          value={numberInStock}
+          onChange={(event) => setNumberInStock(event.target.value)}
+          className={styles.inputField}
+        />
+      </label>}
+    
       <label className={styles.label} htmlFor="category">
         Category:
         <select
@@ -196,8 +199,8 @@ function createProduct() {
           <option value="engine">Engine</option>
           <option value="fuel">Fuel</option>
           <option value="chassis">Chassis</option>
-          <option value="Engine management">Engine management</option>
-          <option value="Drivetrain">Drivetrain</option>
+          <option value="engine-management">Engine management</option>
+          <option value="drivetrain">Drivetrain</option>
         </select>
       </label>
       <CldUploadWidget

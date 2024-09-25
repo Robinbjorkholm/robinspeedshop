@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      default: "unknown",
     },
     image: {
       type: [String],
@@ -63,6 +64,11 @@ const productSchema = new mongoose.Schema(
     amountOfPurchases: {
       type: Number,
       default: 0,
+    },
+    articleNumber: {
+      type: String,
+      required: true,
+      unique: true,
     },
   },
   { timestamps: true }

@@ -41,6 +41,7 @@
 .textContainer {
   display: flex;
   align-items: center;
+  text-align: center;
   justify-content: center;
   background-color: rgba(51, 51, 51, 0.8);
   width: 90%;
@@ -52,7 +53,6 @@
   transform: translateY(-50%);
   transform: translatex(-50%);
 }
-
 
 .titleImageText {
   color: #d8d8d8;

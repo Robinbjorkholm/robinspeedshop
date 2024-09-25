@@ -1,15 +1,22 @@
 .gridContainer {
+  width: 90%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: 90%;
   gap: 1rem;
   margin: 0 auto;
-  margin-top: 4%;
+  margin-top: 4rem;
 }
 
 .gridItem {
-  background-color: #f1f1f1;
-  padding: 20px;
-  font-size: 30px;
+  height: 20rem;
+  width: 20rem;
+  box-sizing: border-box;
   text-align: center;
+  border: 1px solid #ccc;
+}
+
+.imageWrapper {
+  width: 90%;
+  height: 50%;
+  position: relative;
 }

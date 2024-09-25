@@ -1,7 +1,8 @@
 .productDetailsContainer {
   width: 50vw;
   margin-top: 5rem;
-  height: 35vw;
+  height: fit-content;
+  padding-bottom: 10%;
   border: 1px solid #ccc;
   display: flex;
 }
@@ -28,4 +29,29 @@
   flex-direction: column;
   padding-top: 3rem;
   gap: 1rem;
+}
+.addToCartContainer {
+  display: flex;
+  width: fit-content;
+  height: 3rem;
+  border: 1px solid #ccc;
+}
+.addToCartContainer input {
+  text-indent: 10px;
+  padding-right: 10px;
+  font-size: 16px;
+  border: none;
+}
+
+.addToCartContainer button {
+  background-color: rgb(85, 85, 85, 0.7);
+  border-radius: 0px;
+  padding: 10px;
+  width: fit-content;
+  color: white;
+  font-size: 1rem;
+}
+.addToCartContainer button:hover {
+  background-color: rgb(85, 85, 85);
+  transition: all 0.1s;
 }

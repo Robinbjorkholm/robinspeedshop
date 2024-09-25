@@ -2,6 +2,7 @@ import connectDB from "../../../../lib/mongodb";
 import Products from "../../../../models/Products";
 import { NextResponse } from "next/server";
 import logger from "../../../../winston";
+import crypto from "crypto";
 
 export async function POST(req, res) {
   await connectDB();
@@ -17,9 +18,14 @@ export async function POST(req, res) {
     stockProduct,
     kitIncludes,
   } = await req.json();
-  if (numberInStock > 0) {
-    stockProduct = true;
-  }
+
+  const articleNumber = (
+    category.slice(0, 2) +
+    "-" +
+    crypto.randomBytes(3).toString("hex") +
+    Date.now().toString(36)
+  ).toUpperCase();
+
   try {
     const newProduct = await Products.create({
       title: title,
@@ -32,6 +38,7 @@ export async function POST(req, res) {
       image: image,
       stockProduct: stockProduct,
       kitIncludes: kitIncludes,
+      articleNumber: articleNumber,
     });
     await newProduct.save();
     return NextResponse.json({

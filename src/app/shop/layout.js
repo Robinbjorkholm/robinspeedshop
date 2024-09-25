@@ -12,8 +12,7 @@ export default function ShopLayout({ children }) {
     );
   return (
     <div className={styles.main}>
-      {" "}
-      {!isOnProductDetailPage && <ProductsSkeleton />}
+    
       {children}
     </div>
   );
