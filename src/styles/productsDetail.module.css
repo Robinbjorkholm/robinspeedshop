@@ -17,7 +17,7 @@
   background-color: red;
   width: fit-content;
 }
-.imageWrapper {
+.imageContainer {
   width: 90%;
   height: 50%;
   position: relative;
@@ -44,7 +44,7 @@
 }
 
 .addToCartContainer button {
-  background-color: rgb(85, 85, 85, 0.7);
+  background-color: rgba(0, 128, 0, 0.7);
   border-radius: 0px;
   padding: 10px;
   width: fit-content;
@@ -52,6 +52,6 @@
   font-size: 1rem;
 }
 .addToCartContainer button:hover {
-  background-color: rgb(85, 85, 85);
+  background-color: rgba(0, 128, 0, 1);
   transition: all 0.1s;
 }

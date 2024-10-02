@@ -159,7 +159,6 @@ function createProduct() {
           className={styles.inputField}
         />
       </label>
-     
       <label className={styles.label} htmlFor="isStockProduct">
         Stock product:
         <select
@@ -174,18 +173,19 @@ function createProduct() {
           <option value="false">no</option>
         </select>
       </label>
-      {isStockProduct &&   <label className={styles.label} htmlFor="numberInStock">
-        Number in stock:
-        <input
-          type="number"
-          id="numberInStock"
-          placeholder="0"
-          value={numberInStock}
-          onChange={(event) => setNumberInStock(event.target.value)}
-          className={styles.inputField}
-        />
-      </label>}
-    
+      {isStockProduct && (
+        <label className={styles.label} htmlFor="numberInStock">
+          Number in stock:
+          <input
+            type="number"
+            id="numberInStock"
+            placeholder="0"
+            value={numberInStock}
+            onChange={(event) => setNumberInStock(event.target.value)}
+            className={styles.inputField}
+          />
+        </label>
+      )}
       <label className={styles.label} htmlFor="category">
         Category:
         <select
@@ -201,6 +201,7 @@ function createProduct() {
           <option value="chassis">Chassis</option>
           <option value="engine-management">Engine management</option>
           <option value="drivetrain">Drivetrain</option>
+          <option value="connector">Connector</option>
         </select>
       </label>
       <CldUploadWidget

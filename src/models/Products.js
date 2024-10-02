@@ -70,6 +70,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    relatedProducts: {
+      type: [String],
+      required: false,
+      default: [],
+    },
   },
   { timestamps: true }
 );

@@ -12,7 +12,14 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return NextResponse.json(product);
+    const relatedProducts = await Products.find({
+      _id: { $in: product.relatedProducts },
+    });
+    const responseData = {
+      product: product,
+      relatedProducts: relatedProducts,
+    };
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error(error);
     logger.error("error getting single product", error);

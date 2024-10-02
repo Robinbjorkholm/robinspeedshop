@@ -5,17 +5,17 @@ import styles from "@/styles/productsDetail.module.css";
 import { useParams } from "next/navigation";
 import calculateDiscountedPrice from "@/lib/calculateDiscountedPrice";
 import NextImage from "next/image";
+import RelatedProducts from "./RelatedProducts";
+import useStockAmount from "@/lib/hooks/useStockAmount";
 
 function EngineProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [stockAmount, setStockAmount] = useState("");
+  const [relatedProducts, setRelatedProducts] = useState(null);
+  const stockAmount = useStockAmount(product);
   useEffect(() => {
     getProduct();
   }, []);
-  useEffect(() => {
-    if (product) calculateStockAmount(product);
-  }, [product]);
 
   async function getProduct() {
     try {
@@ -30,44 +30,21 @@ function EngineProductDetails() {
       );
 
       const responseData = await response.json();
-      setProduct(responseData);
+
+      setProduct(responseData.product);
+      setRelatedProducts(responseData.relatedProducts);
     } catch (error) {
       console.log(error);
     }
   }
-  const getStockColor = (stockAmount) => {
-    switch (stockAmount) {
-      case "good":
-        return "green";
-      case "low":
-        return "yellow";
-      case "none":
-        return "red";
-      default:
-        return "green";
-    }
-  };
 
-  const calculateStockAmount = (product) => {
-    if (product.isStockProduct === false) {
-      return;
-    }
-    if (product.numberInStock > 5) {
-      setStockAmount("good");
-    } else if (product.numberInStock <= 5) {
-      setStockAmount("low");
-    } else if (product.numberInStock === 0) {
-      setStockAmount("none");
-    }
-  };
-  const stockColor = getStockColor(stockAmount);
   return (
     <>
       {product ? (
         <div styles={{ display: "flex", flexDirection: "column" }}>
           <div className={styles.productDetailsContainer}>
             <div className={styles.productDetailsLeftSide}>
-              <div className={styles.imageWrapper}>
+              <div className={styles.imageContainer}>
                 <NextImage
                   src={product.image[0]}
                   alt={`Image of ${product.title}`}
@@ -95,7 +72,7 @@ function EngineProductDetails() {
               </p>
               {product.isStockProduct && (
                 <p style={{ fontWeight: "bold" }}>
-                  <span style={{ color: stockColor }}>
+                  <span style={{ color: stockAmount }}>
                     {product.numberInStock}
                   </span>{" "}
                   In stock
@@ -143,13 +120,15 @@ function EngineProductDetails() {
                 <input placeholder="1" type="number"></input>
                 <button>Add to cart</button>
               </div>
+              <p>
+                art Number: <b>{product.articleNumber}</b>
+              </p>
             </div>
           </div>
-          <h1 style={{ paddingTop: "1rem" }}>Related products</h1>
-          <div
-            className={styles.productDetailsContainer}
-            style={{ marginTop: "10px" }}
-          ></div>
+
+          {relatedProducts && (
+            <RelatedProducts relatedProducts={relatedProducts} />
+          )}
         </div>
       ) : (
         <ProductsDetailSkeleton />

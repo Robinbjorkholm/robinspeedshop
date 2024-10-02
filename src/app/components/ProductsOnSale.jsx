@@ -63,7 +63,6 @@ function ProductsOnSale({ products }) {
                 <div className={styles.imageContainer}>
                   <NextImage
                     src={product.image[0]}
-                    className={styles.image}
                     alt={`Image of ${product.title}`}
                     fill
                     sizes="(max-width: 100%)"
