@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import logger from "../../../../winston";
 import connectDB from "../../../../lib/mongodb";
 
-export const login = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -38,13 +38,13 @@ export const login = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        (token.id = user._id),
-          (token.email = user.email),
-          (token.address = user.address),
-          (token.postalCode = user.postalCode),
-          (token.country = user.country),
-          (token.city = user.city),
-          (token.admin = user.admin);
+        token.id = user._id;
+        token.email = user.email;
+        token.address = user.address;
+        token.postalCode = user.postalCode;
+        token.country = user.country;
+        token.city = user.city;
+        token.admin = user.admin;
       }
       return token;
     },
@@ -60,11 +60,10 @@ export const login = {
           city: token.city,
         };
       }
-   
       return session;
     },
   },
 };
 
-const handler = NextAuth(login);
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

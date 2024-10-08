@@ -4,9 +4,11 @@ import styles from "../../styles/productsRelated.module.css";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import useStockAmount from "@/lib/hooks/useStockAmount";
+import { useCart } from "@/contexts/CartContext";
 
 function RelatedProducts({ relatedProducts }) {
   const [openModal, setOpenModal] = useState(false);
+  const { addToCart } = useCart();
   const router = useRouter();
 
   return (
@@ -15,7 +17,7 @@ function RelatedProducts({ relatedProducts }) {
       <div className={styles.productsRelated}>
         {relatedProducts.map((product) => {
           return (
-            <div className={styles.productsRelatedContainer}>
+            <div className={styles.productsRelatedContainer} key={product._id}>
               {openModal && <imageModal productImage={product.image[0]} />}
               <div className={styles.imageContainer} key={product._id}>
                 <NextImage
@@ -38,7 +40,7 @@ function RelatedProducts({ relatedProducts }) {
               </p>
               <div className={styles.buttonsContainer}>
                 <button
-                  className={styles.button}
+                  className={styles.buttonMoreInfo}
                   onClick={() =>
                     router.push(
                       `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/shop/${product.category}/${product._id}`
@@ -48,10 +50,10 @@ function RelatedProducts({ relatedProducts }) {
                   More info{" "}
                 </button>
                 <button
-                  className={styles.buttonBuyNow}
-                 
+                  className={styles.buttonAddToCart}
+                  onClick={() => addToCart(product)}
                 >
-                  Buy now
+                  Add to cart
                 </button>
               </div>
             </div>

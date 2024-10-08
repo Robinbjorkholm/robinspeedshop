@@ -1,8 +1,9 @@
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import Filter from "../app/components/Filter";
-import AuthProvider from "../app/components/AuthProvider";
-import Navbar from "../app/components/Navbar";
+import Filter from "./components/Filter";
+import AuthProvider from "./components/AuthProvider";
+import Navbar from "./components/Navbar";
+import { CartProvider } from "@/contexts/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +17,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
+          <CartProvider>
           <Navbar />
           <Filter />
           {children}
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

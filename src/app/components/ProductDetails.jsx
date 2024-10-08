@@ -7,10 +7,13 @@ import calculateDiscountedPrice from "@/lib/calculateDiscountedPrice";
 import NextImage from "next/image";
 import RelatedProducts from "./RelatedProducts";
 import useStockAmount from "@/lib/hooks/useStockAmount";
+import { useCart } from "@/contexts/CartContext";
 
 function EngineProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [amount, setAmount] = useState(1);
+  const { addToCart } = useCart();
   const [relatedProducts, setRelatedProducts] = useState(null);
   const stockAmount = useStockAmount(product);
   useEffect(() => {
@@ -117,8 +120,14 @@ function EngineProductDetails() {
                 </div>
               )}
               <div className={styles.addToCartContainer}>
-                <input placeholder="1" type="number"></input>
-                <button>Add to cart</button>
+                <input
+                  placeholder="1"
+                  type="number"
+                  onChange={(e) => setAmount(e.target.value)}
+                ></input>
+                <button onClick={() => addToCart(product, amount)}>
+                  Add to cart
+                </button>
               </div>
               <p>
                 art Number: <b>{product.articleNumber}</b>

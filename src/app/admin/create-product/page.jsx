@@ -157,7 +157,8 @@ function createProduct() {
           value={price}
           onChange={(event) => setPrice(event.target.value)}
           className={styles.inputField}
-        />
+        >
+        </input>
       </label>
       <label className={styles.label} htmlFor="isStockProduct">
         Stock product:

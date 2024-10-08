@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import styles from "../../../styles/productCards.module.css";
-import NextImage from "next/image";
-import { ProductsSkeleton } from "../../../ui/skeletons";
+import DisplayProductsCards from "@/app/components/DisplayProductsCards";
 
 function Fuel() {
   const [products, setProducts] = useState([]);
@@ -29,29 +27,10 @@ function Fuel() {
     }
   }
   return (
-    <div>
-      {products ? (
-        <div className={styles.gridContainer}>
-          {products.map((product) => {
-            return (
-              <div key={product._id} className={styles.gridItem}>
-                <div className={styles.imageWrapper}>
-                  {" "}
-                  <NextImage
-                    src={product.image[0]}
-                    fill
-                    style={{ objectFit: "contain" }}
-                    quality={100}
-                  />{" "}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <ProductsSkeleton />
-      )}
-    </div>
+    <>
+      {" "}
+      <DisplayProductsCards products={products} />
+    </>
   );
 }
 

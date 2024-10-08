@@ -3,7 +3,7 @@ import React from "react";import { useRouter } from "next/navigation";
 import styles from "../../styles/homePageProducts.module.css";
 import NextImage from "next/image";
 
-function ProductsOnSale({ products }) {
+function ProductsPopular({ products }) {
   const router = useRouter();
 
   return (
@@ -43,4 +43,4 @@ function ProductsOnSale({ products }) {
   );
 }
 
-export default ProductsOnSale;
+export default ProductsPopular;
