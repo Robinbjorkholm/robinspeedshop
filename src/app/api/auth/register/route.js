@@ -18,6 +18,11 @@ export async function POST(req, res) {
         error:
           "Email already in use, if you have forgot your password you can click the link above to reset your password.",
       });
+    if (createPassword.length < 9 || createPassword.length > 20) {
+      return NextResponse.json({
+        error: "Password has to be between 9 and 20 characters .",
+      });
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
     const generatedVerificationCode =
@@ -72,8 +77,3 @@ export async function POST(req, res) {
     );
   }
 }
-
-
-
-
-

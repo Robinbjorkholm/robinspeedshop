@@ -6,7 +6,7 @@ import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import countries from "countries-list";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import mainStyles from "../page.module.css";
+import mainStyles from "@/styles/page.module.css";
 import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 

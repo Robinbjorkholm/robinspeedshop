@@ -10,7 +10,7 @@ export async function POST(req, res) {
   const isValidObjectId = (id) => {
     return /^[0-9a-fA-F]{24}$/.test(id);
   };
-  if (!isValidObjectId("66cc5b6d785e760349cb5cb7333")) {
+  if (!isValidObjectId(id)) {
     return NextResponse.json({ error: "User doesnt exist" });
   }
 

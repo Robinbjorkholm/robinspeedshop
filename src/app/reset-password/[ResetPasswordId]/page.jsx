@@ -43,8 +43,7 @@ function ResetPassword({ params }) {
           },
           body: JSON.stringify({
             id: ResetPasswordId,
-            password,
-            password,
+            password: password,
           }),
         }
       );
@@ -67,9 +66,9 @@ function ResetPassword({ params }) {
         isLoading ? styles.pulse : ""
       }`}
     >
-      <form onSubmit={submitResetPassword}>
+      <form onSubmit={submitResetPassword} style={{ padding: "10px" }}>
         <h2>Change your password</h2>
-        <h3>Enter a new password below to change your password</h3>
+        <h3>Enter a new password below</h3>
         <label htmlFor="NewPassword" className={styles.label}>
           New password
         </label>

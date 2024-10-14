@@ -70,7 +70,7 @@ function ProductCard({ product }) {
         </Link>
         <button
           className={styles.buttonAddToCart}
-          onClick={() => addToCart(product)}
+          onClick={() => addToCart(product,1)}
         >
           Add to cart
         </button>
