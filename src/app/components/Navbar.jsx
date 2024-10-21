@@ -37,7 +37,7 @@ function Navbar() {
           <MdLogin size={32} /> Log in
         </Link>
       )}
-      <Link href="/shopping-cart" className={styles.navbarLink}>
+      <Link href="/checkout" className={styles.navbarLink}>
         <div className={styles.checkout}>
           <TiShoppingCart size={"2em"} color={"white"} />
           <p className={styles.checkoutAmount}>{cartProductsCount}</p>

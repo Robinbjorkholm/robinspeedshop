@@ -21,7 +21,14 @@
   background-color: #e2e2e2;
   height: 90%;
 }
-
+.checkoutLoginFormSkeleton {
+  background-color: #e2e2e2;
+  text-align: center;
+  width: 100%;
+  height: 6rem;
+  animation: pulse 1.5s infinite;
+  font-size:2rem;
+}
 .gridLayout {
   width: 100%;
   display: grid;

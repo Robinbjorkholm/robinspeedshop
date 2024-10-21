@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import ClientWrapper from "./components/ClientWrapper";
 import "../styles/globals.css";
 import Filter from "./components/Filter";
 import AuthProvider from "./components/AuthProvider";
@@ -13,14 +14,14 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
           <CartProvider>
-          <Navbar />
-          <Filter />
-          {children}
+            <Navbar />
+            <ClientWrapper>{children}</ClientWrapper>
           </CartProvider>
         </AuthProvider>
       </body>

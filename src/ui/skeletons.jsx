@@ -47,3 +47,7 @@ export function ProductsSaleSkeleton() {
 export function ProductsDetailSkeleton() {
   return <div className={styles.productsDetailSkeleton}></div>;
 }
+
+export function CheckoutLoginFormSkeleton(){
+  return <div className={styles.checkoutLoginFormSkeleton}>Loading...</div>
+}
