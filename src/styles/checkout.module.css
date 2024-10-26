@@ -1,5 +1,4 @@
 .checkoutContainer {
-  background-color: rgba(139, 139, 139, 0.226);
   width: 100%;
   height: fit-content;
 }
@@ -68,4 +67,42 @@
 }
 .checkoutFormNotLoggedIn button:hover {
   opacity: 1;
+}
+.userShippingInformation {
+  display: Flex;
+  flex-direction: column;
+  background-color: rgb(185, 185, 185, 0.2);
+  width: 50%;
+  margin: 0 auto;
+  border: 1px solid rgb(85, 85, 85);
+  padding: 10px;
+  border-radius: 6px;
+}
+.userShippingInformation div {
+  display: flex;
+
+  flex-direction: column;
+}
+.userShippingInformation input {
+  font-size: 16px;
+}
+.guestLoginContainer {
+  background-color: rgb(185, 185, 185, 0.2);
+  width: 50%;
+  margin: 0 auto;
+  border: 1px solid rgb(85, 85, 85);
+  padding: 10px;
+  border-radius: 6px;
+}
+.sendOrderButton {
+  display: flex;
+  margin:0 auto;
+  background-color: rgb(85, 85, 85);
+  border-radius: 0px;
+  padding: 10px;
+  width: fit-content;
+  color: white;
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-bottom:10px;
 }

@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: [9, "Password must be at least 9 characters long"],
-      //maxlength: [20, "Password must be no more than 20 characters long"],
     },
     address: {
       type: String,
@@ -38,6 +37,18 @@ const userSchema = new mongoose.Schema(
     },
     country: {
       type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      minlength: [1, "firstname must be atleast 1 character long"],
+      maxlength: [40, "firstname max length is 30 charcters"],
+      required: true,
+    },
+    lastName: {
+      type: String,
+      minlength: [1, "lastname must be atleast 1 character long"],
+      maxlength: [40, "lastname max length is 40 charcters"],
       required: true,
     },
     isVerified: {

@@ -28,6 +28,8 @@ const schema = Yup.object().shape({
     .matches(/^\d+$/, "Postal code must be a number"),
   city: Yup.string().required("City is a required field"),
   country: Yup.string().required("Country is a required field"),
+  firstName:Yup.string().required("First name is a required field").min(1).max(35),
+  lastName:Yup.string().required("Last name is a required field").min(1).max(40)
 });
 
 const Login = () => {
@@ -108,7 +110,8 @@ const Login = () => {
     try {
       setIsLoadingRegister(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/auth/register`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api
+        /auth/register`,
         {
           method: "POST",
           headers: {
@@ -121,6 +124,8 @@ const Login = () => {
             postalCode: value.postalCode,
             city: value.city,
             country: value.country,
+            firstName:value.firstName,
+            lastName:value.lastName
           }),
         }
       );
@@ -394,6 +399,41 @@ const Login = () => {
               </p>
             )}
           </div>
+          <div>
+            <label className={styles.label}>
+              First name:<span style={{ color: "red", marginTop: -15 }}>*</span>
+            </label>
+         
+              <input
+                {...register("firstName", { required: "firstName" })}
+                type="text"
+                className={styles.registerInput}
+              />
+     
+            {errors.firstName && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.firstName.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className={styles.label}>
+              Last name:<span style={{ color: "red", marginTop: -15 }}>*</span>
+            </label>
+         
+              <input
+                {...register("lastName", { required: "lastName" })}
+                type="text"
+                className={styles.registerInput}
+              />
+     
+            {errors.lastName && (
+              <p style={{ color: "red", marginTop: -15 }}>
+                {errors.lastName.message}
+              </p>
+            )}
+          </div>
+          
           <div style={{ alignItems: "center", height: "auto" }}>
             {" "}
             {registerError && (

@@ -45,6 +45,8 @@ export const authOptions = {
         token.country = user.country;
         token.city = user.city;
         token.admin = user.admin;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
       }
       return token;
     },
@@ -58,6 +60,8 @@ export const authOptions = {
           postalCode: token.postalCode,
           country: token.country,
           city: token.city,
+          firstName:token.firstName,
+          lastName:token.lastName,
         };
       }
       return session;

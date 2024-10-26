@@ -8,8 +8,16 @@ import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
-  const { createEmail, createPassword, address, country, city, postalCode } =
-    await req.json();
+  const {
+    createEmail,
+    createPassword,
+    address,
+    country,
+    city,
+    postalCode,
+    firstName,
+    lastName,
+  } = await req.json();
 
   try {
     const user = await User.findOne({ email: createEmail });
@@ -37,6 +45,8 @@ export async function POST(req, res) {
       isVerified: false,
       admin: false,
       verificationCode: generatedVerificationCode,
+      firstName: firstName,
+      lastName: lastName,
     });
 
     const expireDate = new Date(Date.now() + 10 * 60 * 1000);
