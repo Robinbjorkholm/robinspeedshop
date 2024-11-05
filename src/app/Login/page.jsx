@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import mainStyles from "@/styles/page.module.css";
 import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
+import LoginForm from "../components/LoginForm";
 
 const schema = Yup.object().shape({
   createEmail: Yup.string()
@@ -28,8 +29,14 @@ const schema = Yup.object().shape({
     .matches(/^\d+$/, "Postal code must be a number"),
   city: Yup.string().required("City is a required field"),
   country: Yup.string().required("Country is a required field"),
-  firstName:Yup.string().required("First name is a required field").min(1).max(35),
-  lastName:Yup.string().required("Last name is a required field").min(1).max(40)
+  firstName: Yup.string()
+    .required("First name is a required field")
+    .min(1)
+    .max(35),
+  lastName: Yup.string()
+    .required("Last name is a required field")
+    .min(1)
+    .max(40),
 });
 
 const Login = () => {
@@ -58,54 +65,6 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  async function submitLoginUser(email, password) {
-    try {
-      setIsLoadingLogin(true);
-
-      const result = await signIn("credentials", {
-        email: email,
-        password: password,
-        redirect: false,
-      });
-      setIsLoadingLogin(false);
-      if (result.error) {
-        setLoginError(result.error);
-      } else {
-        router.push("/");
-      }
-    } catch (error) {
-      setLoginError(error.message);
-    }
-  }
-
-  const submitResetPassword = async (resetPasswordEmail) => {
-    setisLoadingResetPassword(true);
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/send-reset-password-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: resetPasswordEmail,
-          }),
-        }
-      );
-      const responseData = await response.json();
-      setisLoadingResetPassword(false);
-      if (responseData.error) {
-        setResetPasswordError(responseData.error);
-      } else if (responseData.message && responseData.email) {
-        setResetPasswordResponse(responseData.message);
-        setResetPasswordResponseEmail(responseData.email);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const submitRegisterUser = async (value) => {
     try {
       setIsLoadingRegister(true);
@@ -124,8 +83,8 @@ const Login = () => {
             postalCode: value.postalCode,
             city: value.city,
             country: value.country,
-            firstName:value.firstName,
-            lastName:value.lastName
+            firstName: value.firstName,
+            lastName: value.lastName,
           }),
         }
       );
@@ -143,151 +102,7 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <div
-        className={`${styles.loginRegisterContainer} ${
-          isLoadingLogin ? styles.pulse : ""
-        }`}
-      >
-        <h2 style={{ margin: "10px" }}>Login</h2>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            submitLoginUser(email, password);
-          }}
-          className={styles.loginForm}
-        >
-          <label className={styles.label}>Email:</label>
-          <div style={{ position: "relative", width: "65%" }}>
-            <input
-              onChange={(event) => setEmail(event.target.value)}
-              type="email"
-              className={styles.loginInput}
-            />
-          </div>
-          <label className={styles.label}>Password:</label>
-          <div style={{ position: "relative", width: "65%" }}>
-            <input
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-              type={!showPasswordLogin ? "password" : "text"}
-              className={styles.loginInput}
-            />
-            {showPasswordLogin ? (
-              <FaRegEyeSlash
-                className={styles.showPasswordLogin}
-                onClick={() => setShowPasswordLogin(!showPasswordLogin)}
-              />
-            ) : (
-              <FaEye
-                className={styles.showPasswordLogin}
-                onClick={() => setShowPasswordLogin(!showPasswordLogin)}
-              />
-            )}
-          </div>
-          <div
-            style={{
-              display: "Flex",
-              flexDirection: "Column",
-              alignItems: "flex-start",
-            }}
-          >
-            {loginError && (
-              <p style={{ color: "red", marginBottom: "10px" }}>{loginError}</p>
-            )}
-            {!isLoadingLogin ? (
-              <button className={styles.buttonLogin} type="submit">
-                Login
-              </button>
-            ) : (
-              <button
-                className={styles.buttonLogin}
-                type="submit"
-                disabled={true}
-              >
-                Logging in..
-              </button>
-            )}
-            <button
-              onClick={() => setForgotPasswordInput(true)}
-              style={{ padding: "10px" }}
-            >
-              Forgot password?
-            </button>
-          </div>
-        </form>
-        <form
-          className={styles.loginForm}
-          onSubmit={(event) => {
-            event.preventDefault();
-            submitResetPassword(resetPasswordEmail);
-          }}
-        >
-          {forgotPasswordInput && (
-            <p className={mainStyles.rowSpace}>
-              Please provide your email address and we will send an email for
-              resetting your password
-            </p>
-          )}
-          {forgotPasswordInput && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "10px",
-              }}
-            >
-              <input
-                type="email"
-                className={styles.loginInput}
-                {...register("resetPasswordEmail")}
-                onChange={(event) => {
-                  setResetPasswordEmail(event.target.value);
-                }}
-              />
-
-              {resetPasswordError && (
-                <p
-                  style={{
-                    color: "red",
-                    marginBottom: "5px",
-                    paddingLeft: "10px",
-                  }}
-                >
-                  {resetPasswordError}
-                </p>
-              )}
-              {resetPasswordResponse && (
-                <p style={{ marginBottom: "10px", paddingLeft: "10px" }}>
-                  {resetPasswordResponse}
-                  <u
-                    style={{
-                      marginBottom: "10px",
-                      paddingLeft: "10px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    &nbsp;{resetPasswordResponseEmail}{" "}
-                  </u>
-                </p>
-              )}
-
-              {!isLoadingResetPassword ? (
-                <button className={styles.buttonLogin} type="submit">
-                  Send
-                </button>
-              ) : (
-                <button
-                  className={styles.buttonLogin}
-                  type="submit"
-                  disabled={true}
-                >
-                  Sending...
-                </button>
-              )}
-            </div>
-          )}
-        </form>
-      </div>
+      <LoginForm />
       <div
         className={`${styles.loginRegisterContainer} ${
           isLoadingRegister ? styles.pulse : ""
@@ -310,7 +125,7 @@ const Login = () => {
             />
             {errors.createEmail && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.createEmail.message}
+                {errors.createEmail?.message}
               </p>
             )}
           </div>
@@ -339,7 +154,7 @@ const Login = () => {
             </div>
             {errors.createPassword && (
               <p style={{ color: "red", marginTop: -40 }}>
-                {errors.createPassword.message}
+                {errors.createPassword?.message}
               </p>
             )}
           </div>
@@ -363,7 +178,7 @@ const Login = () => {
             />
             {errors.postalCode && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.postalCode.message}
+                {errors.postalCode?.message}
               </p>
             )}
           </div>
@@ -378,7 +193,7 @@ const Login = () => {
             />{" "}
             {errors.city && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.city.message}
+                {errors.city?.message}
               </p>
             )}
           </div>
@@ -386,16 +201,16 @@ const Login = () => {
             <label className={styles.label}>
               Country:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
-         
-              <input
-                {...register("country", { required: "country" })}
-                type="text"
-                className={styles.registerInput}
-              />
-     
+
+            <input
+              {...register("country", { required: "country" })}
+              type="text"
+              className={styles.registerInput}
+            />
+
             {errors.country && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.country.message}
+                {errors.country?.message}
               </p>
             )}
           </div>
@@ -403,16 +218,16 @@ const Login = () => {
             <label className={styles.label}>
               First name:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
-         
-              <input
-                {...register("firstName", { required: "firstName" })}
-                type="text"
-                className={styles.registerInput}
-              />
-     
+
+            <input
+              {...register("firstName", { required: "firstName" })}
+              type="text"
+              className={styles.registerInput}
+            />
+
             {errors.firstName && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.firstName.message}
+                {errors.firstName?.message}
               </p>
             )}
           </div>
@@ -420,20 +235,20 @@ const Login = () => {
             <label className={styles.label}>
               Last name:<span style={{ color: "red", marginTop: -15 }}>*</span>
             </label>
-         
-              <input
-                {...register("lastName", { required: "lastName" })}
-                type="text"
-                className={styles.registerInput}
-              />
-     
+
+            <input
+              {...register("lastName", { required: "lastName" })}
+              type="text"
+              className={styles.registerInput}
+            />
+
             {errors.lastName && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.lastName.message}
+                {errors.lastName?.message}
               </p>
             )}
           </div>
-          
+
           <div style={{ alignItems: "center", height: "auto" }}>
             {" "}
             {registerError && (

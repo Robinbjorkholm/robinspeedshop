@@ -25,8 +25,8 @@ export async function POST(req, res) {
       await sendEmail(data);
       return NextResponse.json({
         message:
-          "An Email containing a link for resetting your password has been sent to",
-        email: user.email,
+          `An Email containing a link for resetting your password has been sent to ${user.email}`
+       ,
       });
     } catch (error) {
       console.error(error);

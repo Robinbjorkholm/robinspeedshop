@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Order from "./Order.js";
 import countries from "countries-list";
 
 const userSchema = new mongoose.Schema(
@@ -55,6 +56,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    orders: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    }],
     verificationCode: { type: Number, required: true },
   },
   {

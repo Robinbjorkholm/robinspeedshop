@@ -6,7 +6,8 @@
 .checkoutFormContainer {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
   margin-bottom: 16px;
 }
 .checkoutFormOptionContainer {
@@ -41,12 +42,7 @@
   background-color: #ccc;
   border: 1px solid #333;
 }
-.checkoutFormAddress {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 16px;
-}
+
 .checkoutFormNotLoggedIn {
   display: flex;
   flex-direction: column;
@@ -80,23 +76,14 @@
 }
 .userShippingInformation div {
   display: flex;
-
   flex-direction: column;
 }
 .userShippingInformation input {
   font-size: 16px;
 }
-.guestLoginContainer {
-  background-color: rgb(185, 185, 185, 0.2);
-  width: 50%;
-  margin: 0 auto;
-  border: 1px solid rgb(85, 85, 85);
-  padding: 10px;
-  border-radius: 6px;
-}
 .sendOrderButton {
   display: flex;
-  margin:0 auto;
+  margin: 0 auto;
   background-color: rgb(85, 85, 85);
   border-radius: 0px;
   padding: 10px;
@@ -104,5 +91,25 @@
   color: white;
   font-size: 1rem;
   opacity: 0.7;
-  margin-bottom:10px;
+  margin-bottom: 10px;
+}
+.sendOrderButton:hover:disabled {
+  opacity: 0.7;
+}
+.sendOrderButton:disabled {
+  background-color: rgb(85, 85, 85, 0.5);
+  cursor: auto;
+}
+.loginButton {
+  width: 25%;
+  min-width: 10rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.644);
+  align-self: flex-start;
+}
+.loginButton:hover {
+  background-color: rgba(0, 0, 0, 1);
 }
