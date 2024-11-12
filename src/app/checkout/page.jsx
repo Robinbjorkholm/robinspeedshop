@@ -56,7 +56,7 @@ function Checkout() {
 
   return (
     <CheckoutProvider>
-      <form >
+      <form  >
         <CheckoutItems />
       
           <CheckoutFormShipping />

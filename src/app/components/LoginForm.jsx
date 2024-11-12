@@ -1,6 +1,6 @@
 "use client";
 import React, {useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import countries from "countries-list";
@@ -17,6 +17,7 @@ function LoginForm() {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const [isLoadingResetPassword, setisLoadingResetPassword] = useState(false);
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -36,6 +37,9 @@ function LoginForm() {
       if (result.error) {
         setLoginError(result.error);
       } else {
+        if(pathname === "/checkout"){
+          router.push("/checkout")
+        }else
         router.push("/");
       }
     } catch (error) {

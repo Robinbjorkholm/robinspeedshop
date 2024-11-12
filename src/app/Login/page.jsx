@@ -40,20 +40,9 @@ const schema = Yup.object().shape({
 });
 
 const Login = () => {
-  const [forgotPasswordInput, setForgotPasswordInput] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [showPasswordRegister, setShowPasswordRegister] = useState(false);
-  const [resetPasswordEmail, setResetPasswordEmail] = useState("");
-  const [resetPasswordError, setResetPasswordError] = useState("");
-  const [resetPasswordResponseEmail, setResetPasswordResponseEmail] =
-    useState("");
+  useState("");
   const [registerError, setRegisterError] = useState("");
-  const [resetPasswordResponse, setResetPasswordResponse] = useState("");
-  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
-  const [isLoadingResetPassword, setisLoadingResetPassword] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const router = useRouter();
   const {
@@ -69,8 +58,7 @@ const Login = () => {
     try {
       setIsLoadingRegister(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api
-        /auth/register`,
+        `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/auth/register`,
         {
           method: "POST",
           headers: {

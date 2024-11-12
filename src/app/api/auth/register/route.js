@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { sendEmail } from "../../../../utils/nodemailer";
 import { cookies } from "next/headers";
 import logger from "../../../../winston";
+import { SignJWT } from "jose";
 
 export async function POST(req, res) {
   await connectDB();
@@ -33,6 +34,13 @@ export async function POST(req, res) {
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
+
+    const tokenSecret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
+    const verificationToken = await new SignJWT({ createEmail })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("30m")
+      .sign(tokenSecret);
+
     const generatedVerificationCode =
       Math.floor(Math.random() * 900000) + 100000;
     const newUser = new User({
@@ -49,7 +57,7 @@ export async function POST(req, res) {
       lastName: lastName,
     });
 
-    const expireDate = new Date(Date.now() + 10 * 60 * 1000);
+    const expireDate = new Date(Date.now() + 10 * 60 * 10000);
     cookies().set("registersession", process.env.I_NEED_TO_PUT_SOMETHING_HERE, {
       httpOnly: true,
       secure: true,
@@ -63,13 +71,13 @@ export async function POST(req, res) {
         to: newUser.email,
         subject: "robinspeedshop - Verify your account",
         html: `<p>Your 6-digit verification code is: <strong>${newUser.verificationCode}</strong></p>
-        <p>Please enter the 6-digit code provided in this email <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${newUser._id}">here</a></p>`,
+        <p>Please enter the 6-digit code provided in this email <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${verificationToken}">here</a></p>`,
       };
       await sendEmail(data);
       await newUser.save();
 
       return NextResponse.json({
-        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${newUser._id}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${verificationToken}`,
       });
     } catch (error) {
       console.error(error);
