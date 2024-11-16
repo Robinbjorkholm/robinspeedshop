@@ -53,7 +53,10 @@
   transform: translateY(-50%);
   transform: translatex(-50%);
 }
-
+.image {
+  color: red;
+  font-size: 2rem;
+}
 .titleImageText {
   color: #d8d8d8;
   font-size: 1.5rem;

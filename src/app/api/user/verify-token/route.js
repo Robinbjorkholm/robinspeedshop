@@ -6,24 +6,26 @@ import { jwtVerify } from "jose";
 
 export async function POST(req) {
   await connectDB();
-  const { VerificationEmailSentId } = await req.json();
+  const { token } = await req.json();
+  
   try {
     const tokenSecret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
-    const { payload } = await jwtVerify(VerificationEmailSentId, tokenSecret);
-    const { createEmail } = payload;
-
-  
-
-    const user = await User.findOne({ email: createEmail });
-
+    const { payload } = await jwtVerify(token, tokenSecret, {
+      algorithms: ["HS256"],
+    });
+    const { email } = payload;
+   
+    const user = await User.findOne({ email: email });
+   
     if (!user) {
-      return NextResponse.json({ error: "Invalid token." }, { status: 404 });
+      return NextResponse.json({ email, validToken: false });
     }
-    const validToken = true
-    return NextResponse.json({createEmail, validToken});
+
+    return NextResponse.json({ email, validToken: true });
   } catch (error) {
     logger.error("Error verifying token", error);
     return NextResponse.json(
+      { validToken: false },
       { error: "Invalid or expired token." },
       { status: 400 }
     );

@@ -56,12 +56,19 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    orders: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
-    }],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
     verificationCode: { type: Number, required: true },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
+
   {
     timestamps: true,
   }

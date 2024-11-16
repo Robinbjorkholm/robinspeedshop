@@ -1,18 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
-import countries from "countries-list";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import mainStyles from "@/styles/page.module.css";
 import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import LoginForm from "../components/LoginForm";
 
 const schema = Yup.object().shape({
-  createEmail: Yup.string()
+  email: Yup.string()
     .email("Email must be a valid email")
     .required("Email is a required field"),
   createPassword: Yup.string()
@@ -39,7 +36,7 @@ const schema = Yup.object().shape({
     .max(40),
 });
 
-const Login = () => {
+function Login(){
   const [showPasswordRegister, setShowPasswordRegister] = useState(false);
   useState("");
   const [registerError, setRegisterError] = useState("");
@@ -65,7 +62,7 @@ const Login = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            createEmail: value.createEmail,
+            email: value.email,
             createPassword: value.createPassword,
             address: value.address,
             postalCode: value.postalCode,
@@ -107,13 +104,13 @@ const Login = () => {
               <span style={{ color: "red", marginTop: -15 }}>* </span>
             </label>
             <input
-              {...register("createEmail", { required: "createEmail" })}
+              {...register("email", { required: "email" })}
               type="email"
               className={styles.registerInput}
             />
-            {errors.createEmail && (
+            {errors.email && (
               <p style={{ color: "red", marginTop: -15 }}>
-                {errors.createEmail?.message}
+                {errors.email?.message}
               </p>
             )}
           </div>

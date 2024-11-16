@@ -6,16 +6,16 @@ import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
-  const { VerificationEmailSentId } = await req.json();
-  const isValidObjectId = (VerificationEmailSentId) => {
-    return /^[0-9a-fA-F]{24}$/.test(VerificationEmailSentId);
+  const { id } = await req.json();
+  const isValidObjectId = (id) => {
+    return /^[0-9a-fA-F]{24}$/.test(id);
   };
-  if (!isValidObjectId(VerificationEmailSentId)) {
+  if (!isValidObjectId(id)) {
     return NextResponse.json({ error: "User doesnt exist." });
   }
 
   try {
-    const user = await User.findOne({ _id: VerificationEmailSentId });
+    const user = await User.findOne({ _id: id });
     if (!user) {
       return NextResponse.json({ error: "Email is not registered." });
     }
