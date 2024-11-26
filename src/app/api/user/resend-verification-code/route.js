@@ -6,18 +6,17 @@ import logger from "../../../../winston";
 
 export async function POST(req, res) {
   await connectDB();
-  const { id } = await req.json();
-  const isValidObjectId = (id) => {
-    return /^[0-9a-fA-F]{24}$/.test(id);
-  };
-  if (!isValidObjectId(id)) {
-    return NextResponse.json({ error: "User doesnt exist." });
-  }
+  const { token } = await req.json();
 
   try {
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ verificationToken: token });
     if (!user) {
       return NextResponse.json({ error: "Email is not registered." });
+    }
+    if (user.emailSentCounter >= 3) {
+      return NextResponse.json({
+        error: "You have already requested multiple emails, try creating a new account to ensure you used the correct email",
+      });
     }
     try {
       const data = {
@@ -25,12 +24,18 @@ export async function POST(req, res) {
         to: user.email,
         subject: "robinspeedshop - Your verification code",
         html: `<p>Your 6-digit verification code is: <strong>${user.verificationCode}</strong></p>
-          `,
+        <p>Please enter the 6-digit code provided in this email <b><a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${user.verificationToken}">here</a></b></p>`,
       };
       await sendEmail(data);
+      await User.updateOne(
+        {
+          _id: user._id,
+        },
+        { $inc: { emailSentCounter: 1 } }
+      );
       return NextResponse.json({
         message:
-          "Verification code sent. If you do not see the email in a few minutes, check your “junk mail” folder or “spam” folder.",
+          "Verification email sent. If you do not see the email in a few minutes, check your “junk” or “spam” folder.",
       });
     } catch (error) {
       console.error(error);

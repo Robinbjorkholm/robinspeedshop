@@ -63,9 +63,14 @@ const userSchema = new mongoose.Schema(
       },
     ],
     verificationCode: { type: Number, required: true },
+    verificationToken: { type: String, required: true },
     isActive: {
       type: Boolean,
       default: true,
+    },
+    emailSentCounter: {
+      type: Number,
+      default: 1,
     },
   },
 

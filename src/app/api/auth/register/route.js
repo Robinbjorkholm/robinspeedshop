@@ -4,7 +4,8 @@ import connectDB from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { sendEmail } from "../../../../utils/nodemailer";
 import logger from "../../../../winston";
-import { SignJWT } from "jose";
+import crypto from "crypto";
+import capitalFirstLetter from "@/lib/capitalFirstLetter";
 
 export async function POST(req, res) {
   await connectDB();
@@ -20,16 +21,15 @@ export async function POST(req, res) {
   } = await req.json();
 
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      if (user.isVerified === true) {
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      if (existingUser.isVerified === true) {
         return NextResponse.json({
           error:
-            "Email already in use, if you have forgot your password you can click the link above to reset your password.",
+            'Email already in use, if you have forgot your password you can click "forgot password" above to reset your password.',
         });
       } else {
-     await User.findByIdAndDelete(user._id);
-      
+        await User.findByIdAndDelete(existingUser._id);
       }
     }
 
@@ -41,26 +41,24 @@ export async function POST(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createPassword, salt);
 
-    const tokenSecret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
-    const verificationToken = await new SignJWT({ email })
-      .setProtectedHeader({ alg: "HS256" })
-      //.setExpirationTime("1h")
-      .sign(tokenSecret);
+    const generatedVerificationToken = crypto.randomBytes(32).toString("hex");
 
     const generatedVerificationCode =
       Math.floor(Math.random() * 900000) + 100000;
     const newUser = new User({
       email: email,
       password: hashedPassword,
-      address: address,
-      country: country,
-      city: city,
+      address: capitalFirstLetter(address),
+      country: capitalFirstLetter(country),
+      city: capitalFirstLetter(city),
       postalCode: postalCode,
       isVerified: false,
       admin: false,
+      verificationToken: generatedVerificationToken,
       verificationCode: generatedVerificationCode,
-      firstName: firstName,
-      lastName: lastName,
+      firstName: capitalFirstLetter(firstName),
+      lastName: capitalFirstLetter(lastName),
+      emailSentCounter: 1,
     });
 
     const expireDate = new Date(Date.now() + 10 * 60 * 10000);
@@ -70,13 +68,13 @@ export async function POST(req, res) {
         to: newUser.email,
         subject: "robinspeedshop - Verify your account",
         html: `<p>Your 6-digit verification code is: <strong>${newUser.verificationCode}</strong></p>
-        <p>Please enter the 6-digit code provided in this email <a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${verificationToken}">here</a></p>`,
+        <p>Please enter the 6-digit code provided in this email <b><a href="${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verify-email/${newUser.verificationToken}">here</a></b></p>`,
       };
       await newUser.save();
       await sendEmail(data);
 
       return NextResponse.json({
-        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${verificationToken}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/verification-email-sent/${generatedVerificationToken}`,
       });
     } catch (error) {
       console.error(error);

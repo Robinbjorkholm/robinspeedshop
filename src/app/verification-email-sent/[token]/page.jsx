@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import styles from "../../../styles/verificationEmailSent.module.css";
 import loginStyles from "../../../styles/login.module.css";
 import { MdMarkEmailRead } from "react-icons/md";
-import hideEmail from "@/lib/hideEmail"
+import hideEmail from "@/lib/hideEmail";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function VerificationEmailSent({ params }) {
-  const {token} = params
+  const { token } = params;
   const [isLoading, setIsLoading] = useState(true);
-  const [responseError, setResponseError] = useState("");
-  const [responseSuccess, setResponseSuccess] = useState("");
+
+  const [userAlreadyVerified, setUserAlreadyVerified] = useState(null);
   const [validToken, setValidToken] = useState(null);
   const [email, setEmail] = useState(null);
   const router = useRouter();
@@ -29,20 +32,34 @@ function VerificationEmailSent({ params }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            token:token,
+            token: token,
           }),
         }
       );
       const data = await response.json();
       setValidToken(data.validToken);
-  
       setEmail(data.email);
+      setUserAlreadyVerified(data.isVerified);
       setIsLoading(false);
     } catch (error) {
       return NextResponse.json({ message: error.message }, { status: 500 });
     }
   }
-  async function submitResendVerificationCode() {
+  const notifySuccess = (message) =>
+    toast.success(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      progress: undefined,
+      theme: "light",
+    });
+  const notifyError = (message) =>
+    toast.error(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      progress: undefined,
+      theme: "light",
+    });
+  async function resendVerificationCode() {
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -53,29 +70,45 @@ function VerificationEmailSent({ params }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: token,
+            token: token,
           }),
         }
       );
       const responseData = await response.json();
       setIsLoading(false);
       if (responseData.error) {
-        setResponseError(responseData.error);
+        console.log(responseData.error);
+        notifyError(responseData.error);
       } else if (responseData.message) {
-        setResponseSuccess(responseData.message);
+        console.log(responseData.message);
+        notifySuccess(responseData.message);
       }
     } catch (error) {
-      return NextResponse.json({ message: error.message }, { status: 500 });
+      console.error(error);
     }
   }
-
-
   if (validToken === false) {
     router.push("/");
   }
+  if (userAlreadyVerified === true) {
+    return (
+      <div className={styles.container}>
+        <MdMarkEmailRead
+          size={120}
+          style={{ margin: "0 auto", color: "rgb(0, 222, 0)" }}
+        />
+        <h2 style={{ marginBottom: "20px" }}>You are already verified</h2>
 
-  if (isLoading === true) {
-    return <div>loading...</div>;
+        <p>
+          You can log in to your account by going to the Log in page or by{" "}
+          <b>
+            <Link href="/login">
+              <a>clicking here</a>{" "}
+            </Link>
+          </b>
+        </p>
+      </div>
+    );
   }
   if (validToken === true) {
     return (
@@ -93,10 +126,10 @@ function VerificationEmailSent({ params }) {
         <p>
           If you don't see the email in your inbox, please check your spam
           folder or try resending the verification email.
-        </p>
+        </p>{" "}
         {!isLoading ? (
           <button
-            onClick={() => submitResendVerificationCode()}
+            onClick={() => resendVerificationCode()}
             className={loginStyles.buttonRegister}
           >
             Resend{" "}
@@ -106,9 +139,12 @@ function VerificationEmailSent({ params }) {
             Sending...{" "}
           </button>
         )}
-
-        {responseSuccess && <p style={{ color: "black" }}>{responseSuccess}</p>}
-        {responseError && <p style={{ color: "red" }}>{responseError}</p>}
+        <ToastContainer
+          style={{ margin: "0 auto", position: "relative" }}
+          position="center"
+          pauseOnFocusLoss={false}
+          pauseOnHover={false}
+        />
       </div>
     );
   }

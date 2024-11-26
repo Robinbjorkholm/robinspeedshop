@@ -1,7 +1,7 @@
 import React from "react";
 import NextImage from "next/image";
 
-function imageModal(productImage) {
+export default function imageModal(productImage) {
   return (
     <div>
       <NextImage src={productImage} fill />
@@ -9,4 +9,4 @@ function imageModal(productImage) {
   );
 }
 
-export default imageModal;
+

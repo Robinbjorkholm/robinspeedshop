@@ -13,6 +13,7 @@ export async function POST(req, res) {
 
     const user = await User.findOne({ email: email });
     if (!user) return NextResponse.json({ error: "Email is not registered" });
+  
     try {
       const data = {
         from: "robinspeedshop",
@@ -23,10 +24,9 @@ export async function POST(req, res) {
         <p>If this was a mistake you can simply ignore this email.</p>`,
       };
       await sendEmail(data);
+    
       return NextResponse.json({
-        message:
-          `An Email containing a link for resetting your password has been sent to ${user.email}`
-       ,
+        message: `An Email containing a link for resetting your password has been sent to ${user.email}`,
       });
     } catch (error) {
       console.error(error);

@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import styles from "../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import LoginForm from "../components/LoginForm";
+import capitalFirstLetter from "@/lib/capitalFirstLetter"
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -28,12 +29,12 @@ const schema = Yup.object().shape({
   country: Yup.string().required("Country is a required field"),
   firstName: Yup.string()
     .required("First name is a required field")
-    .min(1)
-    .max(35),
+    .min(1,"First name must be between 1 and 35 characters")
+    .max(35,"First name must be between 1 and 35 characters"),
   lastName: Yup.string()
     .required("Last name is a required field")
-    .min(1)
-    .max(40),
+    .min(1, "Last name must be between 1 and 40 characters")
+    .max(40, "Last name must be between 1 and 40 characters"),
 });
 
 function Login(){
@@ -44,7 +45,7 @@ function Login(){
   const router = useRouter();
   const {
     register,
-    handleSubmit,
+    handleSubmit,setValue,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: "onBlur",
@@ -84,7 +85,10 @@ function Login(){
       setRegisterError(error.message);
     }
   };
-
+  const handleInputChange = (e, fieldName) => {
+    const value = capitalFirstLetter(e.target.value);
+    setValue(fieldName, value, { shouldValidate: true });
+  };
   return (
     <div className={styles.container}>
       <LoginForm />
@@ -149,6 +153,7 @@ function Login(){
               {...register("address")}
               type="text"
               className={styles.registerInput}
+              onChange={(e) => handleInputChange(e, "address")}
             />
           </div>
           <div>
@@ -174,7 +179,7 @@ function Login(){
             <input
               {...register("city", { required: "city" })}
               type="text"
-              className={styles.registerInput}
+              className={styles.registerInput}onChange={(e) => handleInputChange(e, "city")}
             />{" "}
             {errors.city && (
               <p style={{ color: "red", marginTop: -15 }}>
@@ -190,7 +195,7 @@ function Login(){
             <input
               {...register("country", { required: "country" })}
               type="text"
-              className={styles.registerInput}
+              className={styles.registerInput}onChange={(e) => handleInputChange(e, "country")}
             />
 
             {errors.country && (
@@ -207,7 +212,7 @@ function Login(){
             <input
               {...register("firstName", { required: "firstName" })}
               type="text"
-              className={styles.registerInput}
+              className={styles.registerInput}onChange={(e) => handleInputChange(e, "firstName")}
             />
 
             {errors.firstName && (
@@ -224,7 +229,7 @@ function Login(){
             <input
               {...register("lastName", { required: "lastName" })}
               type="text"
-              className={styles.registerInput}
+              className={styles.registerInput}onChange={(e) => handleInputChange(e, "lastName")}
             />
 
             {errors.lastName && (
@@ -237,7 +242,7 @@ function Login(){
           <div style={{ alignItems: "center", height: "auto" }}>
             {" "}
             {registerError && (
-              <span className={styles.registerErrorMain}>{registerError} </span>
+              <span className={styles.registerErrorMain}>{registerError}</span>
             )}
             {!isLoadingRegister ? (
               <button

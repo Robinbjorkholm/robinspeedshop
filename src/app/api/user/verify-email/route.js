@@ -1,22 +1,17 @@
-import User from "../../../models/User";
-import connectDB from "../../../lib/mongodb";
+import User from "@/models/User";
+import connectDB from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import logger from "../../../winston";
+import logger from "@/winston";
 
 export async function POST(req, res) {
   await connectDB();
 
-  const { id, VerificationCode } = await req.json();
+  const { email, VerificationCode } = await req.json();
   const VerificationNumberString = VerificationCode.join("");
   const VerificationNumber = parseInt(VerificationNumberString);
-  const isValidObjectId = (id) => {
-    return /^[0-9a-fA-F]{24}$/.test(id);
-  };
-  if (!isValidObjectId(id)) {
-    return NextResponse.json({ error: "User doesnt exist" });
-  }
+
   try {
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: "Email is not registered" });
     }

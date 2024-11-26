@@ -1,6 +1,6 @@
 "use client";
-import React, {useState } from "react";
-import { useRouter,usePathname } from "next/navigation";
+import React, { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import countries from "countries-list";
@@ -37,10 +37,9 @@ function LoginForm() {
       if (result.error) {
         setLoginError(result.error);
       } else {
-        if(pathname === "/checkout"){
-          router.push("/checkout")
-        }else
-        router.push("/");
+        if (pathname === "/checkout") {
+          router.push("/checkout");
+        } else router.push("/");
       }
     } catch (error) {
       setLoginError(error.message);
@@ -147,12 +146,38 @@ function LoginForm() {
         className={styles.loginForm}
         onSubmit={handleSubmit(submitResetPassword)}
       >
-        {togglePasswordInput && (
-          <p className={mainStyles.rowSpace}>
-            Please provide your email address and we will send an email for
-            resetting your password
-          </p>
-        )}
+        {togglePasswordInput &&
+          (!resetPasswordError && !resetPasswordSuccess ? (
+            <p className={mainStyles.rowSpace}>
+              Please provide your email address and we will send an email for
+              resetting your password.
+            </p>
+          ) : (
+            <>
+              {resetPasswordError && (
+                <p
+                  style={{
+                    color: "red",
+                    marginBottom: "5px",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  {resetPasswordError}
+                </p>
+              )}
+              {resetPasswordSuccess && (
+                <p
+                  style={{
+                    marginBottom: "5px",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  {resetPasswordSuccess}
+                </p>
+              )}
+            </>
+          ))}
+
         {togglePasswordInput && (
           <div
             style={{
@@ -166,28 +191,6 @@ function LoginForm() {
               className={styles.loginInput}
               {...register("resetPasswordEmail")}
             />
-
-            {resetPasswordError && (
-              <p
-                style={{
-                  color: "red",
-                  marginBottom: "5px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {resetPasswordError}
-              </p>
-            )}
-            {resetPasswordSuccess && (
-              <p
-                style={{
-                  marginBottom: "5px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {resetPasswordSuccess}
-              </p>
-            )}
 
             {!isLoadingResetPassword ? (
               <button className={styles.buttonLogin} type="submit">
