@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import {CheckoutContext} from "@/contexts/CheckoutContext";
 import styles from "@/styles/checkout.module.css";
 import NextImage from "next/image";
 import KlarnaImage from "@/images/Klarna.png";
 import PayPalImage from "@/images/PayPal.png";
 import MasterCardImage from "@/images/MasterCard.png";
+import { useCheckoutContext } from "@/contexts/CheckoutContext";
+import * as Yup from "yup";
+
 
 function CheckoutFormPayment() {
-  const { setPaymentOption, paymentOption } = useContext(CheckoutContext);
+  const { paymentOption, setPaymentOption } = useCheckoutContext();
 
   return (
     <div className={styles.checkoutFormContainer}>

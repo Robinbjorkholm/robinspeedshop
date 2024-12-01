@@ -24,11 +24,11 @@ function ProductsPopular({ products }) {
               <NextImage
                 src={product.image[0]}
                 className={styles.image}
-                alt="latest products"
+                alt="Coming soon"
                 fill
                 sizes="(max-width: 100%)"
                 style={{
-                  objectFit: "cover",
+                  objectFit: "contain",
                 }}
                 quality={100}
               />

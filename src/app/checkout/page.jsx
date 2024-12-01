@@ -1,7 +1,6 @@
-
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { CheckoutProvider } from "@/contexts/CheckoutContext";
+import { useCheckoutContext } from "@/contexts/CheckoutContext";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
@@ -33,11 +32,14 @@ const schema = Yup.object().shape({
 
 function Checkout() {
   const { data: session, status } = useSession();
-  const [toggleGuestLoginForm, setToggleGuestLoginForm] = useState(false);
+  const [toggleGuestLoginForm, setToggleGuestLoginForm] = useState(true);
+  const { setUserFormData, shippingOption, paymentOption } =
+    useCheckoutContext();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: "onBlur",
@@ -46,82 +48,73 @@ function Checkout() {
 
   useEffect(() => {
     if (session) {
-      setCity(session.user.city);
-      setCountry(session.user.country);
-      setPostalCode(session.user.postalCode);
-      setAddress(session.user.address);
-      setName(session.user.firstName + " " + session.user.lastName);
+      setValue("city", session.user.city);
+      setValue("country", session.user.country);
+      setValue("postalCode", session.user.postalCode);
+      setValue("address", session.user.address);
+      setValue("name", session.user.firstName + " " + session.user.lastName);
     }
   }, [session]);
 
   return (
-    <CheckoutProvider>
-      <form  >
+    <div>
+      <form>
         <CheckoutItems />
-      
-          <CheckoutFormShipping />
-          <hr style={{ width: "70%", margin: "0 auto" }} />
-          <CheckoutFormPayment />
-          <hr style={{ width: "70%", margin: "0 auto" }} />
-          <div className={styles.checkoutFormContainer}>
-            <h2 style={{ marginLeft: "5px" }}>Address</h2>
-            {status === "loading" ? (
-              <CheckoutLoginFormSkeleton />
-            ) : (
-              <div>
-                {session?.user ? (
-                  <div className={styles.checkoutFormUserLoggedIn}>
-                    <div>
-                      <label>City</label>
-                      <input
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      {" "}
-                      <label>Country</label>
-                      <input
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label>Postal code</label>
-                      <input
-                        value={postalCode}
-                        onChange={(e) => setPostalCode(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label>Name</label>
-                      <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      ></input>
-                    </div>
+
+        <CheckoutFormShipping />
+        <hr style={{ width: "70%", margin: "0 auto" }} />
+        <CheckoutFormPayment />
+        <hr style={{ width: "70%", margin: "0 auto" }} />
+        <div className={styles.checkoutFormContainer}>
+          <h2 style={{ marginLeft: "5px" }}>Address</h2>
+          {status === "loading" ? (
+            <CheckoutLoginFormSkeleton />
+          ) : (
+            <div>
+              {session?.user ? (
+                <div className={styles.checkoutFormUserLoggedIn}>
+                  <div>
+                    <label>City</label>
+                    <input {...register("city")} placeholder="City" />
                   </div>
-                ) : toggleGuestLoginForm ? (
-                  <LoginForm />
-                ) : (
-                  <CheckoutFormGuest
-                    setToggleGuestLoginForm={setToggleGuestLoginForm}
-                    register={register}
-                    errors={errors}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-          <button disabled={!isValid} className={styles.sendOrderButton}>
-            {" "}
-            Confirm order
-          </button>
-    
+                  <div>
+                    {" "}
+                    <label>Country</label>
+                    <input {...register("country")} placeholder="Country" />
+                  </div>
+                  <div>
+                    <label>Postal code</label>
+                    <input
+                      {...register("postalCode")}
+                      placeholder="Postal code"
+                    />
+                  </div>
+                  <div>
+                    <label>Name</label>
+                    <input {...register("name")} placeholder="Name"></input>
+                  </div>
+                </div>
+              ) : (
+                toggleGuestLoginForm && 
+                <CheckoutFormGuest
+                  setToggleGuestLoginForm={setToggleGuestLoginForm}
+                  register={register}
+                  errors={errors}
+                />
+              )}
+            </div>
+          )}
+        </div>
+
+        <button disabled={!isValid} className={styles.sendOrderButton}>
+          {" "}
+          Confirm order
+        </button>
       </form>
-    </CheckoutProvider>
+      {!toggleGuestLoginForm && !session?.user && <LoginForm /> }
+      
+    </div>
   );
 }
 
 export default Checkout;
-

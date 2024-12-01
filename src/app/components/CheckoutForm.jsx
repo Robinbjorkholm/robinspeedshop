@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 import React, { useState, useEffect, useContext } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ const schema = Yup.object().shape({
   country: Yup.string().required("Country is a required field"),
   city: Yup.string().required("City is a required field"),
   address: Yup.string(),
+  postalCode: Yup.number(),
   firstName: Yup.string()
     .required("First name is a required field")
     .min(1)
@@ -27,12 +28,15 @@ const schema = Yup.object().shape({
     .required("Last name is a required field")
     .min(1)
     .max(40),
+  shippingOption: Yup.string(),
+  paymentOption: Yup.string(),
 });
 
 function CheckoutForm() {
   const { data: session, status } = useSession();
   const [toggleGuestLoginForm, setToggleGuestLoginForm] = useState(false);
-  const { updateFormData } = useContext(CheckoutContext);
+  const { setUserFormData, shippingOption, paymentOption } =
+    useContext(CheckoutContext);
 
   const {
     register,
@@ -45,11 +49,11 @@ function CheckoutForm() {
 
   useEffect(() => {
     if (session) {
-      setCity(session.user.city);
-      setCountry(session.user.country);
-      setPostalCode(session.user.postalCode);
-      setAddress(session.user.address);
-      setName(session.user.firstName + " " + session.user.lastName);
+      setValueCity("city", session.user.city);
+      setValueCountry("country", session.user.country);
+      setValuePostalCode("postalCode", session.user.postalCode);
+      setValueAddress("address",session.user.address);
+      setValueName("name",session.user.firstName + " " + session.user.lastName);
     }
   }, [session]);
 
@@ -119,4 +123,4 @@ function CheckoutForm() {
   );
 }
 
-export default CheckoutForm;
+export default CheckoutForm;*/

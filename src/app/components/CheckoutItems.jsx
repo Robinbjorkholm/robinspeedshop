@@ -3,6 +3,7 @@ import React from "react";
 import styles from "@/styles/checkoutItems.module.css";
 import { useCart } from "@/contexts/CartContext";
 import { IoIosAddCircle, IoIosRemoveCircle, IoIosClose } from "react-icons/io";
+import NextImage from "next/image";
 
 function CheckoutItems() {
   const calculateTotal = (price, quantity) => {
@@ -36,7 +37,17 @@ function CheckoutItems() {
             return (
               <div key={product._id}>
                 <ul className={styles.shoppingCartProducts}>
-                  <li>{product.title}</li>
+                  <li>
+                    {" "}
+                    <NextImage
+                      alt={`image of ${product.title}`}
+                      src={product.image[0]}
+                      width={70}
+                      height={70}
+                      quality={100}
+                    />
+                    {product.title}
+                  </li>
                   <li>{product.price}€</li>
                   <li>
                     <button

@@ -42,7 +42,49 @@
   background-color: #ccc;
   border: 1px solid #333;
 }
+.checkoutFormUserLoggedIn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+  padding: 20px;
+  background-color: #f9f9f9; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
 
+.checkoutFormUserLoggedIn div {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkoutFormUserLoggedIn label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px; 
+  color: #333;
+}
+
+.checkoutFormUserLoggedIn input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.checkoutFormUserLoggedIn input:focus {
+  border-color: #535353;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.checkoutFormUserLoggedIn input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
 .checkoutFormNotLoggedIn {
   display: flex;
   flex-direction: column;

@@ -17,7 +17,7 @@ function LoginForm() {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const [isLoadingResetPassword, setisLoadingResetPassword] = useState(false);
   const router = useRouter();
-
+  const pathname = usePathname();
   const {
     register,
     handleSubmit,

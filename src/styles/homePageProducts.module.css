@@ -14,11 +14,12 @@
   margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(196, 196, 196, 0.527);
 }
 
 .productsContainer {
   display: flex;
-  width: 100%;
+
   height: 90%;
   margin: 0 auto;
   align-items: center;
@@ -30,6 +31,9 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
   margin: 0 auto;
+  gap: 5px;
+
+  border-radius: 3px;
 }
 .productsItems {
   flex: 1;
@@ -43,14 +47,15 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  background-color: rgba(51, 51, 51, 0.8);
+  background-color: rgba(51, 51, 51, 0.6);
   width: 90%;
+  max-width: 30rem;
   position: absolute;
   height: fit-content;
   min-height: 3rem;
-  top: 50%;
+  top: 55%;
   left: 50%;
-  transform: translateY(-50%);
+
   transform: translatex(-50%);
 }
 .image {
@@ -58,8 +63,8 @@
   font-size: 2rem;
 }
 .titleImageText {
-  color: #d8d8d8;
-  font-size: 1.5rem;
+  color: #ffffff;
+  font-size: 1rem;
   font-weight: bold;
 }
 .discountAmount {

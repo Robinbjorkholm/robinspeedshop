@@ -10,7 +10,7 @@ function CheckoutFormGuest({ setToggleGuestLoginForm,register,errors }) {
     <div className={styles.guestLoginContainer}>
       <div>
         <h3>Already have an account?</h3>
-        <button onClick={() => setToggleGuestLoginForm(true)}>Log in</button>
+        <button type="button" onClick={() => setToggleGuestLoginForm(false)}>Log in</button>
         <p style={{ color: "#585858" }}>or continue as a guest</p>
       </div>
       <h3>Your information</h3>

@@ -1,9 +1,21 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cartProducts, setCartProducts] = useState([]);
+
+
+  // saving the shopping cart in local storage instead of db for simplicity 
+  const [cartProducts, setCartProducts] = useState(() => {
+    const savedCart = localStorage.getItem("cartProducts");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+ 
+  useEffect(() => {
+    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+  }, [cartProducts]);
 
   const addToCart = (product, amount) => {
     const amountNumber = Number(amount);
@@ -28,17 +40,19 @@ export function CartProvider({ children }) {
       prevProducts.filter((product) => product._id !== productId)
     );
   };
+
   const removeOneFromCart = (product) => {
     setCartProducts((prevProducts) => {
-      const existingItem = prevProducts.find((item) => item._id === product._id);
-  
+      const existingItem = prevProducts.find(
+        (item) => item._id === product._id
+      );
+
       if (existingItem) {
-    
         if (existingItem.quantity === 1) {
-          
+       
           return prevProducts.filter((item) => item._id !== product._id);
         } else {
-         
+          
           return prevProducts.map((item) =>
             item._id === product._id
               ? { ...item, quantity: item.quantity - 1 }
@@ -49,6 +63,7 @@ export function CartProvider({ children }) {
       return prevProducts;
     });
   };
+
   const cartProductsCount = cartProducts.reduce(
     (total, item) => total + item.quantity,
     0

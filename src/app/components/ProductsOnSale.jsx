@@ -67,7 +67,7 @@ function ProductsOnSale({ products }) {
                     fill
                     sizes="(max-width: 100%)"
                     style={{
-                      objectFit: "cover",
+                      objectFit: "contain",
                     }}
                     quality={100}
                   />

@@ -22,7 +22,7 @@ function ProductNews({ products }) {
               )
             }
           >
-            <div className={styles.imageContainer}>
+            <div >
               <NextImage
                 src={product.image[0]}
                 className={styles.image}
@@ -30,7 +30,7 @@ function ProductNews({ products }) {
                 fill
                 sizes="(max-width: 100%)"
                 style={{
-                  objectFit: "cover",
+                  objectFit: "contain",
                 }}
                 quality={100}
               />

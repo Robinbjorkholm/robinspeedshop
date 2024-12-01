@@ -1,20 +1,34 @@
-import React, { createContext, useState } from "react";
+"use client";
 
-export const CheckoutContext = createContext();
+import React, { createContext, useState, useContext } from "react";
 
-export const CheckoutProvider = ({ children }) => {
+const CheckoutContext = createContext();
+
+export function CheckoutProvider({ children }) {
   const [shippingOption, setShippingOption] = useState("");
   const [paymentOption, setPaymentOption] = useState("");
-  const [formData, setFormData] = useState({});
-
-
-
+  const [userFormData, setUserFormData] = useState({
+    city: "",
+    country: "",
+    postalCode: "",
+    address: "",
+    name: "",
+  });
 
   return (
     <CheckoutContext.Provider
-      value={{ shippingOption,setShippingOption,paymentOption,setPaymentOption }}
+      value={{
+        shippingOption,
+        setShippingOption,
+        paymentOption,
+        setPaymentOption,
+      }}
     >
       {children}
     </CheckoutContext.Provider>
   );
-};
+}
+
+export function useCheckoutContext() {
+  return useContext(CheckoutContext);
+}
