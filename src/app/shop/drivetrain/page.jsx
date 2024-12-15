@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import DisplayProductsCards from "@/app/components/DisplayProductsCards";
+import DisplayProductsCards from "@/app/components/productsUi/ProductCards";
 
 function Drivetrain() {
   const [products, setProducts] = useState([]);

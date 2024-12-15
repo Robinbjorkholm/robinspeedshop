@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import DisplayProductsCards from "@/app/components/DisplayProductsCards";
+import DisplayProductsCards from "@/app/components/productsUi/ProductCards";
 
 function Engine() {
   const [products, setProducts] = useState([]);

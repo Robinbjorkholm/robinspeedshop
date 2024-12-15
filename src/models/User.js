@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: false,
+      required: true,
     },
     postalCode: {
       type: String,

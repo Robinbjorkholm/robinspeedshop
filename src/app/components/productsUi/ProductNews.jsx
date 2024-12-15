@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/homePageProducts.module.css";
+
 import NextImage from "next/image";
+import styles from "@/styles/homePageProducts.module.css"
 import comingsoon from "@/images/comingsoon.png";
 
 function ProductNews({ products }) {

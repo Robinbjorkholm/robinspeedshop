@@ -79,10 +79,7 @@ function LoginForm() {
       }`}
     >
       <h2 style={{ margin: "10px" }}>Login</h2>
-      <form
-        onSubmit={handleSubmit(submitLoginUser)}
-        className={styles.loginForm}
-      >
+      <div className={styles.loginForm}>
         <label className={styles.label}>Email:</label>
         <div style={{ position: "relative", width: "65%" }}>
           <input
@@ -113,27 +110,21 @@ function LoginForm() {
         </div>
         <div
           style={{
-            display: "Flex",
-            flexDirection: "Column",
+            display: "flex",
+            flexDirection: "column",
             alignItems: "flex-start",
           }}
         >
           {loginError && (
             <p style={{ color: "red", marginBottom: "10px" }}>{loginError}</p>
           )}
-          {!isLoadingLogin ? (
-            <button className={styles.buttonLogin} type="submit">
-              Login
-            </button>
-          ) : (
-            <button
-              className={styles.buttonLogin}
-              type="submit"
-              disabled={true}
-            >
-              Logging in..
-            </button>
-          )}
+          <button
+            className={styles.buttonLogin}
+            onClick={handleSubmit(submitLoginUser)}
+            disabled={isLoadingLogin}
+          >
+            {isLoadingLogin ? "Logging in..." : "Login"}
+          </button>
           <button
             onClick={() => setTogglePasswordInput(true)}
             style={{ padding: "10px" }}
@@ -141,44 +132,21 @@ function LoginForm() {
             Forgot password?
           </button>
         </div>
-      </form>
-      <form
-        className={styles.loginForm}
-        onSubmit={handleSubmit(submitResetPassword)}
-      >
-        {togglePasswordInput &&
-          (!resetPasswordError && !resetPasswordSuccess ? (
+      </div>
+      {togglePasswordInput && (
+        <div className={styles.loginForm}>
+          {(!resetPasswordError || !resetPasswordSuccess) && (
             <p className={mainStyles.rowSpace}>
-              Please provide your email address and we will send an email for
-              resetting your password.
+              Please provide your email address, and we will send an email to
+              reset your password.
             </p>
-          ) : (
-            <>
-              {resetPasswordError && (
-                <p
-                  style={{
-                    color: "red",
-                    marginBottom: "5px",
-                    paddingLeft: "10px",
-                  }}
-                >
-                  {resetPasswordError}
-                </p>
-              )}
-              {resetPasswordSuccess && (
-                <p
-                  style={{
-                    marginBottom: "5px",
-                    paddingLeft: "10px",
-                  }}
-                >
-                  {resetPasswordSuccess}
-                </p>
-              )}
-            </>
-          ))}
-
-        {togglePasswordInput && (
+          )}
+          {resetPasswordError && (
+            <p className={mainStyles.rowSpace} style={{color:"red"}}>{resetPasswordError}</p>
+          )}
+          {resetPasswordSuccess && (
+            <p className={mainStyles.rowSpace} >{resetPasswordSuccess}</p>
+          )}
           <div
             style={{
               display: "flex",
@@ -191,23 +159,16 @@ function LoginForm() {
               className={styles.loginInput}
               {...register("resetPasswordEmail")}
             />
-
-            {!isLoadingResetPassword ? (
-              <button className={styles.buttonLogin} type="submit">
-                Send
-              </button>
-            ) : (
-              <button
-                className={styles.buttonLogin}
-                type="submit"
-                disabled={true}
-              >
-                Sending...
-              </button>
-            )}
+            <button
+              className={styles.buttonLogin}
+              onClick={handleSubmit(submitResetPassword)}
+              disabled={isLoadingResetPassword}
+            >
+              {isLoadingResetPassword ? "Sending..." : "Send"}
+            </button>
           </div>
-        )}
-      </form>
+        </div>
+      )}
     </div>
   );
 }

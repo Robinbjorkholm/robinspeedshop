@@ -1,13 +1,12 @@
 "use client";
-
 import React, { useState, useEffect, useContext } from "react";
-import styles from "@/styles/checkout.module.css";
+import styles from "@/styles/checkoutForm.module.css";
 import NextImage from "next/image";
 import KlarnaImage from "@/images/Klarna.png";
 import PayPalImage from "@/images/PayPal.png";
 import MasterCardImage from "@/images/MasterCard.png";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
-import * as Yup from "yup";
+
 
 
 function CheckoutFormPayment() {
@@ -15,7 +14,7 @@ function CheckoutFormPayment() {
 
   return (
     <div className={styles.checkoutFormContainer}>
-      <h2 style={{ marginLeft: "5px" }}>Payment</h2>
+      <h2 style={{ marginLeft: "3rem" }}>Payment</h2>
       <div className={styles.checkoutFormOptionContainer}>
         <div
           className={`${styles.checkoutFormShippingOption} ${
@@ -90,6 +89,7 @@ function CheckoutFormPayment() {
           <p>Klarna</p>
         </div>
       </div>
+      <hr style={{margin:"2rem auto",width:"100%" }} />
     </div>
   );
 }

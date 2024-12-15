@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/homePageProducts.module.css";
+
+import styles from "@/styles/homePageProducts.module.css";
 import NextImage from "next/image";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
-import calculateDiscountedPrice from "../../lib/calculateDiscountedPrice";
+import calculateDiscountedPrice from "../../../lib/calculateDiscountedPrice";
 
 function ProductsOnSale({ products }) {
   const [currentPage, setCurrentPage] = useState(0);

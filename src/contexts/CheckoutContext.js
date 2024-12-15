@@ -5,14 +5,21 @@ import React, { createContext, useState, useContext } from "react";
 const CheckoutContext = createContext();
 
 export function CheckoutProvider({ children }) {
-  const [shippingOption, setShippingOption] = useState("");
+  const [shippingOption, setShippingOption] = useState({
+    courier: "",
+    price: 0,
+    date: "",
+  });
   const [paymentOption, setPaymentOption] = useState("");
   const [userFormData, setUserFormData] = useState({
-    city: "",
+    email: "",
+    firstName: "",
+    lastName: "",
     country: "",
-    postalCode: "",
+    city: "",
     address: "",
-    name: "",
+    phoneNumber: "",
+    postalCode: "",
   });
 
   return (
@@ -22,6 +29,7 @@ export function CheckoutProvider({ children }) {
         setShippingOption,
         paymentOption,
         setPaymentOption,
+        setUserFormData,
       }}
     >
       {children}

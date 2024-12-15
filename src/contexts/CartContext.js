@@ -4,15 +4,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-
-
-  // saving the shopping cart in local storage instead of db for simplicity 
+  // saving the shopping cart in local storage instead of db for simplicity
   const [cartProducts, setCartProducts] = useState(() => {
     const savedCart = localStorage.getItem("cartProducts");
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
- 
   useEffect(() => {
     localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
   }, [cartProducts]);
@@ -49,10 +46,8 @@ export function CartProvider({ children }) {
 
       if (existingItem) {
         if (existingItem.quantity === 1) {
-       
           return prevProducts.filter((item) => item._id !== product._id);
         } else {
-          
           return prevProducts.map((item) =>
             item._id === product._id
               ? { ...item, quantity: item.quantity - 1 }
@@ -69,6 +64,11 @@ export function CartProvider({ children }) {
     0
   );
 
+  const cartTotalPrice = cartProducts.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
   return (
     <CartContext.Provider
       value={{
@@ -77,6 +77,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         cartProductsCount,
         removeOneFromCart,
+        cartTotalPrice,
       }}
     >
       {children}

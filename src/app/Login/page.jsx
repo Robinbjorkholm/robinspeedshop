@@ -17,7 +17,7 @@ const schema = Yup.object().shape({
     .required("Password has to be between 9 & 20")
     .min(9, "password must be between 9 & 20 characters")
     .max(20, "password must be between 9 & 20 characters"),
-  address: Yup.string(),
+  address: Yup.string().required().min(1),
   postalCode: Yup.string()
     .test(
       "len",

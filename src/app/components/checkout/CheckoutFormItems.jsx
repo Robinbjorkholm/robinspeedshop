@@ -1,22 +1,19 @@
 "use client";
 import React from "react";
-import styles from "@/styles/checkoutItems.module.css";
+import styles from "@/styles/checkoutFormItems.module.css";
 import { useCart } from "@/contexts/CartContext";
 import { IoIosAddCircle, IoIosRemoveCircle, IoIosClose } from "react-icons/io";
 import NextImage from "next/image";
+import calculateTotalPrice from "@/lib/calculateTotalPrice";
 
 function CheckoutItems() {
-  const calculateTotal = (price, quantity) => {
-    const totalPrice = price * quantity;
-
-    return totalPrice.toFixed(2);
-  };
   const {
     cartProductsCount,
     cartProducts,
     addToCart,
     removeOneFromCart,
     removeFromCart,
+    cartTotalPrice,
   } = useCart();
 
   return (
@@ -51,6 +48,7 @@ function CheckoutItems() {
                   <li>{product.price}€</li>
                   <li>
                     <button
+                      type="button"
                       className={styles.buttonQuantity}
                       onClick={() => addToCart(product, 1)}
                     >
@@ -58,19 +56,22 @@ function CheckoutItems() {
                     </button>
                     {product.quantity}
                     <button
+                      type="button"
                       className={styles.buttonQuantity}
                       onClick={() => removeOneFromCart(product)}
                     >
                       <IoIosRemoveCircle color="#333" size={24} />
                     </button>
                   </li>
-                  <li>{calculateTotal(product.price, product.quantity)}€</li>
-                  <button
-                    className={styles.test}
-                    onClick={() => removeFromCart(product._id)}
-                  >
-                    <IoIosClose color="#333" size={32} />
-                  </button>
+                  <li>
+                    {calculateTotalPrice(product.price, product.quantity)}€
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(product._id)}
+                    >
+                      <IoIosClose color="#333" size={32} />
+                    </button>
+                  </li>
                 </ul>
                 <hr />
               </div>

@@ -18,6 +18,9 @@
   height: 10rem;
   margin: 0 auto;
 }
+.sectionHeader{
+  margin-left: 3rem;
+}
 
 .checkoutFormShippingOption {
   position: relative;

@@ -1,7 +1,7 @@
 import styles from "../styles/page.module.css";
-import ProductsNews from "./components/ProductsNews";
-import ProductsOnSale from "./components/ProductsOnSale";
-import ProductsPopular from "./components/ProductsPopular";
+import ProductsNews from "./components/productsUi/ProductNews";
+import ProductsOnSale from "./components/productsUi/ProductsOnSale";
+import ProductsPopular from "./components/productsUi/ProductsPopular";
 import {
   ProductsNewsSkeleton,
   ProductsPopularSkeleton,

@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ProductsDetailSkeleton } from "@/ui/skeletons";
+
 import styles from "@/styles/productsDetail.module.css";
 import { useParams } from "next/navigation";
 import calculateDiscountedPrice from "@/lib/calculateDiscountedPrice";
 import NextImage from "next/image";
-import RelatedProducts from "./RelatedProducts";
+import RelatedProducts from "./ProductsRelated";
 import useStockAmount from "@/lib/hooks/useStockAmount";
 import { useCart } from "@/contexts/CartContext";
 

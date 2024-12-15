@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
-import { CheckoutContext } from "@/contexts/CheckoutContext";
-import styles from "@/styles/checkout.module.css";
+import React, { useState, useEffect } from "react";
+import styles from "@/styles/checkoutForm.module.css";
 import NextImage from "next/image";
 import PostiImage from "@/images/PostiGroup.png";
 import DHLImage from "@/images/DHL.png";
@@ -28,18 +27,24 @@ function CheckoutFormShipping() {
   }, []);
   return (
     <div className={styles.checkoutFormContainer}>
-      <h2 style={{ marginLeft: "5px" }}>Shipping</h2>
+      <h2 style={{ marginLeft: "3rem" }}>Shipping</h2>
       <div className={styles.checkoutFormOptionContainer}>
         <div
           className={`${styles.checkoutFormShippingOption} ${
-            shippingOption === "Posti" ? styles.active : ""
+            shippingOption.courier === "Posti" ? styles.active : ""
           }`}
-          onClick={() => setShippingOption("Posti")}
+          onClick={() =>
+            setShippingOption({
+              courier: "Posti",
+              price: 17.99,
+              date: shippingDatePosti,
+            })
+          }
         >
           <input
             className={styles.checkoutFormCheckbox}
             type="checkbox"
-            checked={shippingOption === "Posti"}
+            checked={shippingOption.courier === "Posti"}
             readOnly
           />
 
@@ -60,14 +65,20 @@ function CheckoutFormShipping() {
         </div>
         <div
           className={`${styles.checkoutFormShippingOption} ${
-            shippingOption === "DHL" ? styles.active : ""
+            shippingOption.courier === "DHL" ? styles.active : ""
           }`}
-          onClick={() => setShippingOption("DHL")}
+          onClick={() =>
+            setShippingOption({
+              courier: "DHL",
+              price: 23.99,
+              date: shippingDateDHL,
+            })
+          }
         >
           <input
             className={styles.checkoutFormCheckbox}
             type="checkbox"
-            checked={shippingOption === "DHL"}
+            checked={shippingOption.courier === "DHL"}
             readOnly
           />
           <NextImage
@@ -86,6 +97,7 @@ function CheckoutFormShipping() {
           </p>
         </div>
       </div>
+      <hr style={{ margin: "2rem auto", width: "100%" }} />
     </div>
   );
 }

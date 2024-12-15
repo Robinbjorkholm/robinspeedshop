@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import styles from "../../styles/productsRelated.module.css";
+
+import styles from "@/styles/productsRelated.module.css";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import useStockAmount from "@/lib/hooks/useStockAmount";

@@ -32,24 +32,25 @@
   flex-basis: 25%;
   display: flex;
   justify-content: center;
-}
+  align-items: center;
 
+}
+.shoppingCartProducts li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
 .shoppingCartInfo li:first-child,
 .shoppingCartProducts li:first-child {
   justify-content: flex-start;
 }
-
 
 .buttonQuantity {
   margin-left: 5px;
   margin-right: 5px;
 }
 
-.test {
-  position: absolute;
-  right: 20%;
-  padding-top: 5px;
-}
 .continueToCheckoutButton {
   align-self: flex-end;
   background-color: rgba(0, 128, 0);
@@ -58,7 +59,7 @@
   width: fit-content;
   color: white;
   font-size: 1rem;
-  
+
   opacity: 0.7;
   margin-top: 1rem;
 }
