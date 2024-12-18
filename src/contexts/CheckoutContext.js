@@ -1,14 +1,14 @@
 "use client";
-
+import calculateShippingTime from "@/lib/calculateShippingTime";
 import React, { createContext, useState, useContext } from "react";
 
 const CheckoutContext = createContext();
 
 export function CheckoutProvider({ children }) {
   const [shippingOption, setShippingOption] = useState({
-    courier: "",
-    price: 0,
-    date: "",
+    courier: "Posti",
+    price: 17.99,
+    date: calculateShippingTime(6),
   });
   const [paymentOption, setPaymentOption] = useState("");
   const [userFormData, setUserFormData] = useState({
@@ -30,6 +30,7 @@ export function CheckoutProvider({ children }) {
         paymentOption,
         setPaymentOption,
         setUserFormData,
+        userFormData,
       }}
     >
       {children}

@@ -4,6 +4,7 @@ import styles from "@/styles/checkoutForm.module.css";
 import NextImage from "next/image";
 import PostiImage from "@/images/PostiGroup.png";
 import DHLImage from "@/images/DHL.png";
+import calculateShippingTime from "@/lib/calculateShippingTime";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
 
 function CheckoutFormShipping() {
@@ -12,15 +13,8 @@ function CheckoutFormShipping() {
   const [shippingDateDHL, setShippingDateDHL] = useState("");
 
   useEffect(() => {
-    const calculateShippingTime = (days) => {
-      const date = new Date();
-      date.setDate(date.getDate() + days);
-      return date.toLocaleDateString("en-EN", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-      });
-    };
+   
+   
 
     setShippingDatePosti(calculateShippingTime(6));
     setShippingDateDHL(calculateShippingTime(3));

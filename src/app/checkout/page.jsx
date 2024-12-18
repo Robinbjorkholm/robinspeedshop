@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import styles from "@/styles/checkoutForm.module.css";
 import { CheckoutLoginFormSkeleton } from "@/ui/skeletons";
@@ -41,6 +41,8 @@ function Checkout() {
     register,
     handleSubmit,
     setValue,
+    watch,
+
     formState: { errors, isDirty, isValid },
   } = useForm({
     mode: "onBlur",
@@ -58,43 +60,45 @@ function Checkout() {
   }, [session]);
 
   return (
-    <div>
-      <form>
-        <CheckoutItems />
+    <FormProvider
+      {...{ register, handleSubmit, setValue, watch, formState: { errors } }}
+    >
+      <div>
+        <form>
+          <CheckoutItems />
 
-        <CheckoutFormShipping />
+          <CheckoutFormShipping />
 
-        <CheckoutFormPayment />
+          <CheckoutFormPayment />
 
-        <div className={styles.checkoutFormContainer}>
-          {status === "loading" ? (
-            <CheckoutLoginFormSkeleton />
-          ) : (
-            <div>
-              {!session?.user && toggleGuestLoginForm && (
-                <div>
-                  <h2 style={{ marginLeft: "5px" }}>Address</h2>
-                  <CheckoutFormGuest
-                    setToggleGuestLoginForm={setToggleGuestLoginForm}
-                    register={register}
-                    errors={errors}
-                    setUserFormData={setUserFormData}
-                    userFormData={userFormData}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+          <div className={styles.checkoutFormContainer}>
+            {status === "loading" ? (
+              <CheckoutLoginFormSkeleton />
+            ) : (
+              <div>
+                {!session?.user && toggleGuestLoginForm && (
+                  <div>
+                    <h2 style={{ marginLeft: "5px" }}>Address</h2>
+                    <CheckoutFormGuest
+                      setToggleGuestLoginForm={setToggleGuestLoginForm}
+                      setUserFormData={setUserFormData}
+                      userFormData={userFormData}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
-        {!toggleGuestLoginForm && !session?.user && <LoginForm />}
-        <CheckoutFormOrderDetails />
-        <button disabled={!isValid} className={styles.sendOrderButton}>
-          {" "}
-          Confirm order
-        </button>
-      </form>
-    </div>
+          {!toggleGuestLoginForm && !session?.user && <LoginForm />}
+          <CheckoutFormOrderDetails />
+          <button disabled={!isValid} className={styles.sendOrderButton}>
+            {" "}
+            Confirm order
+          </button>
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 

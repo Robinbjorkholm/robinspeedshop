@@ -1,14 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import styles from "@/styles/checkoutFormGuest.module.css";
 import loginStyles from "@/styles/login.module.css";
 
 function CheckoutFormGuest({
   setToggleGuestLoginForm,
-  register,
-  errors,
   setUserFormData,
   userFormData,
 }) {
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+  const watchedFields = watch(); 
+
+  useEffect(() => {
+    setUserFormData((prevData) => ({
+      ...prevData,
+      ...watchedFields,
+    }));
+  }, [watchedFields, setUserFormData]);
+
   return (
     <div className={styles.guestLoginContainer}>
       <div>
@@ -35,9 +48,6 @@ function CheckoutFormGuest({
           className={loginStyles.loginInput}
           placeholder="YourEmail@example.com"
           id="email"
-          onChange={(e) =>
-            setUserFormData({ ...userFormData, email: e.target.value })
-          }
         />
         {errors.email && (
           <p className={loginStyles.errorMessage}>{errors.email?.message}</p>
@@ -74,7 +84,7 @@ function CheckoutFormGuest({
           placeholder="Last name"
           id="lastName"
           onChange={(e) =>
-            setUserFormData({ ...lastName, email: e.target.value })
+            setUserFormData({ ...lastName, lastName: e.target.value })
           }
         />
         {errors.lastName && (
@@ -92,7 +102,7 @@ function CheckoutFormGuest({
           placeholder="gremlings landia"
           id="country"
           onChange={(e) =>
-            setUserFormData({ ...country, email: e.target.value })
+            setUserFormData({ ...country, country: e.target.value })
           }
         />
         {errors.country && (
@@ -109,14 +119,14 @@ function CheckoutFormGuest({
           className={loginStyles.loginInput}
           placeholder="gremlin outpost"
           id="city"
-          onChange={(e) => setUserFormData({ ...city, email: e.target.value })}
+          onChange={(e) => setUserFormData({ ...city, city: e.target.value })}
         />
         {errors.city && (
           <p className={loginStyles.errorMessage}>{errors.city?.message}</p>
         )}
       </div>
       <div style={{ position: "relative", width: "65%" }}>
-        <label className={loginStyles.label} htmlFor="streetAddress">
+        <label className={loginStyles.label} htmlFor="address">
           Street address:<span style={{ color: "red" }}> *</span>
         </label>
         <input
@@ -124,7 +134,7 @@ function CheckoutFormGuest({
           type="text"
           className={loginStyles.loginInput}
           placeholder="gremlinroad 22"
-          id="streetAddress"
+          id="address"
           onChange={(e) =>
             setUserFormData({ ...userFormData, address: e.target.value })
           }

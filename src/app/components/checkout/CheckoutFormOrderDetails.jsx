@@ -9,46 +9,29 @@ function CheckoutFormOrderDetails() {
   const { data: session, status } = useSession();
   const { cartTotalPrice, cartProductsCount } = useCart();
   const { shippingOption, userFormData } = useCheckoutContext();
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [orderTotalPrice, setOrderTotalPrice] = useState(0);
   const [productsTotalPriceBeforeTax, setProductsTotalPriceBeforeTax] =
     useState(0);
   const [taxPrice, setTaxPrice] = useState(0);
 
   useEffect(() => {
-    if (cartTotalPrice > 0) {
-      setProductsTotalPriceBeforeTax(cartTotalPrice * 0.745);
-      setTaxPrice(cartTotalPrice * 0.255);
-    }
-    if (shippingOption) {
-      const newPrice = (
-        shippingOption.price +
-        productsTotalPriceBeforeTax +
-        taxPrice
-      ).toFixed(2);
-      setTotalPrice(newPrice);
-    }
+    const productsPrice = cartTotalPrice * 0.745;
+    const tax = cartTotalPrice * 0.255;
+    setProductsTotalPriceBeforeTax(productsPrice);
+    setTaxPrice(tax);
+    const totalPrice = (shippingOption.price + productsPrice + tax).toFixed(2);
+    setOrderTotalPrice(totalPrice);
   }, [shippingOption, cartTotalPrice]);
 
-  console.log("formdata", userFormData);
+
+
 
   return (
     <div className={styles.container}>
       <hr style={{ margin: "2rem auto", width: "100%" }} />
       <h2 className={styles.sectionHeader}>Order details</h2>
       <div style={{ width: "50%", margin: "0 auto", position: "relative" }}>
-        {(!shippingOption || !userFormData || cartProductsCount == 0) && (
-          <p className={styles.blurredMessage}>
-            Fill out the form to see order details
-          </p>
-        )}
-
-        <div
-          className={`${styles.mainContent} ${
-            !shippingOption.price || !userFormData || cartProductsCount == 0
-              ? styles.blurred
-              : ""
-          }`}
-        >
+        <div className={styles.mainContent}>
           <ul className={styles.ulRow}>
             <li>Products</li>
             <li>{productsTotalPriceBeforeTax.toFixed(2)}€</li>
@@ -64,7 +47,7 @@ function CheckoutFormOrderDetails() {
           <hr style={{ width: "99%", margin: "0 auto" }} />
           <ul className={styles.ulRow}>
             <li>Total </li>
-            <li>{totalPrice}€</li>
+            <li>{orderTotalPrice}€</li>
           </ul>
           <br />
           <h3 style={{ color: "#333", padding: "5px" }}>Shipping address</h3>
@@ -80,7 +63,16 @@ function CheckoutFormOrderDetails() {
               <li>{session.user.country}</li>
             </ul>
           ) : (
-            <ul className={styles.ulRow}>asdfghj</ul>
+            <ul style={{ color: "#333", padding: "5px" }}>
+            <li>
+              {userFormData.firstName}&nbsp;{userFormData.lastName}{" "}
+            </li>
+            <li>{userFormData.address}</li>
+            <li>
+              {userFormData.city}&nbsp; 
+            </li>
+            <li>{userFormData.country}</li>
+          </ul>
           )}
         </div>
       </div>
