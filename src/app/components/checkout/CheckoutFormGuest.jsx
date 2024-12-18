@@ -20,7 +20,7 @@ function CheckoutFormGuest({
       ...prevData,
       ...watchedFields,
     }));
-  }, [watchedFields, setUserFormData]);
+  }, []);
 
   return (
     <div className={styles.guestLoginContainer}>

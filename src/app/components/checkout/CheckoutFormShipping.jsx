@@ -9,16 +9,10 @@ import { useCheckoutContext } from "@/contexts/CheckoutContext";
 
 function CheckoutFormShipping() {
   const { shippingOption, setShippingOption } = useCheckoutContext();
-  const [shippingDatePosti, setShippingDatePosti] = useState("");
-  const [shippingDateDHL, setShippingDateDHL] = useState("");
+  const [shippingDatePosti, setShippingDatePosti] = useState(calculateShippingTime(6));
+  const [shippingDateDHL, setShippingDateDHL] = useState(calculateShippingTime(3));
 
-  useEffect(() => {
-   
-   
 
-    setShippingDatePosti(calculateShippingTime(6));
-    setShippingDateDHL(calculateShippingTime(3));
-  }, []);
   return (
     <div className={styles.checkoutFormContainer}>
       <h2 style={{ marginLeft: "3rem" }}>Shipping</h2>

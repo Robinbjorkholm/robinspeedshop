@@ -89,7 +89,7 @@ function CheckoutFormPayment() {
           <p>Klarna</p>
         </div>
       </div>
-      <hr style={{margin:"2rem auto",width:"100%" }} />
+      
     </div>
   );
 }

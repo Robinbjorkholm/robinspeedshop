@@ -72,6 +72,8 @@ function CheckoutFormOrderDetails() {
               {userFormData.city}&nbsp; 
             </li>
             <li>{userFormData.country}</li>
+            <li>{userFormData.email}</li>
+            <li>{userFormData.phoneNumber}</li>
           </ul>
           )}
         </div>

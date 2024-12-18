@@ -29,6 +29,20 @@ const schema = Yup.object().shape({
     .required("Last name is a required field")
     .min(1)
     .max(40),
+  shippingOption: Yup.object()
+    .shape({
+      courier: Yup.string().required("Courier is required"),
+      price: Yup.number()
+        .required("Price is required")
+        .positive("Price must be positive"),
+      date: Yup.date()
+       
+    })
+    .required("Shipping option is required"),
+  paymentOption: Yup.string()
+    .required("Payment option is required")
+    .min(1)
+    .max(40),
 });
 
 function Checkout() {
@@ -42,8 +56,7 @@ function Checkout() {
     handleSubmit,
     setValue,
     watch,
-
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isValid },
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -51,14 +64,24 @@ function Checkout() {
 
   useEffect(() => {
     if (session) {
-      setValue("city", session.user.city);
-      setValue("country", session.user.country);
-      setValue("postalCode", session.user.postalCode);
-      setValue("address", session.user.address);
-      setValue("name", session.user.firstName + " " + session.user.lastName);
+      setValue("city", session.user.city, { shouldValidate: true });
+      setValue("country", session.user.country, { shouldValidate: true });
+      setValue("postalCode", session.user.postalCode, { shouldValidate: true });
+      setValue("address", session.user.address, { shouldValidate: true });
+      setValue("firstName", session.user.firstName, { shouldValidate: true });
+      setValue("lastName", session.user.lastName, { shouldValidate: true });
+      setValue("email", session.user.email, { shouldValidate: true });
     }
-  }, [session]);
+  }, [session, setValue]);
+  useEffect(() => {
+    setValue("shippingOption", shippingOption || {}, { shouldValidate: true });
+  }, [shippingOption, setValue]);
 
+  useEffect(() => {
+    setValue("paymentOption", paymentOption || "", { shouldValidate: true });
+  }, [paymentOption, setValue]);
+  console.log(isValid);
+  console.log(errors)
   return (
     <FormProvider
       {...{ register, handleSubmit, setValue, watch, formState: { errors } }}
@@ -66,11 +89,8 @@ function Checkout() {
       <div>
         <form>
           <CheckoutItems />
-
           <CheckoutFormShipping />
-
           <CheckoutFormPayment />
-
           <div className={styles.checkoutFormContainer}>
             {status === "loading" ? (
               <CheckoutLoginFormSkeleton />
@@ -78,6 +98,8 @@ function Checkout() {
               <div>
                 {!session?.user && toggleGuestLoginForm && (
                   <div>
+                    {" "}
+                    <hr style={{ margin: "2rem auto", width: "100%" }} />
                     <h2 style={{ marginLeft: "5px" }}>Address</h2>
                     <CheckoutFormGuest
                       setToggleGuestLoginForm={setToggleGuestLoginForm}
@@ -89,8 +111,13 @@ function Checkout() {
               </div>
             )}
           </div>
-
-          {!toggleGuestLoginForm && !session?.user && <LoginForm />}
+          {!toggleGuestLoginForm && !session?.user && (
+            <div className={styles.checkoutFormContainer}>
+              <hr style={{ margin: "2rem auto", width: "100%" }} />
+              <h2 style={{ marginLeft: "5px" }}>Address</h2>
+              <LoginForm />
+            </div>
+          )}
           <CheckoutFormOrderDetails />
           <button disabled={!isValid} className={styles.sendOrderButton}>
             {" "}
