@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/checkoutFormOrderDetails.module.css";
-import { useCart } from "@/contexts/CartContext";
+import { useCartContext } from "@/contexts/CartContext";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
 import { useSession } from "next-auth/react";
 
 function CheckoutFormOrderDetails() {
   const { data: session, status } = useSession();
-  const { cartTotalPrice, cartProductsCount } = useCart();
+  const { cartTotalPrice, cartProductsCount } = useCartContext();
   const { shippingOption, userFormData } = useCheckoutContext();
   const [orderTotalPrice, setOrderTotalPrice] = useState(0);
   const [productsTotalPriceBeforeTax, setProductsTotalPriceBeforeTax] =

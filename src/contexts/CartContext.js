@@ -4,14 +4,21 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  // saving the shopping cart in local storage instead of db for simplicity
-  const [cartProducts, setCartProducts] = useState(() => {
-    const savedCart = localStorage.getItem("cartProducts");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const [cartProducts, setCartProducts] = useState([]);
 
+  
   useEffect(() => {
-    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+    const savedCart = localStorage.getItem("cartProducts");
+    if (savedCart) {
+      setCartProducts(JSON.parse(savedCart));
+    }
+  }, []);
+
+ //storing the cart in localStorage instead of db for simplicity
+  useEffect(() => {
+    if (cartProducts.length > 0) {
+      localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+    }
   }, [cartProducts]);
 
   const addToCart = (product, amount) => {
@@ -85,6 +92,6 @@ export function CartProvider({ children }) {
   );
 }
 
-export function useCart() {
+export function useCartContext() {
   return useContext(CartContext);
 }

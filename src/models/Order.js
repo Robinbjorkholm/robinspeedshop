@@ -1,29 +1,89 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import Counter from "@/models/Counter";
 
-const ordersSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
-    shippingMethod: {
-      type: String,
-      required: true,
+    shippingOption: {
+      courier: {
+        type: String,
+        required: true,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+      date: {
+        type: Date,
+        required: true,
+      },
     },
     paymentOption: {
       type: String,
       required: true,
       trim: true,
     },
-    isPaid:{
-        type:Boolean,
-        default:false,
-        
+    isPaid: {
+      type: Boolean,
+      default: false,
     },
-    user:{
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    }
+    },
+    orderNumber: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    guestInfo: {
+      email: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+      firstName: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+      lastName: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+      country: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+
+      city: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+      address: {
+        type: String,
+        required: function () {
+          return !this.user;
+        },
+      },
+      phoneNumber: {
+        type: Number,
+        required: false,
+      },
+    },
   },
   { timestamps: true }
 );
-const Order =
-  mongoose.models.Order || mongoose.model("Order", ordersSchema);
+
+
+
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 
 export default Order;

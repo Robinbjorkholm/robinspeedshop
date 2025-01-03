@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import Order from "./Order.js";
-import countries from "countries-list";
+
 
 const userSchema = new mongoose.Schema(
   {

@@ -13,6 +13,7 @@ export function CheckoutProvider({ children }) {
   const [paymentOption, setPaymentOption] = useState("");
   const [userFormData, setUserFormData] = useState({
     email: "",
+    guestEmail: "",
     firstName: "",
     lastName: "",
     country: "",

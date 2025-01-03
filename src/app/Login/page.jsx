@@ -37,6 +37,7 @@ const schema = Yup.object().shape({
     .max(40, "Last name must be between 1 and 40 characters"),
 });
 
+//This page handles the Login and Registering of users
 function Login(){
   const [showPasswordRegister, setShowPasswordRegister] = useState(false);
   useState("");
@@ -79,18 +80,23 @@ function Login(){
       if (responseData.error) {
         setRegisterError(responseData.error);
       } else if (responseData.url) {
+        // if the user succesfully creates an account the api returns a url to the "verification-email-sent/their unique id " with a unique - 
+        // token which will tell the user to what email their verification code was sent to 
         router.push(responseData.url);
       }
     } catch (error) {
       setRegisterError(error.message);
     }
   };
+
+  //this function just makes sure the first letter is always in capital 
   const handleInputChange = (e, fieldName) => {
     const value = capitalFirstLetter(e.target.value);
     setValue(fieldName, value, { shouldValidate: true });
   };
   return (
     <div className={styles.container}>
+      {/* rendering a reusable LoginForm component since its also used in the checkout page */}
       <LoginForm />
       <div
         className={`${styles.loginRegisterContainer} ${

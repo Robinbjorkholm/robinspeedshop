@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "../../styles/navbar.module.css";
 import Link from "next/link";
-import { useCart } from "@/contexts/CartContext";
+import { useCartContext } from "@/contexts/CartContext";
 import { TiShoppingCart } from "react-icons/ti";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
@@ -10,8 +10,8 @@ import { MdLogin, MdLogout } from "react-icons/md";
 
 function Navbar() {
   const { data: session } = useSession();
-  const { cartProductsCount } = useCart();
-  
+  const { cartProductsCount } = useCartContext();
+
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.navbarLink}>

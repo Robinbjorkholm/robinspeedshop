@@ -7,7 +7,7 @@
   height: 5vh;
   max-height: 4rem;
   width: 100vw;
-  z-index: 1;
+  z-index: 3;
 }
 .navbarLink {
   color: white;

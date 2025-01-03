@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styles from "@/styles/checkoutFormItems.module.css";
-import { useCart } from "@/contexts/CartContext";
+import { useCartContext } from "@/contexts/CartContext";
 import { IoIosAddCircle, IoIosRemoveCircle, IoIosClose } from "react-icons/io";
 import NextImage from "next/image";
 import calculateTotalPrice from "@/lib/calculateTotalPrice";
@@ -14,7 +14,7 @@ function CheckoutItems() {
     removeOneFromCart,
     removeFromCart,
     cartTotalPrice,
-  } = useCart();
+  } = useCartContext();
 
   return (
     <div className={styles.shoppingCartContainerMain}>
