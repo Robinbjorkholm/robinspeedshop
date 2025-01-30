@@ -1,21 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/checkoutForm.module.css";
+import checkoutSeparatorStyles from "@/styles/checkoutSeparator.module.css";
+
 import NextImage from "next/image";
 import PostiImage from "@/images/PostiGroup.png";
 import DHLImage from "@/images/DHL.png";
 import calculateShippingTime from "@/lib/calculateShippingTime";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
+import CheckoutSeparator from "./CheckoutSeparator";
 
 function CheckoutFormShipping() {
   const { shippingOption, setShippingOption } = useCheckoutContext();
-  const [shippingDatePosti, setShippingDatePosti] = useState(calculateShippingTime(6));
-  const [shippingDateDHL, setShippingDateDHL] = useState(calculateShippingTime(3));
-
 
   return (
     <div className={styles.checkoutFormContainer}>
-      <h2 style={{ marginLeft: "3rem" }}>Shipping</h2>
+      <CheckoutSeparator stepNumber={2} label="Shipping" />
       <div className={styles.checkoutFormOptionContainer}>
         <div
           className={`${styles.checkoutFormShippingOption} ${
@@ -25,7 +25,7 @@ function CheckoutFormShipping() {
             setShippingOption({
               courier: "Posti",
               price: 17.99,
-              date: shippingDatePosti,
+              date: calculateShippingTime(6),
             })
           }
         >
@@ -46,7 +46,7 @@ function CheckoutFormShipping() {
             sizes="64px"
           />
 
-          <p>Shipping arrives by {shippingDatePosti}</p>
+          <p>Shipping arrives by {calculateShippingTime(6)}</p>
           <p style={{ fontSize: "12px", marginTop: "5px" }}>
             Shipping starts at 17.99€
           </p>
@@ -59,7 +59,7 @@ function CheckoutFormShipping() {
             setShippingOption({
               courier: "DHL",
               price: 23.99,
-              date: shippingDateDHL,
+              date: calculateShippingTime(3),
             })
           }
         >
@@ -79,13 +79,12 @@ function CheckoutFormShipping() {
             sizes="64px"
           />
 
-          <p>Shipping arrives by {shippingDateDHL}</p>
+          <p>Shipping arrives by {calculateShippingTime(3)}</p>
           <p style={{ fontSize: "12px", marginTop: "5px" }}>
             Shipping starts at 23.99€
           </p>
         </div>
       </div>
-      <hr style={{ margin: "2rem auto", width: "100%" }} />
     </div>
   );
 }

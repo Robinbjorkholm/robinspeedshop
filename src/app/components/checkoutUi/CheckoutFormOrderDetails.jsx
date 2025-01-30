@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/checkoutFormOrderDetails.module.css";
+import CheckoutSeparator from "@/app/components/checkoutUi/CheckoutSeparator"
 import { useCartContext } from "@/contexts/CartContext";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
 import { useSession } from "next-auth/react";
@@ -28,8 +29,7 @@ function CheckoutFormOrderDetails() {
 
   return (
     <div className={styles.container}>
-      <hr style={{ margin: "2rem auto", width: "100%" }} />
-      <h2 className={styles.sectionHeader}>Order details</h2>
+      <CheckoutSeparator  stepNumber={5} label="Order details"/>
       <div style={{ width: "50%", margin: "0 auto", position: "relative" }}>
         <div className={styles.mainContent}>
           <ul className={styles.ulRow}>

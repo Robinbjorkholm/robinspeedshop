@@ -4,6 +4,7 @@ import styles from "@/styles/checkoutFormItems.module.css";
 import { useCartContext } from "@/contexts/CartContext";
 import { IoIosAddCircle, IoIosRemoveCircle, IoIosClose } from "react-icons/io";
 import NextImage from "next/image";
+import CheckoutSeparator from "./CheckoutSeparator";
 import calculateTotalPrice from "@/lib/calculateTotalPrice";
 
 function CheckoutItems() {
@@ -18,8 +19,8 @@ function CheckoutItems() {
 
   return (
     <div className={styles.shoppingCartContainerMain}>
-      <h1>Your cart {cartProductsCount} items</h1>
       <div className={styles.shoppingCartContainer}>
+        <CheckoutSeparator stepNumber={1} label="Cart"/>
         <ul
           className={styles.shoppingCartInfo}
           style={{ backgroundColor: "#333" }}
@@ -73,7 +74,7 @@ function CheckoutItems() {
                     </button>
                   </li>
                 </ul>
-                <hr />
+                <hr style={{width:"90%", margin:"0 auto"}} />
               </div>
             );
           })}

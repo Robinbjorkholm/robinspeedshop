@@ -57,11 +57,12 @@ const schema = Yup.object()
 
 function Checkout() {
   //this page collects data from all "CheckoutForms" and validates the data using yup and react-hook-form and finally allows the user to submit the order
-  const { data: session, status } = useSession();
-  const [toggleGuestLoginForm, setToggleGuestLoginForm] = useState(true);
-  const [isLoadingProcessingOrder, setIsLoadingProcessingOrder] = useState(false);
   const { cartProducts, cartProductsCount } = useCartContext();
   const { shippingOption, paymentOption } = useCheckoutContext();
+  const { data: session, status } = useSession();
+  const [toggleGuestLoginForm, setToggleGuestLoginForm] = useState(true);
+  const [isLoadingProcessingOrder, setIsLoadingProcessingOrder] =
+    useState(false);
   const [responseError, setResponseError] = useState("");
   const router = useRouter();
   const {
@@ -91,7 +92,7 @@ function Checkout() {
   useEffect(() => {
     setValue("shippingOption", shippingOption || {}, { shouldValidate: true });
   }, [shippingOption, setValue]);
-
+  console.log("shipping option date ",shippingOption)
   useEffect(() => {
     setValue("paymentOption", paymentOption || "", { shouldValidate: true });
   }, [paymentOption, setValue]);
@@ -105,11 +106,12 @@ function Checkout() {
       ...data,
       cartProducts,
     };
+    console.log(newData);
     submitOrder(newData);
   };
 
   const submitOrder = async (data) => {
-    setIsLoadingProcessingOrder(true)
+    setIsLoadingProcessingOrder(true);
     try {
       const response = await fetch("/api/order/create-order", {
         method: "POST",
@@ -121,79 +123,76 @@ function Checkout() {
       const responseData = await response.json();
 
       if (responseData.error) {
-        setIsLoadingProcessingOrder(false)
+        setIsLoadingProcessingOrder(false);
         setResponseError(responseData.error);
-
       }
       if (responseData.url) {
         // if the api call is succesful it returns a unique url  with the order number that goes to /order-placed/{orderNumber}
         router.push(responseData.url);
       }
     } catch (error) {
-      setIsLoadingProcessingOrder(false)
+      setIsLoadingProcessingOrder(false);
       console.error("Error:", error);
     }
   };
 
   return (
-    
-      <FormProvider
-        {...{ register, handleSubmit, setValue, watch, formState: { errors } }}
-      >
+    <FormProvider
+      {...{ register, handleSubmit, setValue, watch, formState: { errors } }}
+    >
       {isLoadingProcessingOrder && <ProcessingOrder />}
-        <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <CheckoutItems />
-            <CheckoutFormShipping />
-            <CheckoutFormPayment />
-            <div className={styles.checkoutFormContainer}>
-              {status === "loading" ? (
-                <CheckoutLoginFormSkeleton />
-              ) : (
-                <div>
-                  {/* rendering the CheckoutForm for guests by default, the user can choose to login with their existing account to render the "LoginForm" below */}
-                  {!session?.user && toggleGuestLoginForm && (
-                    <CheckoutFormGuest
-                      setToggleGuestLoginForm={setToggleGuestLoginForm}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-            {/*Renders LoginForm if the user is not already logged in AND the user wants to login using existing account,
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CheckoutItems />
+          <CheckoutFormShipping />
+          <CheckoutFormPayment />
+          <div className={styles.checkoutFormContainer}>
+            {status === "loading" ? (
+              <CheckoutLoginFormSkeleton />
+            ) : (
+              <div>
+                {/* rendering the CheckoutForm for guests by default, the user can choose to login with their existing account to render the "LoginForm" below */}
+                {!session?.user && toggleGuestLoginForm && (
+                  <CheckoutFormGuest
+                    setToggleGuestLoginForm={setToggleGuestLoginForm}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+          {/*Renders LoginForm if the user is not already logged in AND the user wants to login using existing account,
           also had to add the <hr> and <h2> tag inside a div with the login form because the login form is also used in the "login page" where it wouldnt make sense to
           have the address header and separator
           
           */}
-            {!toggleGuestLoginForm && !session?.user && (
-              <div className={styles.checkoutFormContainer}>
-                <hr style={{ margin: "2rem auto", width: "100%" }} />
-                <h2 style={{ marginLeft: "5px" }}>Address</h2>
-                <LoginForm />
-              </div>
-            )}
-            <CheckoutFormOrderDetails />
+          {!toggleGuestLoginForm && !session?.user && (
+            <div className={styles.checkoutFormContainer}>
+              <hr style={{ margin: "2rem auto", width: "100%" }} />
+              <h2 style={{ marginLeft: "5px" }}>Address</h2>
+              <LoginForm />
+            </div>
+          )}
+          <CheckoutFormOrderDetails />
 
-            {responseError && (
-              <p
-                style={{
-                  color: "red",
-                  margin: "0 auto",
-                  width: "fit-content",
-                  padding: "10px",
-                }}
-              >
-                {responseError}
-              </p>
-            )}
-            <button disabled={!isValid} className={styles.sendOrderButton}>
-              {" "}
-              Confirm order
-            </button>
-          </form>
-        </div>
-      </FormProvider>
-    
+          {responseError && (
+            <p
+              style={{
+                color: "red",
+                margin: "0 auto",
+                width: "fit-content",
+                padding: "10px",
+              }}
+            >
+              {responseError}
+            </p>
+          )}
+          <button disabled={!isValid} className={styles.sendOrderButton}>
+            {" "}
+            Confirm order
+          </button>
+        </form>
+      </div>
+    </FormProvider>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import styles from "@/styles/checkoutFormGuest.module.css";
+import CheckoutSeparator from "@/app/components/checkoutUi/CheckoutSeparator";
 import loginStyles from "@/styles/login.module.css";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
 
@@ -22,8 +23,7 @@ function CheckoutFormGuest({ setToggleGuestLoginForm }) {
 
   return (
     <div>
-      <hr style={{ margin: "2rem auto", width: "100%" }} />
-      <h2 style={{ marginLeft: "5px" }}>Address</h2>
+      <CheckoutSeparator stepNumber={4} label="Address" />
       <div className={styles.guestLoginContainer}>
         <div>
           <h3>Already have an account?</h3>
@@ -130,7 +130,9 @@ function CheckoutFormGuest({ setToggleGuestLoginForm }) {
             className={loginStyles.loginInput}
             placeholder="gremlin outpost"
             id="city"
-            onChange={(e) => setUserFormData({ ...userFormData, city: e.target.value })}
+            onChange={(e) =>
+              setUserFormData({ ...userFormData, city: e.target.value })
+            }
           />
           {errors.city && (
             <p className={loginStyles.errorMessage}>{errors.city?.message}</p>

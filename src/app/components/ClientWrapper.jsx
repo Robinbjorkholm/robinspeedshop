@@ -1,10 +1,11 @@
-'use client'
+"use client";
 import { usePathname } from "next/navigation";
 import Filter from "./Filter";
 
 export default function ClientWrapper({ children }) {
   const pathname = usePathname();
-  const hideFilter = ["/checkout"].includes(pathname);
+  const hideFilter =
+    pathname.startsWith("/checkout") || pathname.startsWith("/order-placed");
 
   return (
     <>

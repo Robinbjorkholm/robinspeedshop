@@ -4,6 +4,7 @@ import User from "@/models/User";
 import Counter from "@/models/Counter";
 import { NextResponse } from "next/server";
 import logger from "../../../../winston";
+import { v4 as uuidv4 } from "uuid";
 
 async function getNextOrderNumber() {
   try {
@@ -47,20 +48,37 @@ export async function POST(req, res) {
       });
     }
     const nextOrderNumber = await getNextOrderNumber();
+    const newCartProducts = cartProducts.map((product) => ({
+      productId: product._id,
+      quantity: product.quantity,
+      price: product.price,
+    }));
+
+    const totalProductPrice = newCartProducts.reduce(
+      (sum, product) => sum + product.price * product.quantity,
+      0
+    );
+
+    const orderTotalPrice = totalProductPrice + shippingOption.price;
+
     if (email) {
       const existingUser = await User.findOne({ email });
       newOrder = await Order.create({
         shippingOption,
         paymentOption,
+        cartProducts: newCartProducts,
         user: existingUser,
         orderNumber: nextOrderNumber,
+        orderUUID: uuidv4(),
+        price: orderTotalPrice.toFixed(2),
       });
     } else if (guestEmail) {
       newOrder = await Order.create({
-        cartProducts,
+        cartProducts: newCartProducts,
         shippingOption,
         paymentOption,
         orderNumber: nextOrderNumber,
+        orderUUID: uuidv4(),
         guestInfo: {
           email: guestEmail,
           firstName,
@@ -69,11 +87,12 @@ export async function POST(req, res) {
           city,
           address,
         },
+        price: orderTotalPrice.toFixed(2),
       });
     }
 
     return NextResponse.json({
-      url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/order-placed/${newOrder.orderNumber}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/order-placed/${newOrder.orderUUID}`,
     });
   } catch (error) {
     console.error("Error creating order:", error);

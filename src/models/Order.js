@@ -35,6 +35,37 @@ const orderSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    orderStatus: {
+      type: String,
+      required: true,
+      default: "Pending",
+    },
+    orderUUID: {
+      type: String,
+      required: true,
+    },
+    orderPlacedDate: {
+      type: Date,
+      default: Date.now,
+    },
+    cartProducts: {
+      type: [
+        {
+          productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+          },
+          quantity: { type: Number, required: true },
+          price: { type: Number, required: true },
+        },
+      ],
+      required: true,
+    },
+    price:{
+      type:Number,
+      required:true,
+    },
     guestInfo: {
       email: {
         type: String,
@@ -81,8 +112,6 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 

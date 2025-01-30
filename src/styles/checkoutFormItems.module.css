@@ -1,28 +1,27 @@
 .shoppingCartContainerMain {
   width: 70%;
   margin: 0 auto;
-  margin-top: 40px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .shoppingCartContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
-
 .shoppingCartInfo,
 .shoppingCartProducts {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 90%;
   padding: 0.5rem;
   list-style-type: none;
   text-align: center;
   color: white;
+  margin: 0 auto;
 }
 .shoppingCartProducts {
   color: black;
@@ -33,13 +32,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 .shoppingCartProducts li button {
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 .shoppingCartInfo li:first-child,
 .shoppingCartProducts li:first-child {

@@ -6,6 +6,7 @@ import KlarnaImage from "@/images/Klarna.png";
 import PayPalImage from "@/images/PayPal.png";
 import MasterCardImage from "@/images/MasterCard.png";
 import { useCheckoutContext } from "@/contexts/CheckoutContext";
+import CheckoutSeparator from "./CheckoutSeparator";
 
 
 
@@ -14,7 +15,7 @@ function CheckoutFormPayment() {
 
   return (
     <div className={styles.checkoutFormContainer}>
-      <h2 style={{ marginLeft: "3rem" }}>Payment</h2>
+       <CheckoutSeparator stepNumber={2} label="Payment" />
       <div className={styles.checkoutFormOptionContainer}>
         <div
           className={`${styles.checkoutFormShippingOption} ${
