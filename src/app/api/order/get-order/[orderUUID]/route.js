@@ -7,7 +7,10 @@ export async function GET(req, { params }) {
   await connectDB();
   const { orderUUID } = params;
   try {
-    const order = await Order.findOne({ orderUUID });
+    const order = await Order.findOne({ orderUUID }).populate(
+      "user",
+      "email address postalCode city country firstName lastName"
+    );
     if (!order) {
       return NextResponse.json({
         url: `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}`,

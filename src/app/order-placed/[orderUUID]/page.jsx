@@ -1,7 +1,7 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import styles from "@/styles/orderPlaced.module.css";
 import hideEmail from "@/lib/hideEmail";
+
 async function getOrder(orderUUID) {
   try {
     const response = await fetch(
@@ -21,24 +21,22 @@ async function getOrder(orderUUID) {
 export default async function OrderPlaced({ params }) {
   const { orderUUID } = params;
   const order = await getOrder(orderUUID);
-  const dateOptions = {
-    year: "numeric",
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
-  const dateString = order.order.shippingOption.date;
+  const guestInfo = order.order.guestInfo;
+  const existingUserInfo = order.order.user;
+  const orderInfo = order.order;
   const orderPlacedString = order.order.orderPlacedDate;
-  const dateObject = new Date(dateString);
   const orderPlacedDate = new Date(orderPlacedString);
-  const newDate = dateObject.toLocaleString("fi-FI", { dateOptions });
-  const newOrderPlacedDate = orderPlacedDate.toLocaleString("fi-FI", {
-    dateOptions,
-  });
-  if (!order) {
+  const newOrderPlacedDate = orderPlacedDate.toLocaleString(
+    undefined,{ year: "numeric",
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,}
+   
+  );
+  if (!order || !order.order) {
     return (
       <div>
         <h1>Order Not Found</h1>
@@ -49,33 +47,65 @@ export default async function OrderPlaced({ params }) {
 
   return (
     <div className={styles.container}>
-      {order.order.guestInfo && (
-        <div style={{ padding: "10px" }}>
-          <h1>Thank you for your order!</h1>
-          <div style={{ marginLeft: "16px" }}>
-            <p>Your order has been placed succesfully.</p>
-            <p>An email with your order details will be sent to {hideEmail(order.order.guestInfo.email)}.</p>
-
-            <p>
-              <b style={{ color: "#B0B0B0" }}>Order number</b> &nbsp;
-              {order.order.orderNumber}
-            </p>
-            <p>
-              <b style={{ color: "#B0B0B0" }}>Order date</b>&nbsp;
-              {newOrderPlacedDate}
-            </p>
-            <p> Estimated deliveryx {newDate}</p>
-            <ul className={styles.userInformation}>
-              <li>{order.order.guestInfo.firstName}</li>
-              <li>{order.order.guestInfo.lastName}</li>
-              <li>{order.order.guestInfo.country}</li>
-              <li>{order.order.guestInfo.city}</li>
-              <li>{order.order.guestInfo.address}</li>
-              <li>{order.order.guestInfo.lastName}</li>
+      <h3>Thanks for your order!</h3>
+      <hr />
+      <div className={styles.orderOverview}>
+        <div className={styles.userDetails}>
+          {guestInfo ? (
+            <ul>
+              <li>
+                <b>Orderer</b>
+              </li>
+              <li>{guestInfo.firstName}</li>
+              <li>{guestInfo.address}</li>
+              <li>{guestInfo.city}</li>
+              <li>{guestInfo.country}</li>
+              <br />
+              <li>{guestInfo.email}</li>
+              {guestInfo.phoneNumber && <li>{guestInfo.phoneNumber}</li>}
             </ul>
-          </div>
+          ) : (
+            <ul>
+              <li>
+                {existingUserInfo.firstName}&nbsp;{existingUserInfo.lastName}
+              </li>
+              <li>{existingUserInfo.address}</li>
+              <li>
+                {existingUserInfo.postalCode}&nbsp;{existingUserInfo.city}
+              </li>
+              <li>{existingUserInfo.fcountry}</li>
+              <br />
+              <li>{existingUserInfo.email}</li>
+            </ul>
+          )}
+          <ul>
+            <li><b>Shipping method</b></li>
+            <li>{orderInfo.shippingOption.courier}</li>
+            <li>expected delivery date {orderInfo.shippingOption.date}</li>
+          </ul>
         </div>
-      )}
+        <div className={styles.paymentDetails}>
+          <ul>
+            <li>
+              <b>payment method</b>
+            </li>
+            <li>{orderInfo.paymentOption}</li>
+          </ul>
+        </div>
+        <div className={styles.orderDetails}>
+          <ul>
+            <li>
+              <b>order placed</b>
+            </li>
+            <li>{newOrderPlacedDate}</li>
+            <br />
+            <li>
+              <b>Order ID</b>
+            </li>
+            <li>{orderInfo.orderNumber}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

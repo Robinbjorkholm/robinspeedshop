@@ -1,13 +1,34 @@
 .container {
   width: 50%;
   height: 50%;
-  background-color: rgb(185, 185, 185, 0.2);
-  align-items: center;
   border-radius: 9px;
   line-height: 28px;
-  justify-content: center;
   border: 1px solid rgb(85, 85, 85);
   margin: 15% auto;
   display: Flex;
   flex-direction: column;
+}
+.container h3 {
+  text-align: left;
+}
+
+.orderOverview {
+  display: grid;
+  align-self: center;
+  grid-template-rows: 1;
+  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  background-color: red;
+  width: 90%;
+  height: 30px;
+}
+
+.userDetails {
+  grid-column: 1;
+}
+.paymentDetails {
+  grid-column: 2;
+}
+.orderDetails {
+  grid-column: 3;
 }

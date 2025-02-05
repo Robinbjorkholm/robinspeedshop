@@ -36,6 +36,7 @@ export async function POST(req, res) {
     paymentOption,
     cartProducts,
     email,
+    phoneNumber
   } = await req.json();
 
   try {
@@ -86,6 +87,7 @@ export async function POST(req, res) {
           country,
           city,
           address,
+          phoneNumber,
         },
         price: orderTotalPrice.toFixed(2),
       });
